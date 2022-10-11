@@ -47,12 +47,12 @@ public class DBInitializer {
     private List<String> getSqlQuery() {
         List<String> list = new ArrayList<>();
         list.add("DROP TABLE IF EXISTS personal_courses, students, groups, courses;");
-        list.add("CREATE TABLE groups (group_id INTEGER NOT NULL PRIMARY KEY, group_name VARCHAR(5) NOT NULL);");
-        list.add("CREATE TABLE courses (course_id INTEGER NOT NULL PRIMARY KEY, course_name VARCHAR(32) NOT NULL, " +
+        list.add("CREATE TABLE groups (group_id SERIAL NOT NULL PRIMARY KEY, group_name VARCHAR(5) NOT NULL);");
+        list.add("CREATE TABLE courses (course_id SERIAL NOT NULL PRIMARY KEY, course_name VARCHAR(32) NOT NULL, " +
                 "course_description VARCHAR(32) NOT NULL);");
-        list.add("CREATE TABLE students (student_id INTEGER NOT NULL PRIMARY KEY, first_name VARCHAR(32) NOT NULL," +
+        list.add("CREATE TABLE students (student_id SERIAL NOT NULL PRIMARY KEY, first_name VARCHAR(32) NOT NULL," +
                 "last_name VARCHAR(32) NOT NULL, group_id INTEGER NOT NULL REFERENCES groups(group_id))");
-        list.add("CREATE TABLE personal_courses (id INTEGER NOT NULL PRIMARY KEY,\n" +
+        list.add("CREATE TABLE personal_courses (id SERIAL NOT NULL PRIMARY KEY,\n" +
                 "student_id INTEGER NOT NULL  REFERENCES students(student_id),\n" +
                 "course_id INTEGER NOT NULL REFERENCES courses(course_id)\n" +
                 ");");

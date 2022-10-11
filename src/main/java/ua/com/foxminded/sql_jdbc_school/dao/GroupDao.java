@@ -1,7 +1,7 @@
 package ua.com.foxminded.sql_jdbc_school.dao;
 
 import ua.com.foxminded.sql_jdbc_school.dao.connection.BasicConnectionPool;
-import ua.com.foxminded.sql_jdbc_school.dto.StudentDTO;
+import ua.com.foxminded.sql_jdbc_school.dto.GroupDTO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,29 +9,22 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-
-public class StudentDao implements Dao<StudentDTO, String> {
-
+public class GroupDao implements Dao<GroupDTO, String> {
     private BasicConnectionPool connectionPool;
+    private Map<Integer, GroupDTO> groupMap = new HashMap<>();
+    private final String insert = "INSERT INTO groups (group_id, group_name) VALUES (DEFAULT, (?)) RETURNING group_id";
 
-    Map<Integer, StudentDTO> studentDTOMap = new HashMap<>();
-
-    private final  String insert = "INSERT INTO students (student_id, first_name, last_name,group_id) VALUES (DEFAULT, (?), (?), (?)) RETURNING id";
-
-    public StudentDao(BasicConnectionPool pool) {
-        this.connectionPool = pool;
+    public GroupDao(BasicConnectionPool connectionPool) {
+        this.connectionPool = connectionPool;
     }
 
-
     @Override
-    public boolean create(StudentDTO student) {
+    public boolean create(GroupDTO group) {
         boolean result = false;
+        addToCache(group);
         Connection connection = connectionPool.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(insert)) {
-            ;
-            statement.setString(1, student.getStudentFirstName());
-            statement.setString(2, student.getStudentLastName());
-            statement.setInt(3, student.getStudentGroupId());
+            statement.setString(1, group.getGroupName());
             result = statement.executeQuery().next();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -40,21 +33,22 @@ public class StudentDao implements Dao<StudentDTO, String> {
         }
         return result;
     }
+    public void addToCache(GroupDTO group) {
+        groupMap.put(group.getGroupId(), group);
+    }
 
     @Override
-    public StudentDTO read(String s) {
+    public GroupDTO read(String s) {
         return null;
     }
 
     @Override
-    public boolean update(StudentDTO model) {
+    public boolean update(GroupDTO model) {
         return false;
     }
 
     @Override
-    public boolean delete(StudentDTO model) {
+    public boolean delete(GroupDTO model) {
         return false;
     }
-
-
 }

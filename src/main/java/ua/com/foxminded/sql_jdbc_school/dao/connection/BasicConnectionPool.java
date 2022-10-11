@@ -26,7 +26,7 @@ public class BasicConnectionPool implements ConnectionPool {
         return new BasicConnectionPool(url, user, password, pool);
     }
 
-    public void closePoolConnection(List<Connection> connectionPool) {
+    public void closePoolConnection() {
         for (Connection connection : connectionPool) {
             closeConnection(connection);
         }
