@@ -15,27 +15,21 @@ public class BasicConnectionPool implements ConnectionPool {
     private List<Connection> connectionPool;
     private List<Connection> usedConnections = new ArrayList<>();
 
-    public BasicConnectionPool(String url, String user, String password, List<Connection> connectionPool) {
-        this.url = url;
-        this.user = user;
-        this.password = password;
-        this.connectionPool = connectionPool;
-    }
-
     private static final int INITIAL_POOL_SIZE = 10;
 
-    public BasicConnectionPool(String url, String user, String password) {
-        this.url = url;
-        this.user = user;
-        this.password = password;
-    }
 
     public static BasicConnectionPool create(String url, String user, String password) throws SQLException {
         List<Connection> pool = new ArrayList<>(INITIAL_POOL_SIZE);
         for (int i = 0; i < INITIAL_POOL_SIZE; i++) {
             pool.add(createConnection(url, user, password));
         }
-        return new BasicConnectionPool(url, user, password,pool);
+        return new BasicConnectionPool(url, user, password, pool);
+    }
+
+    public void closePoolConnection(List<Connection> connectionPool) {
+        for (Connection connection : connectionPool) {
+            closeConnection(connection);
+        }
     }
 
     @Override
@@ -75,6 +69,24 @@ public class BasicConnectionPool implements ConnectionPool {
             String url, String user, String password)
             throws SQLException {
         return DriverManager.getConnection(url, user, password);
+    }
+
+    private BasicConnectionPool(String url, String user, String password, List<Connection> connectionPool) {
+        this.url = url;
+        this.user = user;
+        this.password = password;
+        this.connectionPool = connectionPool;
+    }
+
+
+    private static void closeConnection(Connection connection) {
+        try {
+            if (connection != null) {
+                connection.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 
