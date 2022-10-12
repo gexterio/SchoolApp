@@ -16,7 +16,12 @@ public class StudentDao implements Dao<StudentDTO, String> {
 
     Map<Integer, StudentDTO> studentDTOMap = new HashMap<>();
 
-    private final  String insert = "INSERT INTO students (student_id, first_name, last_name,group_id) VALUES (DEFAULT, (?), (?), (?)) RETURNING id";
+    @Override
+    public void addToCache(StudentDTO student) {
+        studentDTOMap.put(student.getStudentID(), student);
+    }
+
+    private final String insert = "INSERT INTO students (student_id, first_name, last_name,group_id) VALUES (DEFAULT, (?), (?), (?)) RETURNING student_id";
 
     public StudentDao(BasicConnectionPool pool) {
         this.connectionPool = pool;
@@ -38,6 +43,7 @@ public class StudentDao implements Dao<StudentDTO, String> {
         } finally {
             connectionPool.releaseConnection(connection);
         }
+        addToCache(student);
         return result;
     }
 

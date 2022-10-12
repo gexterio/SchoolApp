@@ -21,7 +21,6 @@ public class GroupDao implements Dao<GroupDTO, String> {
     @Override
     public boolean create(GroupDTO group) {
         boolean result = false;
-        addToCache(group);
         Connection connection = connectionPool.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(insert)) {
             statement.setString(1, group.getGroupName());
@@ -31,8 +30,10 @@ public class GroupDao implements Dao<GroupDTO, String> {
         } finally {
             connectionPool.releaseConnection(connection);
         }
+        addToCache(group);
         return result;
     }
+    @Override
     public void addToCache(GroupDTO group) {
         groupMap.put(group.getGroupId(), group);
     }

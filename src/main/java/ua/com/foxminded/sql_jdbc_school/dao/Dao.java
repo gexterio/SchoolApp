@@ -7,4 +7,5 @@ public interface Dao <Entity, Key> {
     Entity read(Key key);
     boolean update(Entity model);
     boolean delete(Entity model);
+    void addToCache(Entity model);
 }
