@@ -12,6 +12,11 @@ import java.util.Map;
 
 public class CourseDao implements Dao<CourseDTO, String> {
     private BasicConnectionPool connectionPool;
+
+    public Map<Integer, CourseDTO> getCourseMap() {
+        return courseMap;
+    }
+
     private Map<Integer, CourseDTO> courseMap = new HashMap<>();
     private final String insert = "INSERT INTO courses (course_id, course_name, course_description) VALUES (DEFAULT, (?), (?)) RETURNING course_id";
 

@@ -10,8 +10,7 @@ import ua.com.foxminded.sql_jdbc_school.dto.GroupDTO;
 import ua.com.foxminded.sql_jdbc_school.dto.StudentDTO;
 import ua.com.foxminded.sql_jdbc_school.util.FileParser;
 
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class SchoolDataGenerator {
     BasicConnectionPool connectionPool;
@@ -22,6 +21,7 @@ public class SchoolDataGenerator {
     FileParser parser;
     private static final Integer GROUPS_COUNT = 10;
     private static final Integer STUDENTS_COUNT = 200;
+    private static final  Integer COURSE_COUNT = 10;
 
     public SchoolDataGenerator(BasicConnectionPool connectionPool, StudentDao studentDao, GroupDao groupDao, CourseDao courseDao) {
         this.connectionPool = connectionPool;
@@ -35,12 +35,52 @@ public class SchoolDataGenerator {
         generateGroups();
         generateCourses();
         generateStudents();
-        addStudentsToCourses();
+        addStudentsToGroups();
+        addStudentToCourses();
     }
 
-    private void addStudentsToCourses() {
+    private void addStudentToCourses() {
+        Map<Integer, StudentDTO> studentDTOMap = studentDao.getStudentDTOMap();
+        List<CourseDTO> courses = new ArrayList<>(courseDao.getCourseMap().values());
+        studentDTOMap.values()
+                .forEach(student -> addStudentToRandomCourse(courses, student));
+    }
+
+    private void addStudentToRandomCourse(List<CourseDTO> courses, StudentDTO student) {
+        List<Integer> integers = new ArrayList<>(COURSE_COUNT);
+        for (int i = 0; i < COURSE_COUNT; i++) {
+            integers.add(i);
+        }
+            Collections.shuffle(integers);
+        for (int j = 0; j < random.nextInt(3)+1; j++) {
+                studentDao.addStudentToCourse(student, courses.get(integers.get(j)));
+            }
+        }
+
+
+
+    private void addStudentsToGroups() {
+        List<StudentDTO> studentDTOList = new ArrayList<>(studentDao.getStudentDTOMap().values());
+        Collections.shuffle(studentDTOList);
+        for (int i = 1; i <= GROUPS_COUNT; i++) {
+            int chanceToEmptyGroup = random.nextInt(100);
+            if (chanceToEmptyGroup > 75) {
+                continue;
+            }
+            int limit = random.nextInt(20) + 10;
+            if (limit >= studentDTOList.size()) {
+                limit = studentDTOList.size() - 1;
+            }
+            for (int j = limit; j > 0; j--) {
+                StudentDTO student = studentDTOList.get(j);
+                studentDao.addStudentToGroup(student, i);
+                studentDTOList.remove(student);
+            }
+
+        }
 
     }
+
 
     private void generateGroups() {
         for (int i = 0; i < GROUPS_COUNT; i++) {
@@ -57,7 +97,7 @@ public class SchoolDataGenerator {
         for (int i = 0; i < STUDENTS_COUNT; i++) {
             String firstName = firstNames.get(random.nextInt(firstNames.size()));
             String lastName = lastNames.get(random.nextInt(lastNames.size()));
-            studentDao.create(new StudentDTO(i, firstName, lastName, random.nextInt(GROUPS_COUNT) + 1));
+            studentDao.create(new StudentDTO(i, firstName, lastName));
         }
     }
 
@@ -68,7 +108,6 @@ public class SchoolDataGenerator {
             String[] line = courses.get(i).split("_");
             courseDao.create(new CourseDTO(i, line[0], line[1]));
         }
-
     }
 
     private String groupNameGenerator() {

@@ -4,14 +4,18 @@ public class StudentDTO {
     private final Integer studentID;
     private final String studentFirstName;
     private final String studentLastName;
-    private final Integer studentGroupId;
+
+    private Integer studentGroupId;
 
     public StudentDTO(Integer studentID, String studentFirstName,
-                      String studentLastName, Integer studentGroup) {
+                      String studentLastName) {
         this.studentID = studentID;
         this.studentFirstName = studentFirstName;
         this.studentLastName = studentLastName;
-        this.studentGroupId = studentGroup;
+    }
+
+    public void setStudentGroupId(Integer studentGroupId) {
+        this.studentGroupId = studentGroupId;
     }
 
     public Integer getStudentID() {

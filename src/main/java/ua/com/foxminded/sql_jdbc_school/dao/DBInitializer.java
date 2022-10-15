@@ -9,23 +9,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DBInitializer {
-
-   private  BasicConnectionPool connectionPool;
+    private BasicConnectionPool basicConnectionPool;
 
     public DBInitializer(String url, String user, String password) {
-        try {
-            this.connectionPool = BasicConnectionPool.create(url,user,password);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        basicConnectionPool = new BasicConnectionPool(url, user, password);
         initALLTables();
     }
 
     public BasicConnectionPool getConnectionPool() {
-        return connectionPool;
+        return basicConnectionPool;
     }
 
-    public  void initALLTables() {
+    public void initALLTables() {
         List<String> sqlQueryList = getSqlQuery();
         for (String s : sqlQueryList) {
             initTable(s);
@@ -33,14 +28,14 @@ public class DBInitializer {
     }
 
     private void initTable(String sqlQuery) {
-        Connection connection = connectionPool.getConnection();
+        Connection connection = basicConnectionPool.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(
                 sqlQuery)) {
             statement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            connectionPool.releaseConnection(connection);
+            basicConnectionPool.releaseConnection(connection);
         }
     }
 
@@ -51,11 +46,10 @@ public class DBInitializer {
         list.add("CREATE TABLE courses (course_id SERIAL NOT NULL PRIMARY KEY, course_name VARCHAR(32) NOT NULL, " +
                 "course_description VARCHAR(256) NOT NULL);");
         list.add("CREATE TABLE students (student_id SERIAL NOT NULL PRIMARY KEY, first_name VARCHAR(32) NOT NULL," +
-                "last_name VARCHAR(32) NOT NULL, group_id INTEGER NOT NULL REFERENCES groups(group_id))");
-        list.add("CREATE TABLE personal_courses (id SERIAL NOT NULL PRIMARY KEY,\n" +
-                "student_id INTEGER NOT NULL  REFERENCES students(student_id),\n" +
-                "course_id INTEGER NOT NULL REFERENCES courses(course_id)\n" +
-                ");");
+                "last_name VARCHAR(32) NOT NULL, group_id INTEGER  REFERENCES groups(group_id))");
+        list.add("CREATE TABLE personal_courses (student_id INTEGER NOT NULL  REFERENCES students(student_id)," +
+                "course_id INTEGER NOT NULL REFERENCES courses(course_id)," +
+                " CONSTRAINT pair PRIMARY KEY (student_id, course_id));");
         return list;
     }
 }

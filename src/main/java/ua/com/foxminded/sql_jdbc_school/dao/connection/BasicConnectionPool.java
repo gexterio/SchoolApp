@@ -14,21 +14,26 @@ public class BasicConnectionPool implements ConnectionPool {
     private final String password;
     private List<Connection> connectionPool;
     private List<Connection> usedConnections = new ArrayList<>();
-
     private static final int INITIAL_POOL_SIZE = 10;
 
-
-    public static BasicConnectionPool create(String url, String user, String password) throws SQLException {
-        List<Connection> pool = new ArrayList<>(INITIAL_POOL_SIZE);
-        for (int i = 0; i < INITIAL_POOL_SIZE; i++) {
-            pool.add(createConnection(url, user, password));
+    public BasicConnectionPool(String url, String user, String password) {
+        this.url = url;
+        this.user = user;
+        this.password = password;
+        try {
+            this.connectionPool = initConnectionPool(url, user, password);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        return new BasicConnectionPool(url, user, password, pool);
     }
+
 
     public void closePoolConnection() {
         for (Connection connection : connectionPool) {
             closeConnection(connection);
+        }
+        for (Connection usedConnection : usedConnections) {
+            closeConnection(usedConnection);
         }
     }
 
@@ -65,17 +70,17 @@ public class BasicConnectionPool implements ConnectionPool {
         return connectionPool.size() + usedConnections.size();
     }
 
-    private static Connection createConnection(
-            String url, String user, String password)
-            throws SQLException {
-        return DriverManager.getConnection(url, user, password);
+    private List<Connection> initConnectionPool(String url, String user, String password) throws SQLException {
+        List<Connection> pool = new ArrayList<>(INITIAL_POOL_SIZE);
+        for (int i = 0; i < INITIAL_POOL_SIZE; i++) {
+            pool.add(createConnection(url, user, password));
+        }
+        return pool;
     }
 
-    private BasicConnectionPool(String url, String user, String password, List<Connection> connectionPool) {
-        this.url = url;
-        this.user = user;
-        this.password = password;
-        this.connectionPool = connectionPool;
+    private static Connection createConnection(String url, String user, String password)
+            throws SQLException {
+        return DriverManager.getConnection(url, user, password);
     }
 
 

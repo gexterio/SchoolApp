@@ -5,7 +5,6 @@ import ua.com.foxminded.sql_jdbc_school.dao.CourseDao;
 import ua.com.foxminded.sql_jdbc_school.dao.DBInitializer;
 import ua.com.foxminded.sql_jdbc_school.dao.GroupDao;
 import ua.com.foxminded.sql_jdbc_school.dao.StudentDao;
-import ua.com.foxminded.sql_jdbc_school.menu.Menu;
 import ua.com.foxminded.sql_jdbc_school.servicedb.SchoolDataGenerator;
 
 public class Application {
@@ -22,4 +21,5 @@ public class Application {
 
 dbInitializer.getConnectionPool().closePoolConnection();
     }
+
 }
