@@ -1,8 +1,8 @@
 package ua.com.foxminded.sql_jdbc_school.servicedb;
 
-
 import ua.com.foxminded.sql_jdbc_school.dao.CourseDao;
 import ua.com.foxminded.sql_jdbc_school.dao.GroupDao;
+import ua.com.foxminded.sql_jdbc_school.dao.PersonalCoursesDao;
 import ua.com.foxminded.sql_jdbc_school.dao.StudentDao;
 import ua.com.foxminded.sql_jdbc_school.dao.connection.BasicConnectionPool;
 import ua.com.foxminded.sql_jdbc_school.dto.CourseDTO;
@@ -10,24 +10,30 @@ import ua.com.foxminded.sql_jdbc_school.dto.GroupDTO;
 import ua.com.foxminded.sql_jdbc_school.dto.StudentDTO;
 import ua.com.foxminded.sql_jdbc_school.util.FileParser;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 public class SchoolDataGenerator {
     BasicConnectionPool connectionPool;
     StudentDao studentDao;
     GroupDao groupDao;
     CourseDao courseDao;
+    PersonalCoursesDao personalCoursesDao;
     Random random;
     FileParser parser;
     private static final Integer GROUPS_COUNT = 10;
     private static final Integer STUDENTS_COUNT = 200;
-    private static final  Integer COURSE_COUNT = 10;
+    private Integer courseCount = 0;
 
-    public SchoolDataGenerator(BasicConnectionPool connectionPool, StudentDao studentDao, GroupDao groupDao, CourseDao courseDao) {
+    public SchoolDataGenerator(BasicConnectionPool connectionPool, StudentDao studentDao, GroupDao groupDao,
+                               CourseDao courseDao, PersonalCoursesDao personalCoursesDao) {
         this.connectionPool = connectionPool;
         this.studentDao = studentDao;
         this.groupDao = groupDao;
         this.courseDao = courseDao;
+        this.personalCoursesDao = personalCoursesDao;
         random = new Random();
     }
 
@@ -40,31 +46,28 @@ public class SchoolDataGenerator {
     }
 
     private void addStudentToCourses() {
-        Map<Integer, StudentDTO> studentDTOMap = studentDao.getStudentDTOMap();
-        List<CourseDTO> courses = new ArrayList<>(courseDao.getCourseMap().values());
-        studentDTOMap.values()
-                .forEach(student -> addStudentToRandomCourse(courses, student));
+        List<StudentDTO> studentList = studentDao.getAll();
+        List<CourseDTO> courses = courseDao.getAll();
+        studentList.forEach(student -> addStudentToRandomCourse(courses, student));
     }
 
     private void addStudentToRandomCourse(List<CourseDTO> courses, StudentDTO student) {
-        List<Integer> integers = new ArrayList<>(COURSE_COUNT);
-        for (int i = 0; i < COURSE_COUNT; i++) {
+        List<Integer> integers = new ArrayList<>(courseCount);
+        for (int i = 0; i < courseCount; i++) {
             integers.add(i);
         }
-            Collections.shuffle(integers);
-        for (int j = 0; j < random.nextInt(3)+1; j++) {
-                studentDao.addStudentToCourse(student, courses.get(integers.get(j)));
-            }
+        Collections.shuffle(integers);
+        for (int j = 0; j < random.nextInt(3) + 1; j++) {
+            personalCoursesDao.addStudentToCourse(student, courses.get(integers.get(j)));
         }
-
-
+    }
 
     private void addStudentsToGroups() {
-        List<StudentDTO> studentDTOList = new ArrayList<>(studentDao.getStudentDTOMap().values());
+        List<StudentDTO> studentDTOList = studentDao.getAll();
         Collections.shuffle(studentDTOList);
         for (int i = 1; i <= GROUPS_COUNT; i++) {
             int chanceToEmptyGroup = random.nextInt(100);
-            if (chanceToEmptyGroup > 75) {
+            if (chanceToEmptyGroup > 90) {
                 continue;
             }
             int limit = random.nextInt(20) + 10;
@@ -80,7 +83,6 @@ public class SchoolDataGenerator {
         }
 
     }
-
 
     private void generateGroups() {
         for (int i = 0; i < GROUPS_COUNT; i++) {
@@ -107,7 +109,9 @@ public class SchoolDataGenerator {
         for (int i = 0; i < courses.size(); i++) {
             String[] line = courses.get(i).split("_");
             courseDao.create(new CourseDTO(i, line[0], line[1]));
+            courseCount++;
         }
+
     }
 
     private String groupNameGenerator() {

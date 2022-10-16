@@ -1,45 +1,47 @@
 package ua.com.foxminded.sql_jdbc_school.dao;
 
 import ua.com.foxminded.sql_jdbc_school.dao.connection.BasicConnectionPool;
-import ua.com.foxminded.sql_jdbc_school.dto.CourseDTO;
 import ua.com.foxminded.sql_jdbc_school.dto.StudentDTO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
-
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 public class StudentDao implements Dao<StudentDTO, String> {
 
-    private BasicConnectionPool connectionPool;
-
-    Map<Integer, StudentDTO> studentDTOMap = new HashMap<>();
-    Map<Integer, CourseDTO> personalCourses = new HashMap<>();
-
-    @Override
-    public void addToCache(StudentDTO student) {
-        studentDTOMap.put(student.getStudentID(), student);
-    }
-
-    public void addToCache(CourseDTO course, StudentDTO student) {
-        personalCourses.put(student.getStudentID(), course);
-    }
-
-    private final String insert = "INSERT INTO students (student_id, first_name, last_name) VALUES (DEFAULT, (?), (?)) RETURNING student_id";
-    private final String insertGroup = "UPDATE students SET group_id = (?) WHERE student_id = (?) RETURNING student_id;";
-    private final String insertPersonalCourses = "INSERT INTO personal_courses (student_id, course_id) VALUES ((?), (?)) RETURNING student_id;";
+    private final BasicConnectionPool connectionPool;
 
     public StudentDao(BasicConnectionPool pool) {
         this.connectionPool = pool;
     }
 
-    public void addStudentToCourse(StudentDTO student, CourseDTO course) {
+
+
+    public void addStudentToGroup(StudentDTO student, Integer groupId) {
         Connection connection = connectionPool.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(insertPersonalCourses)) {
-            statement.setInt(1, student.getStudentID()+1);
-            statement.setInt(2, course.getCourseId()+1);
+        String insertGroup = "UPDATE students SET group_id = (?) WHERE student_id = (?);";
+        try (PreparedStatement statement = connection.prepareStatement(insertGroup)) {
+            statement.setInt(1, groupId);
+            statement.setInt(2, student.getStudentID());
+            statement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            connectionPool.releaseConnection(connection);
+        }
+    }
+
+    @Override
+    public void create(StudentDTO student) {
+        Connection connection = connectionPool.getConnection();
+        String insert = "INSERT INTO students (student_id, first_name, last_name) VALUES (DEFAULT, (?), (?)) RETURNING student_id";
+        try (PreparedStatement statement = connection.prepareStatement(insert)) {
+            statement.setString(1, student.getFirstName());
+            statement.setString(2, student.getLastName());
             statement.executeQuery().next();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -48,43 +50,27 @@ public class StudentDao implements Dao<StudentDTO, String> {
         }
     }
 
-    public Map<Integer, StudentDTO> getStudentDTOMap() {
-        return studentDTOMap;
-    }
-
-
-    public boolean addStudentToGroup(StudentDTO student, Integer group_id) {
-        boolean result = false;
-        Connection connection = connectionPool.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(insertGroup)) {
-            ;
-            statement.setInt(1, group_id);
-            statement.setInt(2, student.getStudentID());
-            result = statement.executeQuery().next();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            connectionPool.releaseConnection(connection);
-        }
-        return result;
-    }
-
     @Override
-    public boolean create(StudentDTO student) {
-        boolean result = false;
+    public List<StudentDTO> getAll() {
         Connection connection = connectionPool.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(insert)) {
-            ;
-            statement.setString(1, student.getStudentFirstName());
-            statement.setString(2, student.getStudentLastName());
-            result = statement.executeQuery().next();
+        List<StudentDTO> studentDTOList = new ArrayList<>();
+        String selectAll = "SELECT student_id, first_name, last_name, group_id FROM students;";
+        try (PreparedStatement statement = connection.prepareStatement(selectAll)) {
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int studentId = resultSet.getInt("student_id");
+                String firstName = resultSet.getString("first_name");
+                String lastName = resultSet.getString("last_name");
+                int groupId = resultSet.getInt("group_id");
+                studentDTOList.add(new StudentDTO(studentId, firstName, lastName, groupId));
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             connectionPool.releaseConnection(connection);
         }
-        addToCache(student);
-        return result;
+        studentDTOList.sort(Comparator.comparing(StudentDTO::getStudentID));
+        return studentDTOList;
     }
 
     @Override

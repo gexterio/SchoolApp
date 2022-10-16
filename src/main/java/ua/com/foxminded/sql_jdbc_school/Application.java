@@ -1,25 +1,30 @@
 package ua.com.foxminded.sql_jdbc_school;
 
 
-import ua.com.foxminded.sql_jdbc_school.dao.CourseDao;
-import ua.com.foxminded.sql_jdbc_school.dao.DBInitializer;
-import ua.com.foxminded.sql_jdbc_school.dao.GroupDao;
-import ua.com.foxminded.sql_jdbc_school.dao.StudentDao;
+import ua.com.foxminded.sql_jdbc_school.dao.*;
+import ua.com.foxminded.sql_jdbc_school.dao.connection.BasicConnectionPool;
+import ua.com.foxminded.sql_jdbc_school.dto.StudentDTO;
 import ua.com.foxminded.sql_jdbc_school.servicedb.SchoolDataGenerator;
 
 public class Application {
-    private final static String URL = "jdbc:postgresql://localhost:5432/school";
-    private final static String USER = "postgres";
-    private final static String PASSWORD = "1101";
+    private static final String URL = "jdbc:postgresql://localhost:5432/school";
+    private static final String USER = "postgres";
+    private static final String PASSWORD = "1101";
+
     public static void main(String[] args) {
 
         DBInitializer dbInitializer = new DBInitializer(URL, USER, PASSWORD);
-        StudentDao studentDao = new StudentDao(dbInitializer.getConnectionPool());
-        GroupDao groupDao = new GroupDao(dbInitializer.getConnectionPool());
-        CourseDao courseDao = new CourseDao(dbInitializer.getConnectionPool());
-        new SchoolDataGenerator(dbInitializer.getConnectionPool(), studentDao, groupDao,courseDao).generateSchoolData();
-
-dbInitializer.getConnectionPool().closePoolConnection();
+        BasicConnectionPool connectionPool = dbInitializer.getConnectionPool();
+        StudentDao studentDao = new StudentDao(connectionPool);
+        GroupDao groupDao = new GroupDao(connectionPool);
+        CourseDao courseDao = new CourseDao(connectionPool);
+        PersonalCoursesDao personalCourseDao = new PersonalCoursesDao(connectionPool);
+        new SchoolDataGenerator(connectionPool, studentDao, groupDao, courseDao, personalCourseDao)
+                .generateSchoolData();
+//        for (StudentDTO studentDTO : studentDao.getAll()) {
+//            System.out.println(studentDTO.toString());
+//        }
+        connectionPool.closePoolConnection();
     }
 
 }
