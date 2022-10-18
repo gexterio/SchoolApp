@@ -43,7 +43,7 @@ public class PersonalCoursesDao implements Dao<PersonalCoursesDTO, String> {
             while (resultSet.next()) {
                 int courseId = resultSet.getInt("course_id");
                 int studentId = resultSet.getInt("student_id");
-                personalCoursesDTOList.add(new PersonalCoursesDTO(courseId, studentId));
+                personalCoursesDTOList.add(new PersonalCoursesDTO(studentId, courseId));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -63,14 +63,68 @@ public class PersonalCoursesDao implements Dao<PersonalCoursesDTO, String> {
         return null;
     }
 
-    @Override
-    public boolean update(PersonalCoursesDTO model) {
-        return false;
+
+    public List<PersonalCoursesDTO> getCoursesByStudent(StudentDTO student) {
+        Connection connection = connectionPool.getConnection();
+        List<PersonalCoursesDTO> list = new ArrayList<>();
+        String select = "SELECT course_id, student_id FROM personal_courses WHERE student_id = (?);";
+        try (PreparedStatement statement = connection.prepareStatement(select)) {
+            statement.setInt(1, student.getStudentID());
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int courseId = resultSet.getInt("course_id");
+                int studentId = resultSet.getInt("student_id");
+                list.add(new PersonalCoursesDTO(courseId, studentId));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            connectionPool.releaseConnection(connection);
+        }
+        return list;
     }
 
     @Override
-    public boolean delete(PersonalCoursesDTO model) {
-        return false;
+    public void update(PersonalCoursesDTO model) {
+
     }
 
+    @Override
+    public void delete(PersonalCoursesDTO model) {
+
+    }
+
+    public List<Integer> getAllStudentByCourse (int courseID) {
+        Connection connection = connectionPool.getConnection();
+        List<Integer> list = new ArrayList<>();
+        String select = "SELECT student_id FROM personal_courses WHERE course_id = (?);";
+        try (PreparedStatement statement = connection.prepareStatement(select)) {
+            statement.setInt(1, courseID);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int studentId = resultSet.getInt("student_id");
+                list.add(studentId);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            connectionPool.releaseConnection(connection);
+        }
+        return list;
+    }
+
+    public void deleteStudentFromCourse(StudentDTO student, CourseDTO course) {
+        Connection connection = connectionPool.getConnection();
+        List<PersonalCoursesDTO> list = new ArrayList<>();
+        String select = "DELETE FROM personal_courses WHERE student_id = (?) AND course_id = (?);";
+        try (PreparedStatement statement = connection.prepareStatement(select)) {
+            statement.setInt(1, student.getStudentID());
+            statement.setInt(2, course.getCourseId());
+            statement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            connectionPool.releaseConnection(connection);
+        }
+    }
 }

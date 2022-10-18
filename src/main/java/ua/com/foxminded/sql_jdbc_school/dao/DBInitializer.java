@@ -47,7 +47,7 @@ public class DBInitializer {
                 "course_description VARCHAR(256) NOT NULL);");
         list.add("CREATE TABLE students (student_id SERIAL NOT NULL PRIMARY KEY, first_name VARCHAR(32) NOT NULL," +
                 "last_name VARCHAR(32) NOT NULL, group_id INTEGER  REFERENCES groups(group_id))");
-        list.add("CREATE TABLE personal_courses (student_id INTEGER NOT NULL  REFERENCES students(student_id)," +
+        list.add("CREATE TABLE personal_courses (student_id INTEGER NOT NULL  REFERENCES students(student_id) on delete cascade," +
                 "course_id INTEGER NOT NULL REFERENCES courses(course_id)," +
                 " CONSTRAINT pair PRIMARY KEY (student_id, course_id));");
         return list;

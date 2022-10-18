@@ -60,13 +60,13 @@ public class CourseDao implements Dao<CourseDTO, String> {
     }
 
     @Override
-    public boolean update(CourseDTO model) {
-        return false;
+    public void update(CourseDTO model) {
+
     }
 
     @Override
-    public boolean delete(CourseDTO model) {
-        return false;
+    public void delete(CourseDTO model) {
+
     }
 
 }

@@ -1,10 +1,15 @@
 package ua.com.foxminded.sql_jdbc_school.dto;
 
 public class StudentDTO {
-    private final Integer studentID;
     private final String firstName;
     private final String lastName;
+    private  Integer studentID;
     private Integer groupId;
+
+    public StudentDTO(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 
     public StudentDTO(Integer studentID, String firstName,
                       String lastName) {
@@ -30,6 +35,10 @@ public class StudentDTO {
 
     public String getLastName() {
         return lastName;
+    }
+
+    public Integer getGroupId() {
+        return groupId;
     }
 
     @Override

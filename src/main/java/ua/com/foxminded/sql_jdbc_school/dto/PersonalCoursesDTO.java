@@ -8,4 +8,18 @@ public class PersonalCoursesDTO {
         this.studentId = studentId;
         this.courseId = courseId;
     }
+
+    @Override
+    public String toString() {
+        return "studentID = " + studentId + " | "
+                + "courseID = " + courseId;
+    }
+
+    public Integer getStudentId() {
+        return studentId;
+    }
+
+    public Integer getCourseId() {
+        return courseId;
+    }
 }

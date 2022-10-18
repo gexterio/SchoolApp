@@ -58,12 +58,12 @@ public class GroupDao implements Dao<GroupDTO, String> {
     }
 
     @Override
-    public boolean update(GroupDTO model) {
-        return false;
+    public void update(GroupDTO model) {
+
     }
 
     @Override
-    public boolean delete(GroupDTO model) {
-        return false;
+    public void delete(GroupDTO model) {
+
     }
 }

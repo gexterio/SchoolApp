@@ -42,7 +42,7 @@ public class StudentDao implements Dao<StudentDTO, String> {
         try (PreparedStatement statement = connection.prepareStatement(insert)) {
             statement.setString(1, student.getFirstName());
             statement.setString(2, student.getLastName());
-            statement.executeQuery().next();
+            statement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -79,13 +79,21 @@ public class StudentDao implements Dao<StudentDTO, String> {
     }
 
     @Override
-    public boolean update(StudentDTO model) {
-        return false;
+    public void update(StudentDTO model) {
     }
 
     @Override
-    public boolean delete(StudentDTO model) {
-        return false;
+    public void delete(StudentDTO student) {
+        Connection connection = connectionPool.getConnection();
+        String delete = "DELETE FROM students WHERE student_id = (?)";
+        try (PreparedStatement statement = connection.prepareStatement(delete)) {
+            statement.setInt(1, student.getStudentID());
+            statement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            connectionPool.releaseConnection(connection);
+        }
     }
 
 

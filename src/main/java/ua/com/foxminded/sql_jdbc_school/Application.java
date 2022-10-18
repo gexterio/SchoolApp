@@ -3,7 +3,7 @@ package ua.com.foxminded.sql_jdbc_school;
 
 import ua.com.foxminded.sql_jdbc_school.dao.*;
 import ua.com.foxminded.sql_jdbc_school.dao.connection.BasicConnectionPool;
-import ua.com.foxminded.sql_jdbc_school.dto.StudentDTO;
+import ua.com.foxminded.sql_jdbc_school.menu.Menu;
 import ua.com.foxminded.sql_jdbc_school.servicedb.SchoolDataGenerator;
 
 public class Application {
@@ -12,7 +12,6 @@ public class Application {
     private static final String PASSWORD = "1101";
 
     public static void main(String[] args) {
-
         DBInitializer dbInitializer = new DBInitializer(URL, USER, PASSWORD);
         BasicConnectionPool connectionPool = dbInitializer.getConnectionPool();
         StudentDao studentDao = new StudentDao(connectionPool);
@@ -21,10 +20,8 @@ public class Application {
         PersonalCoursesDao personalCourseDao = new PersonalCoursesDao(connectionPool);
         new SchoolDataGenerator(connectionPool, studentDao, groupDao, courseDao, personalCourseDao)
                 .generateSchoolData();
-//        for (StudentDTO studentDTO : studentDao.getAll()) {
-//            System.out.println(studentDTO.toString());
-//        }
-        connectionPool.closePoolConnection();
+        Menu menu = new Menu(connectionPool, studentDao, personalCourseDao, courseDao);
+        menu.exit.exit();
     }
 
 }
