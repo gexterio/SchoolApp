@@ -13,7 +13,6 @@ import java.util.List;
 public class CourseDao implements Dao<CourseDTO, String> {
     private BasicConnectionPool connectionPool;
 
-
     public CourseDao(BasicConnectionPool connectionPool) {
         this.connectionPool = connectionPool;
     }

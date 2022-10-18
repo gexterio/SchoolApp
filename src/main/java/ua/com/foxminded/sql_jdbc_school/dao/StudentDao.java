@@ -19,8 +19,6 @@ public class StudentDao implements Dao<StudentDTO, String> {
         this.connectionPool = pool;
     }
 
-
-
     public void addStudentToGroup(StudentDTO student, Integer groupId) {
         Connection connection = connectionPool.getConnection();
         String insertGroup = "UPDATE students SET group_id = (?) WHERE student_id = (?);";

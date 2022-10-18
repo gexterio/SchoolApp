@@ -63,27 +63,6 @@ public class PersonalCoursesDao implements Dao<PersonalCoursesDTO, String> {
         return null;
     }
 
-
-    public List<PersonalCoursesDTO> getCoursesByStudent(StudentDTO student) {
-        Connection connection = connectionPool.getConnection();
-        List<PersonalCoursesDTO> list = new ArrayList<>();
-        String select = "SELECT course_id, student_id FROM personal_courses WHERE student_id = (?);";
-        try (PreparedStatement statement = connection.prepareStatement(select)) {
-            statement.setInt(1, student.getStudentID());
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                int courseId = resultSet.getInt("course_id");
-                int studentId = resultSet.getInt("student_id");
-                list.add(new PersonalCoursesDTO(courseId, studentId));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            connectionPool.releaseConnection(connection);
-        }
-        return list;
-    }
-
     @Override
     public void update(PersonalCoursesDTO model) {
 
@@ -92,25 +71,6 @@ public class PersonalCoursesDao implements Dao<PersonalCoursesDTO, String> {
     @Override
     public void delete(PersonalCoursesDTO model) {
 
-    }
-
-    public List<Integer> getAllStudentByCourse (int courseID) {
-        Connection connection = connectionPool.getConnection();
-        List<Integer> list = new ArrayList<>();
-        String select = "SELECT student_id FROM personal_courses WHERE course_id = (?);";
-        try (PreparedStatement statement = connection.prepareStatement(select)) {
-            statement.setInt(1, courseID);
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                int studentId = resultSet.getInt("student_id");
-                list.add(studentId);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            connectionPool.releaseConnection(connection);
-        }
-        return list;
     }
 
     public void deleteStudentFromCourse(StudentDTO student, CourseDTO course) {
