@@ -49,16 +49,4 @@ public class GroupDao implements Dao {
         }
     }
 
-
-    public GroupDTO read(String s) {
-        return null;
-    }
-
-    public void update(GroupDTO model) {
-
-    }
-
-    public void delete(GroupDTO model) {
-
-    }
 }

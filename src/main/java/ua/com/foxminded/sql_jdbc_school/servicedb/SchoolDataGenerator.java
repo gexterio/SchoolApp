@@ -2,7 +2,6 @@ package ua.com.foxminded.sql_jdbc_school.servicedb;
 
 import ua.com.foxminded.sql_jdbc_school.dao.CourseDao;
 import ua.com.foxminded.sql_jdbc_school.dao.GroupDao;
-import ua.com.foxminded.sql_jdbc_school.dao.PersonalCoursesDao;
 import ua.com.foxminded.sql_jdbc_school.dao.StudentDao;
 import ua.com.foxminded.sql_jdbc_school.dao.connection.BasicConnectionPool;
 import ua.com.foxminded.sql_jdbc_school.dto.CourseDTO;
@@ -20,7 +19,6 @@ public class SchoolDataGenerator {
     StudentDao studentDao;
     GroupDao groupDao;
     CourseDao courseDao;
-    PersonalCoursesDao personalCoursesDao;
     Random random;
     FileParser parser;
     private static final Integer GROUPS_COUNT = 10;
@@ -28,12 +26,11 @@ public class SchoolDataGenerator {
     private Integer courseCount = 0;
 
     public SchoolDataGenerator(BasicConnectionPool connectionPool, StudentDao studentDao, GroupDao groupDao,
-                               CourseDao courseDao, PersonalCoursesDao personalCoursesDao) {
+                               CourseDao courseDao) {
         this.connectionPool = connectionPool;
         this.studentDao = studentDao;
         this.groupDao = groupDao;
         this.courseDao = courseDao;
-        this.personalCoursesDao = personalCoursesDao;
         random = new Random();
     }
 
@@ -58,7 +55,7 @@ public class SchoolDataGenerator {
         }
         Collections.shuffle(integers);
         for (int j = 0; j < random.nextInt(3) + 1; j++) {
-            personalCoursesDao.addStudentToCourse(student, courses.get(integers.get(j)));
+            studentDao.addStudentToCourse(student, courses.get(integers.get(j)));
         }
     }
 

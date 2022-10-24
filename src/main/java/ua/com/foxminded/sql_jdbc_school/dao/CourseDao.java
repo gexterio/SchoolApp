@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CourseDao implements Dao {
-    private BasicConnectionPool connectionPool;
+    private final BasicConnectionPool connectionPool;
 
     public CourseDao(BasicConnectionPool connectionPool) {
         this.connectionPool = connectionPool;
@@ -40,6 +40,25 @@ public class CourseDao implements Dao {
         return courseDTOList;
     }
 
+    public List<Integer> getAllStudentsInCourse(CourseDTO courseDTO) {
+        Connection connection = connectionPool.getConnection();
+        List<Integer> idList = new ArrayList<>();
+        String select = "SELECT student_id FROM personal_courses Where course_id = (?);";
+        try (PreparedStatement statement = connection.prepareStatement(select)) {
+            statement.setInt(1, courseDTO.getCourseId());
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int studentId = resultSet.getInt("student_id");
+                idList.add(studentId);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            connectionPool.releaseConnection(connection);
+        }
+        return idList;
+    }
+
     public void create(CourseDTO course) {
         Connection connection = connectionPool.getConnection();
         String insert = "INSERT INTO courses (course_id, course_name, course_description) VALUES (DEFAULT, (?), (?)) RETURNING course_id";
@@ -52,18 +71,6 @@ public class CourseDao implements Dao {
         } finally {
             connectionPool.releaseConnection(connection);
         }
-    }
-
-    public CourseDTO read(String s) {
-        return null;
-    }
-
-    public void update(CourseDTO model) {
-
-    }
-
-    public void delete(CourseDTO model) {
-
     }
 
 }

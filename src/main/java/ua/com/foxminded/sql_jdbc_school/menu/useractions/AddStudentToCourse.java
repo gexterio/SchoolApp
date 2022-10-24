@@ -6,13 +6,13 @@ import ua.com.foxminded.sql_jdbc_school.dto.CourseDTO;
 import ua.com.foxminded.sql_jdbc_school.dto.StudentDTO;
 
 public class AddStudentToCourse implements UserOption {
-    PersonalCoursesDao personalCoursesDao;
+    StudentDao studentDao;
 
-    public AddStudentToCourse(PersonalCoursesDao personalCoursesDao) {
-        this.personalCoursesDao = personalCoursesDao;
+    public AddStudentToCourse(StudentDao studentDao) {
+        this.studentDao = studentDao;
     }
 
-  public void addStudentToCourse(StudentDTO student, CourseDTO course) {
-        personalCoursesDao.addStudentToCourse(student, course);
+    public void addStudentToCourse(StudentDTO student, CourseDTO course) {
+        studentDao.addStudentToCourse(student, course);
     }
 }

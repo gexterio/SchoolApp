@@ -1,7 +1,10 @@
 package ua.com.foxminded.sql_jdbc_school;
 
 
-import ua.com.foxminded.sql_jdbc_school.dao.*;
+import ua.com.foxminded.sql_jdbc_school.dao.CourseDao;
+import ua.com.foxminded.sql_jdbc_school.dao.DBInitializer;
+import ua.com.foxminded.sql_jdbc_school.dao.GroupDao;
+import ua.com.foxminded.sql_jdbc_school.dao.StudentDao;
 import ua.com.foxminded.sql_jdbc_school.dao.connection.BasicConnectionPool;
 import ua.com.foxminded.sql_jdbc_school.menu.Menu;
 import ua.com.foxminded.sql_jdbc_school.servicedb.SchoolDataGenerator;
@@ -17,10 +20,9 @@ public class Application {
         StudentDao studentDao = new StudentDao(connectionPool);
         GroupDao groupDao = new GroupDao(connectionPool);
         CourseDao courseDao = new CourseDao(connectionPool);
-        PersonalCoursesDao personalCourseDao = new PersonalCoursesDao(connectionPool);
-        new SchoolDataGenerator(connectionPool, studentDao, groupDao, courseDao, personalCourseDao)
+        new SchoolDataGenerator(connectionPool, studentDao, groupDao, courseDao)
                 .generateSchoolData();
-        Menu menu = new Menu(connectionPool, studentDao, personalCourseDao, courseDao);
+        Menu menu = new Menu(connectionPool, studentDao, courseDao);
         menu.exit.exit();
     }
 

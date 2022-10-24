@@ -1,6 +1,7 @@
 package ua.com.foxminded.sql_jdbc_school.dao;
 
 import ua.com.foxminded.sql_jdbc_school.dao.connection.BasicConnectionPool;
+import ua.com.foxminded.sql_jdbc_school.dto.CourseDTO;
 import ua.com.foxminded.sql_jdbc_school.dto.StudentDTO;
 
 import java.sql.Connection;
@@ -25,6 +26,34 @@ public class StudentDao implements Dao {
         try (PreparedStatement statement = connection.prepareStatement(insertGroup)) {
             statement.setInt(1, groupId);
             statement.setInt(2, student.getStudentID());
+            statement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            connectionPool.releaseConnection(connection);
+        }
+    }
+
+    public void addStudentToCourse(StudentDTO student, CourseDTO course) {
+        Connection connection = connectionPool.getConnection();
+        String insertPersonalCourses = "INSERT INTO personal_courses (student_id, course_id) VALUES ((?), (?));";
+        try (PreparedStatement statement = connection.prepareStatement(insertPersonalCourses)) {
+            statement.setInt(1, student.getStudentID());
+            statement.setInt(2, course.getCourseId());
+            statement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            connectionPool.releaseConnection(connection);
+        }
+    }
+
+    public void deleteStudentFromCourse(StudentDTO student, CourseDTO course) {
+        Connection connection = connectionPool.getConnection();
+        String select = "DELETE FROM personal_courses WHERE student_id = (?) AND course_id = (?);";
+        try (PreparedStatement statement = connection.prepareStatement(select)) {
+            statement.setInt(1, student.getStudentID());
+            statement.setInt(2, course.getCourseId());
             statement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -67,13 +96,6 @@ public class StudentDao implements Dao {
         }
         studentDTOList.sort(Comparator.comparing(StudentDTO::getStudentID));
         return studentDTOList;
-    }
-
-    public StudentDTO read(String s) {
-        return null;
-    }
-
-    public void update(StudentDTO model) {
     }
 
     public void delete(StudentDTO student) {
