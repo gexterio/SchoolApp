@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class StudentDao implements Dao<StudentDTO, String> {
+public class StudentDao implements Dao {
 
     private final BasicConnectionPool connectionPool;
 
@@ -33,7 +33,6 @@ public class StudentDao implements Dao<StudentDTO, String> {
         }
     }
 
-    @Override
     public void create(StudentDTO student) {
         Connection connection = connectionPool.getConnection();
         String insert = "INSERT INTO students (student_id, first_name, last_name) VALUES (DEFAULT, (?), (?)) RETURNING student_id";
@@ -48,7 +47,6 @@ public class StudentDao implements Dao<StudentDTO, String> {
         }
     }
 
-    @Override
     public List<StudentDTO> getAll() {
         Connection connection = connectionPool.getConnection();
         List<StudentDTO> studentDTOList = new ArrayList<>();
@@ -60,7 +58,7 @@ public class StudentDao implements Dao<StudentDTO, String> {
                 String firstName = resultSet.getString("first_name");
                 String lastName = resultSet.getString("last_name");
                 int groupId = resultSet.getInt("group_id");
-                studentDTOList.add(new StudentDTO(studentId, firstName, lastName, groupId));
+                studentDTOList.add(new StudentDTO.StudentBuilder(firstName, lastName).setStudentId(studentId).setGroupId(groupId).build());
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -71,16 +69,13 @@ public class StudentDao implements Dao<StudentDTO, String> {
         return studentDTOList;
     }
 
-    @Override
     public StudentDTO read(String s) {
         return null;
     }
 
-    @Override
     public void update(StudentDTO model) {
     }
 
-    @Override
     public void delete(StudentDTO student) {
         Connection connection = connectionPool.getConnection();
         String delete = "DELETE FROM students WHERE student_id = (?)";

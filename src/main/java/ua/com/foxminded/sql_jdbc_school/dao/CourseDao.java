@@ -10,14 +10,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CourseDao implements Dao<CourseDTO, String> {
+public class CourseDao implements Dao {
     private BasicConnectionPool connectionPool;
 
     public CourseDao(BasicConnectionPool connectionPool) {
         this.connectionPool = connectionPool;
     }
 
-    @Override
     public List<CourseDTO> getAll() {
         Connection connection = connectionPool.getConnection();
         List<CourseDTO> courseDTOList = new ArrayList<>();
@@ -25,10 +24,13 @@ public class CourseDao implements Dao<CourseDTO, String> {
         try (PreparedStatement statement = connection.prepareStatement(selectAll)) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                int courseId = resultSet.getInt("course_id");
-                String courseName = resultSet.getString("course_name");
-                String courseDescription = resultSet.getString("course_description");
-                courseDTOList.add(new CourseDTO(courseId, courseName, courseDescription));
+                int id = resultSet.getInt("course_id");
+                String name = resultSet.getString("course_name");
+                String description = resultSet.getString("course_description");
+                courseDTOList.add(new CourseDTO.CourseBuilder(name)
+                        .setId(id)
+                        .setDescription(description)
+                        .build());
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -38,7 +40,6 @@ public class CourseDao implements Dao<CourseDTO, String> {
         return courseDTOList;
     }
 
-    @Override
     public void create(CourseDTO course) {
         Connection connection = connectionPool.getConnection();
         String insert = "INSERT INTO courses (course_id, course_name, course_description) VALUES (DEFAULT, (?), (?)) RETURNING course_id";
@@ -53,17 +54,14 @@ public class CourseDao implements Dao<CourseDTO, String> {
         }
     }
 
-    @Override
     public CourseDTO read(String s) {
         return null;
     }
 
-    @Override
     public void update(CourseDTO model) {
 
     }
 
-    @Override
     public void delete(CourseDTO model) {
 
     }

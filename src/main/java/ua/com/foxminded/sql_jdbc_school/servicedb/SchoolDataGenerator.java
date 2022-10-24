@@ -87,7 +87,7 @@ public class SchoolDataGenerator {
     private void generateGroups() {
         for (int i = 0; i < GROUPS_COUNT; i++) {
             String groupName = groupNameGenerator();
-            groupDao.create(new GroupDTO(i, groupName));
+            groupDao.create(new GroupDTO.GroupBuilder(groupName).setId(i).build());
         }
     }
 
@@ -99,7 +99,7 @@ public class SchoolDataGenerator {
         for (int i = 0; i < STUDENTS_COUNT; i++) {
             String firstName = firstNames.get(random.nextInt(firstNames.size()));
             String lastName = lastNames.get(random.nextInt(lastNames.size()));
-            studentDao.create(new StudentDTO(i, firstName, lastName));
+            studentDao.create(new StudentDTO.StudentBuilder(firstName, lastName).setStudentId(i).build());
         }
     }
 
@@ -108,7 +108,10 @@ public class SchoolDataGenerator {
         List<String> courses = parser.parseCourses("courses");
         for (int i = 0; i < courses.size(); i++) {
             String[] line = courses.get(i).split("_");
-            courseDao.create(new CourseDTO(i, line[0], line[1]));
+            courseDao.create(new CourseDTO.CourseBuilder(line[0])
+                    .setId(i)
+                    .setDescription(line[1])
+                    .build());
             courseCount++;
         }
 

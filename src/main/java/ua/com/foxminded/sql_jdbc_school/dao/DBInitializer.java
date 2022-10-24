@@ -9,18 +9,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DBInitializer {
-    private BasicConnectionPool basicConnectionPool;
+    private final BasicConnectionPool basicConnectionPool;
 
     public DBInitializer(String url, String user, String password) {
         basicConnectionPool = new BasicConnectionPool(url, user, password);
-        initALLTables();
+        initAllTables();
     }
 
     public BasicConnectionPool getConnectionPool() {
         return basicConnectionPool;
     }
 
-    public void initALLTables() {
+    public void initAllTables() {
         List<String> sqlQueryList = getSqlQuery();
         for (String s : sqlQueryList) {
             initTable(s);

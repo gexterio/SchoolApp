@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PersonalCoursesDao implements Dao<PersonalCoursesDTO, String> {
+public class PersonalCoursesDao implements Dao {
     BasicConnectionPool connectionPool;
 
     public PersonalCoursesDao(BasicConnectionPool connectionPool) {
@@ -33,7 +33,6 @@ public class PersonalCoursesDao implements Dao<PersonalCoursesDTO, String> {
         }
     }
 
-    @Override
     public List<PersonalCoursesDTO> getAll() {
         Connection connection = connectionPool.getConnection();
         List<PersonalCoursesDTO> personalCoursesDTOList = new ArrayList<>();
@@ -53,22 +52,18 @@ public class PersonalCoursesDao implements Dao<PersonalCoursesDTO, String> {
         return personalCoursesDTOList;
     }
 
-    @Override
     public void create(PersonalCoursesDTO model) {
         // replaced by addStudentToCourse(StudentDTO, CourseDTO)
     }
 
-    @Override
     public PersonalCoursesDTO read(String s) {
         return null;
     }
 
-    @Override
     public void update(PersonalCoursesDTO model) {
 
     }
 
-    @Override
     public void delete(PersonalCoursesDTO model) {
 
     }

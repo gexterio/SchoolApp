@@ -10,14 +10,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GroupDao implements Dao<GroupDTO, String> {
+public class GroupDao implements Dao {
     private final BasicConnectionPool connectionPool;
 
     public GroupDao(BasicConnectionPool connectionPool) {
         this.connectionPool = connectionPool;
     }
 
-    @Override
     public List<GroupDTO> getAll() {
         Connection connection = connectionPool.getConnection();
         List<GroupDTO> groupDTOList = new ArrayList<>();
@@ -27,7 +26,7 @@ public class GroupDao implements Dao<GroupDTO, String> {
             while (resultSet.next()) {
                 int groupId = resultSet.getInt("group_id");
                 String groupName = resultSet.getString("group_name");
-                groupDTOList.add(new GroupDTO(groupId, groupName));
+                groupDTOList.add(new GroupDTO.GroupBuilder(groupName).setId(groupId).build());
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -37,7 +36,6 @@ public class GroupDao implements Dao<GroupDTO, String> {
         return groupDTOList;
     }
 
-    @Override
     public void create(GroupDTO group) {
         Connection connection = connectionPool.getConnection();
         String insert = "INSERT INTO groups (group_id, group_name) VALUES (DEFAULT, (?)) RETURNING group_id";
@@ -52,17 +50,14 @@ public class GroupDao implements Dao<GroupDTO, String> {
     }
 
 
-    @Override
     public GroupDTO read(String s) {
         return null;
     }
 
-    @Override
     public void update(GroupDTO model) {
 
     }
 
-    @Override
     public void delete(GroupDTO model) {
 
     }
