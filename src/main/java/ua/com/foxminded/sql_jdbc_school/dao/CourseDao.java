@@ -17,6 +17,21 @@ public class CourseDao implements Dao {
         this.connectionPool = connectionPool;
     }
 
+    public CourseDTO searchById(int id) {
+        Connection connection = connectionPool.getConnection();
+        String select = "SELECT  course_name, course_description FROM courses WHERE course_id = (?);";
+        try (PreparedStatement statement = connection.prepareStatement(select)) {
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            String courseName = resultSet.getString("course_name");
+            String courseDescription = resultSet.getString("course_description");
+            return new CourseDTO.CourseBuilder(courseName).setId(id).setDescription(courseDescription).build();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        throw new IllegalArgumentException("Course not found");
+    }
     public List<CourseDTO> getAll() {
         Connection connection = connectionPool.getConnection();
         List<CourseDTO> courseDTOList = new ArrayList<>();

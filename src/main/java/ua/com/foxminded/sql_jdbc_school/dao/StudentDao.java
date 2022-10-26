@@ -17,9 +17,26 @@ public class StudentDao implements Dao {
     private final BasicConnectionPool connectionPool;
 
     public StudentDao(BasicConnectionPool pool) {
+
         this.connectionPool = pool;
     }
 
+    public StudentDTO searchById (int id) {
+        Connection connection = connectionPool.getConnection();
+        String select = "SELECT  first_name, last_name, group_id FROM students WHERE student_id = (?);";
+        try (PreparedStatement statement = connection.prepareStatement(select)) {
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            String firstName = resultSet.getString("first_name");
+            String lastName = resultSet.getString("last_name");
+            int groupId = resultSet.getInt("group_id");
+            return new StudentDTO.StudentBuilder(firstName, lastName).setStudentId(id).setGroupId(groupId).build();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        throw new IllegalArgumentException("Student not found");
+    }
     public void addStudentToGroup(StudentDTO student, Integer groupId) {
         Connection connection = connectionPool.getConnection();
         String insertGroup = "UPDATE students SET group_id = (?) WHERE student_id = (?);";

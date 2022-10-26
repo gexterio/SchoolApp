@@ -23,6 +23,7 @@ public class Application {
         new SchoolDataGenerator(connectionPool, studentDao, groupDao, courseDao)
                 .generateSchoolData();
         Menu menu = new Menu(connectionPool, studentDao, courseDao);
+        menu.run();
         menu.exit.exit();
     }
 
