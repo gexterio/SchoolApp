@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CourseDao implements Dao {
+public class CourseDao {
     private final BasicConnectionPool connectionPool;
 
     public CourseDao(BasicConnectionPool connectionPool) {
@@ -32,6 +32,7 @@ public class CourseDao implements Dao {
         }
         throw new IllegalArgumentException("Course not found");
     }
+
     public List<CourseDTO> getAll() {
         Connection connection = connectionPool.getConnection();
         List<CourseDTO> courseDTOList = new ArrayList<>();

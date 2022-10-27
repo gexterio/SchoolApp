@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class StudentDao implements Dao {
+public class StudentDao {
 
     private final BasicConnectionPool connectionPool;
 

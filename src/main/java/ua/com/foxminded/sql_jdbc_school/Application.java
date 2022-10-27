@@ -8,14 +8,20 @@ import ua.com.foxminded.sql_jdbc_school.dao.StudentDao;
 import ua.com.foxminded.sql_jdbc_school.dao.connection.BasicConnectionPool;
 import ua.com.foxminded.sql_jdbc_school.menu.Menu;
 import ua.com.foxminded.sql_jdbc_school.servicedb.SchoolDataGenerator;
+import ua.com.foxminded.sql_jdbc_school.util.FileReader;
+
+import java.io.IOException;
+import java.util.Properties;
 
 public class Application {
-    private static final String URL = "jdbc:postgresql://localhost:5432/school";
-    private static final String USER = "postgres";
-    private static final String PASSWORD = "1101";
 
-    public static void main(String[] args) {
-        DBInitializer dbInitializer = new DBInitializer(URL, USER, PASSWORD);
+    public static void main(String[] args) throws IOException {
+        Properties prop = new Properties();
+        prop.load(new FileReader().readProperties("properties.properties"));
+        DBInitializer dbInitializer = new DBInitializer(
+                prop.getProperty("url"),
+                prop.getProperty("user"),
+                prop.getProperty("password"));
         BasicConnectionPool connectionPool = dbInitializer.getConnectionPool();
         StudentDao studentDao = new StudentDao(connectionPool);
         GroupDao groupDao = new GroupDao(connectionPool);
@@ -24,7 +30,6 @@ public class Application {
                 .generateSchoolData();
         Menu menu = new Menu(connectionPool, studentDao, courseDao);
         menu.run();
-        menu.exit.exit();
     }
 
 }

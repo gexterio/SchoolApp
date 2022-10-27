@@ -8,8 +8,8 @@ public class Exit implements UserOption {
     public Exit(BasicConnectionPool basicConnectionPool) {
         this.basicConnectionPool = basicConnectionPool;
     }
-
-    public void exit () {
+@Override
+    public void execute  () {
         basicConnectionPool.closePoolConnection();
     }
 }

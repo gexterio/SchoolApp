@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GroupDao implements Dao {
+public class GroupDao {
     private final BasicConnectionPool connectionPool;
 
     public GroupDao(BasicConnectionPool connectionPool) {

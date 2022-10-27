@@ -23,4 +23,9 @@ public class FileReader {
             return list;
         }
     }
+
+    public InputStream readProperties (String fileName) {
+        return getClass().getClassLoader().getResourceAsStream(fileName);
+
+    }
 }
