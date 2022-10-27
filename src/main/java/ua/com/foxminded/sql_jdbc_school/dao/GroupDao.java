@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GroupDao {
+    private static final String SELECT_ALL_GROUPS = "SELECT group_id, group_name FROM groups;";
+    private static final String CREATE_GROUP = "INSERT INTO groups (group_id, group_name) VALUES (DEFAULT, (?)) RETURNING group_id";
     private final BasicConnectionPool connectionPool;
 
     public GroupDao(BasicConnectionPool connectionPool) {
@@ -20,8 +22,7 @@ public class GroupDao {
     public List<GroupDTO> getAll() {
         Connection connection = connectionPool.getConnection();
         List<GroupDTO> groupDTOList = new ArrayList<>();
-        String selectAll = "SELECT group_id, group_name FROM groups;";
-        try (PreparedStatement statement = connection.prepareStatement(selectAll)) {
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_GROUPS)) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 int groupId = resultSet.getInt("group_id");
@@ -38,8 +39,7 @@ public class GroupDao {
 
     public void create(GroupDTO group) {
         Connection connection = connectionPool.getConnection();
-        String insert = "INSERT INTO groups (group_id, group_name) VALUES (DEFAULT, (?)) RETURNING group_id";
-        try (PreparedStatement statement = connection.prepareStatement(insert)) {
+        try (PreparedStatement statement = connection.prepareStatement(CREATE_GROUP)) {
             statement.setString(1, group.getGroupName());
             statement.executeQuery().next();
         } catch (SQLException e) {

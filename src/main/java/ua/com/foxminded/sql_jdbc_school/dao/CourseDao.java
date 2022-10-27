@@ -11,6 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CourseDao {
+    private static final String SELECT_COURSE_BY_ID = "SELECT  course_name, course_description FROM courses WHERE course_id = (?);";
+    private static final String SELECT_COURSE_BY_NAME = "SELECT  course_id, course_description FROM courses WHERE course_name = (?);";
+    private static final String SELECT_STUDENT_BY_COURSE_ID = "SELECT student_id FROM personal_courses WHERE course_id = (?);";
+    private static final String SELECT_ALL_COURSES = "SELECT course_id, course_name, course_description FROM courses;";
+    private static final String CREATE_COURSE = "INSERT INTO courses (course_id, course_name, course_description) VALUES (DEFAULT, (?), (?)) RETURNING course_id";
     private final BasicConnectionPool connectionPool;
 
     public CourseDao(BasicConnectionPool connectionPool) {
@@ -19,8 +24,7 @@ public class CourseDao {
 
     public CourseDTO searchById(int id) {
         Connection connection = connectionPool.getConnection();
-        String select = "SELECT  course_name, course_description FROM courses WHERE course_id = (?);";
-        try (PreparedStatement statement = connection.prepareStatement(select)) {
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_COURSE_BY_ID)) {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
@@ -33,11 +37,43 @@ public class CourseDao {
         throw new IllegalArgumentException("Course not found");
     }
 
+    public CourseDTO searchByName(String name) {
+        Connection connection = connectionPool.getConnection();
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_COURSE_BY_NAME)) {
+            statement.setString(1, name);
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            int courseId = resultSet.getInt("course_id");
+            String courseDescription = resultSet.getString("course_description");
+            return new CourseDTO.CourseBuilder(name).setId(courseId).setDescription(courseDescription).build();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        throw new IllegalArgumentException("Course not found");
+    }
+
+    public List<Integer> searchStudentsInCourse(String courseName) {
+        int courseId = searchByName(courseName).getCourseId();
+        Connection connection = connectionPool.getConnection();
+        List<Integer> list = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_STUDENT_BY_COURSE_ID)) {
+            statement.setInt(1, courseId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int studentId = resultSet.getInt("student_id");
+                list.add(studentId);
+            }
+            return list;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        throw new IllegalArgumentException("Course not found");
+    }
+
     public List<CourseDTO> getAll() {
         Connection connection = connectionPool.getConnection();
         List<CourseDTO> courseDTOList = new ArrayList<>();
-        String selectAll = "SELECT course_id, course_name, course_description FROM courses;";
-        try (PreparedStatement statement = connection.prepareStatement(selectAll)) {
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_COURSES)) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 int id = resultSet.getInt("course_id");
@@ -56,29 +92,9 @@ public class CourseDao {
         return courseDTOList;
     }
 
-    public List<Integer> getAllStudentsInCourse(CourseDTO courseDTO) {
-        Connection connection = connectionPool.getConnection();
-        List<Integer> idList = new ArrayList<>();
-        String select = "SELECT student_id FROM personal_courses Where course_id = (?);";
-        try (PreparedStatement statement = connection.prepareStatement(select)) {
-            statement.setInt(1, courseDTO.getCourseId());
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                int studentId = resultSet.getInt("student_id");
-                idList.add(studentId);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            connectionPool.releaseConnection(connection);
-        }
-        return idList;
-    }
-
     public void create(CourseDTO course) {
         Connection connection = connectionPool.getConnection();
-        String insert = "INSERT INTO courses (course_id, course_name, course_description) VALUES (DEFAULT, (?), (?)) RETURNING course_id";
-        try (PreparedStatement statement = connection.prepareStatement(insert)) {
+        try (PreparedStatement statement = connection.prepareStatement(CREATE_COURSE)) {
             statement.setString(1, course.getCourseName());
             statement.setString(2, course.getCourseDescription());
             statement.executeQuery().next();

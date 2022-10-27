@@ -21,7 +21,7 @@ public class SchoolDataGenerator {
     CourseDao courseDao;
     Random random;
     FileParser parser;
-    private static final Integer GROUPS_COUNT = 10;
+    public static final Integer GROUPS_COUNT = 10;
     private static final Integer STUDENTS_COUNT = 200;
     private Integer courseCount = 0;
 

@@ -12,6 +12,9 @@ import ua.com.foxminded.sql_jdbc_school.util.FileReader;
 
 import java.io.IOException;
 import java.util.Properties;
+import java.util.stream.IntStream;
+
+import static ua.com.foxminded.sql_jdbc_school.servicedb.SchoolDataGenerator.GROUPS_COUNT;
 
 public class Application {
 

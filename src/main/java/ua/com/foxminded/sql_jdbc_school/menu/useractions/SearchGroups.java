@@ -25,12 +25,6 @@ public class SearchGroups implements UserOption {
     }
 
     private Map<Integer, Integer> searchGroups(int studentCount) {
-        List<StudentDTO> studentList = studentDao.getAll(); // TODO remove this line and searching by Dao
-        Map<Integer, Integer> list = studentList.stream()
-                .collect(Collectors.groupingBy(StudentDTO::getGroupId,
-                        Collectors.summingInt(stud -> 1)));
-        return list.entrySet().stream()
-                .filter(entry -> entry.getValue() <= studentCount).skip(1)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        return studentDao.searchGroupsByStudentCount(studentCount);
     }
 }

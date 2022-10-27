@@ -8,12 +8,20 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+
+import static ua.com.foxminded.sql_jdbc_school.servicedb.SchoolDataGenerator.GROUPS_COUNT;
 
 public class StudentDao {
 
+    public static final String CREATE_STUDENT = "INSERT INTO students (student_id, first_name, last_name) VALUES (DEFAULT, (?), (?))";
+    private static final String ADD_STUDENT_TO_COURSE = "INSERT INTO personal_courses (student_id, course_id) VALUES ((?), (?));";
+    private static final String DELETE_STUDENT_FROM_COURSE = "DELETE FROM personal_courses WHERE student_id = (?) AND course_id = (?);";
+    private static final String SELECT_ALL_STUDENTS = "SELECT student_id, first_name, last_name, group_id FROM students;";
+    private static final String SELECT_COUNT_STUDENTS_IN_GROUP = "SELECT COUNT(group_id) FROM students WHERE group_id = (?)";
+    private static final String DELETE_STUDENT = "DELETE FROM students WHERE student_id = (?)";
+    private static final String SELECT_BY_ID = "SELECT  first_name, last_name, group_id FROM students WHERE student_id = (?);";
+    private static final String SET_GROUP_ID = "UPDATE students SET group_id = (?) WHERE student_id = (?);";
     private final BasicConnectionPool connectionPool;
 
     public StudentDao(BasicConnectionPool pool) {
@@ -21,10 +29,9 @@ public class StudentDao {
         this.connectionPool = pool;
     }
 
-    public StudentDTO searchById (int id) {
+    public StudentDTO searchById(int id) {
         Connection connection = connectionPool.getConnection();
-        String select = "SELECT  first_name, last_name, group_id FROM students WHERE student_id = (?);";
-        try (PreparedStatement statement = connection.prepareStatement(select)) {
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID)) {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
@@ -37,10 +44,10 @@ public class StudentDao {
         }
         throw new IllegalArgumentException("Student not found");
     }
+
     public void addStudentToGroup(StudentDTO student, Integer groupId) {
         Connection connection = connectionPool.getConnection();
-        String insertGroup = "UPDATE students SET group_id = (?) WHERE student_id = (?);";
-        try (PreparedStatement statement = connection.prepareStatement(insertGroup)) {
+        try (PreparedStatement statement = connection.prepareStatement(SET_GROUP_ID)) {
             statement.setInt(1, groupId);
             statement.setInt(2, student.getStudentID());
             statement.execute();
@@ -53,8 +60,7 @@ public class StudentDao {
 
     public void addStudentToCourse(StudentDTO student, CourseDTO course) {
         Connection connection = connectionPool.getConnection();
-        String insertPersonalCourses = "INSERT INTO personal_courses (student_id, course_id) VALUES ((?), (?));";
-        try (PreparedStatement statement = connection.prepareStatement(insertPersonalCourses)) {
+        try (PreparedStatement statement = connection.prepareStatement(ADD_STUDENT_TO_COURSE)) {
             statement.setInt(1, student.getStudentID());
             statement.setInt(2, course.getCourseId());
             statement.execute();
@@ -67,8 +73,7 @@ public class StudentDao {
 
     public void deleteStudentFromCourse(StudentDTO student, CourseDTO course) {
         Connection connection = connectionPool.getConnection();
-        String select = "DELETE FROM personal_courses WHERE student_id = (?) AND course_id = (?);";
-        try (PreparedStatement statement = connection.prepareStatement(select)) {
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_STUDENT_FROM_COURSE)) {
             statement.setInt(1, student.getStudentID());
             statement.setInt(2, course.getCourseId());
             statement.execute();
@@ -81,8 +86,7 @@ public class StudentDao {
 
     public void create(StudentDTO student) {
         Connection connection = connectionPool.getConnection();
-        String insert = "INSERT INTO students (student_id, first_name, last_name) VALUES (DEFAULT, (?), (?)) RETURNING student_id";
-        try (PreparedStatement statement = connection.prepareStatement(insert)) {
+        try (PreparedStatement statement = connection.prepareStatement(CREATE_STUDENT)) {
             statement.setString(1, student.getFirstName());
             statement.setString(2, student.getLastName());
             statement.execute();
@@ -96,8 +100,7 @@ public class StudentDao {
     public List<StudentDTO> getAll() {
         Connection connection = connectionPool.getConnection();
         List<StudentDTO> studentDTOList = new ArrayList<>();
-        String selectAll = "SELECT student_id, first_name, last_name, group_id FROM students;";
-        try (PreparedStatement statement = connection.prepareStatement(selectAll)) {
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_STUDENTS)) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 int studentId = resultSet.getInt("student_id");
@@ -115,10 +118,36 @@ public class StudentDao {
         return studentDTOList;
     }
 
+    public Map<Integer, Integer> searchGroupsByStudentCount(int studentCount) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 1; i <= GROUPS_COUNT; i++) {
+            int count = countStudentsInGroup(i);
+            if (count <= studentCount) {
+                map.put(i, count);
+            }
+        }
+        return map;
+    }
+
+    public int countStudentsInGroup(int groupId) {
+        Connection connection = connectionPool.getConnection();
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_COUNT_STUDENTS_IN_GROUP)) {
+            statement.setInt(1, groupId);
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            return resultSet.getInt(1);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            connectionPool.releaseConnection(connection);
+        }
+        throw new IllegalArgumentException("Invalid groupId");
+    }
+
     public void delete(StudentDTO student) {
         Connection connection = connectionPool.getConnection();
-        String delete = "DELETE FROM students WHERE student_id = (?)";
-        try (PreparedStatement statement = connection.prepareStatement(delete)) {
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_STUDENT)) {
             statement.setInt(1, student.getStudentID());
             statement.execute();
         } catch (SQLException e) {
