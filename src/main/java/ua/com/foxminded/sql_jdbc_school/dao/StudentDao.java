@@ -19,7 +19,7 @@ public class StudentDao {
     private static final String ADD_STUDENT_TO_COURSE = "INSERT INTO personal_courses (student_id, course_id) VALUES ((?), (?));";
     private static final String DELETE_STUDENT_FROM_COURSE = "DELETE FROM personal_courses WHERE student_id = (?) AND course_id = (?);";
     private static final String SELECT_ALL_STUDENTS = "SELECT student_id, first_name, last_name, group_id FROM students;";
-    private static final String SELECT_COUNT_STUDENTS_IN_GROUP = "SELECT group_id, Count(student_id) as cnt FROM students WHERE group_id>0 GROUP BY students.group_id ORDER BY students.group_id";
+    private static final String SELECT_COUNT_STUDENTS_IN_GROUP = "SELECT group_id, Count(student_id) as cnt FROM students WHERE group_id>0 GROUP BY students.group_id HAVING COUNT (student_id)<=(?) ORDER BY students.group_id;";
     private static final String DELETE_STUDENT = "DELETE FROM students WHERE student_id = (?)";
     private static final String SELECT_BY_ID = "SELECT  first_name, last_name, group_id FROM students WHERE student_id = (?);";
     private static final String SET_GROUP_ID = "UPDATE students SET group_id = (?) WHERE student_id = (?);";
@@ -120,23 +120,18 @@ public class StudentDao {
     }
 
     public Map<Integer, Integer> searchGroupsByStudentCount(int studentCount) {
-
-        Map<Integer, Integer> map = countStudentsInGroup();
-        return map.entrySet().stream().filter(key -> key.getValue() <= studentCount).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-    }
-
-    public Map<Integer, Integer> countStudentsInGroup() {
         Connection connection = connectionPool.getConnection();
         Map<Integer,Integer> result;
         try (PreparedStatement statement = connection.prepareStatement(SELECT_COUNT_STUDENTS_IN_GROUP)) {
+            statement.setInt(1, studentCount);
             ResultSet resultSet = statement.executeQuery();
-           result = new HashMap<>();
+            result = new HashMap<>();
             while ( resultSet.next()) {
                 int groupId = resultSet.getInt("group_id");
                 int count = resultSet.getInt("cnt");
                 result.put(groupId, count);
-           }
-           return result;
+            }
+            return result;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -144,6 +139,7 @@ public class StudentDao {
         }
         throw new IllegalArgumentException("Invalid groupId");
     }
+
 
     public void delete(StudentDTO student) {
         Connection connection = connectionPool.getConnection();
