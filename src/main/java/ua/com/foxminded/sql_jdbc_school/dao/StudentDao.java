@@ -9,9 +9,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.stream.Collectors;
-
-import static ua.com.foxminded.sql_jdbc_school.servicedb.SchoolDataGenerator.GROUPS_COUNT;
 
 public class StudentDao {
 
@@ -23,6 +20,7 @@ public class StudentDao {
     private static final String DELETE_STUDENT = "DELETE FROM students WHERE student_id = (?)";
     private static final String SELECT_BY_ID = "SELECT  first_name, last_name, group_id FROM students WHERE student_id = (?);";
     private static final String SET_GROUP_ID = "UPDATE students SET group_id = (?) WHERE student_id = (?);";
+    public static final String GROUP_ID = "group_id";
     private final BasicConnectionPool connectionPool;
 
     public StudentDao(BasicConnectionPool pool) {
@@ -38,7 +36,7 @@ public class StudentDao {
             resultSet.next();
             String firstName = resultSet.getString("first_name");
             String lastName = resultSet.getString("last_name");
-            int groupId = resultSet.getInt("group_id");
+            int groupId = resultSet.getInt(GROUP_ID);
             return new StudentDTO.StudentBuilder(firstName, lastName).setStudentId(id).setGroupId(groupId).build();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -107,7 +105,7 @@ public class StudentDao {
                 int studentId = resultSet.getInt("student_id");
                 String firstName = resultSet.getString("first_name");
                 String lastName = resultSet.getString("last_name");
-                int groupId = resultSet.getInt("group_id");
+                int groupId = resultSet.getInt(GROUP_ID);
                 studentDTOList.add(new StudentDTO.StudentBuilder(firstName, lastName).setStudentId(studentId).setGroupId(groupId).build());
             }
         } catch (SQLException e) {
@@ -121,13 +119,13 @@ public class StudentDao {
 
     public Map<Integer, Integer> searchGroupsByStudentCount(int studentCount) {
         Connection connection = connectionPool.getConnection();
-        Map<Integer,Integer> result;
+        Map<Integer, Integer> result;
         try (PreparedStatement statement = connection.prepareStatement(SELECT_COUNT_STUDENTS_IN_GROUP)) {
             statement.setInt(1, studentCount);
             ResultSet resultSet = statement.executeQuery();
             result = new HashMap<>();
-            while ( resultSet.next()) {
-                int groupId = resultSet.getInt("group_id");
+            while (resultSet.next()) {
+                int groupId = resultSet.getInt(GROUP_ID);
                 int count = resultSet.getInt("cnt");
                 result.put(groupId, count);
             }
