@@ -64,7 +64,7 @@ public class SchoolDataGenerator {
         Collections.shuffle(studentDTOList);
         for (int i = 1; i <= GROUPS_COUNT; i++) {
             int chanceToEmptyGroup = random.nextInt(100);
-            if (chanceToEmptyGroup > 90) {
+            if (chanceToEmptyGroup > 70) {
                 continue;
             }
             int limit = random.nextInt(20) + 10;

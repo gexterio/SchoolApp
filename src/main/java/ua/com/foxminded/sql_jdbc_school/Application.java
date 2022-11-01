@@ -11,6 +11,8 @@ import ua.com.foxminded.sql_jdbc_school.servicedb.SchoolDataGenerator;
 import ua.com.foxminded.sql_jdbc_school.util.FileReader;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Properties;
 import java.util.stream.IntStream;
 
