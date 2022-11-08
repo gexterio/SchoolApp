@@ -11,15 +11,10 @@ import ua.com.foxminded.sql_jdbc_school.servicedb.SchoolDataGenerator;
 import ua.com.foxminded.sql_jdbc_school.util.FileReader;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Properties;
-import java.util.stream.IntStream;
-
-import static ua.com.foxminded.sql_jdbc_school.servicedb.SchoolDataGenerator.GROUPS_COUNT;
 
 public class Application {
-
+    
     public static void main(String[] args) throws IOException {
         Properties prop = new Properties();
         prop.load(new FileReader().readProperties("properties.properties"));

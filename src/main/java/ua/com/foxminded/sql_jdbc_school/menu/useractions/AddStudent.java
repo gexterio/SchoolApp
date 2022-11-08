@@ -9,9 +9,9 @@ public class AddStudent implements UserOption{
     StudentDao studentDao;
     Scanner scanner;
 
-    public AddStudent(StudentDao studentDao) {
+    public AddStudent(StudentDao studentDao, Scanner scanner) {
         this.studentDao = studentDao;
-        scanner = new Scanner(System.in);
+       this.scanner = scanner;
     }
 
     @Override

@@ -3,7 +3,14 @@ package ua.com.foxminded.sql_jdbc_school.menu;
 import ua.com.foxminded.sql_jdbc_school.dao.CourseDao;
 import ua.com.foxminded.sql_jdbc_school.dao.StudentDao;
 import ua.com.foxminded.sql_jdbc_school.dao.connection.BasicConnectionPool;
-import ua.com.foxminded.sql_jdbc_school.menu.useractions.*;
+import ua.com.foxminded.sql_jdbc_school.menu.useractions.AddStudent;
+import ua.com.foxminded.sql_jdbc_school.menu.useractions.AddStudentToCourse;
+import ua.com.foxminded.sql_jdbc_school.menu.useractions.DeleteStudent;
+import ua.com.foxminded.sql_jdbc_school.menu.useractions.Exit;
+import ua.com.foxminded.sql_jdbc_school.menu.useractions.RemoveStudentFromCourse;
+import ua.com.foxminded.sql_jdbc_school.menu.useractions.SearchGroups;
+import ua.com.foxminded.sql_jdbc_school.menu.useractions.SearchStudentsInCourse;
+import ua.com.foxminded.sql_jdbc_school.menu.useractions.UserOption;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,12 +40,13 @@ public class Menu {
     }
 
     private void addOptions(BasicConnectionPool basicConnectionPool, StudentDao studentDao, CourseDao courseDao) {
-        userOptions.put(0, new AddStudent(studentDao));
-        userOptions.put(1, new AddStudentToCourse(studentDao, courseDao));
-        userOptions.put(2, new DeleteStudent(studentDao));
-        userOptions.put(3, new RemoveStudentFromCourse(studentDao, courseDao));
-        userOptions.put(4, new SearchGroups(studentDao));
-        userOptions.put(5, new SearchStudentsInCourse(courseDao));
+        Scanner scanner = new Scanner(System.in);
+        userOptions.put(0, new AddStudent(studentDao, scanner));
+        userOptions.put(1, new AddStudentToCourse(studentDao, courseDao, scanner));
+        userOptions.put(2, new DeleteStudent(studentDao, scanner));
+        userOptions.put(3, new RemoveStudentFromCourse(studentDao, courseDao,scanner));
+        userOptions.put(4, new SearchGroups(studentDao,scanner));
+        userOptions.put(5, new SearchStudentsInCourse(courseDao,scanner));
         userOptions.put(6, new Exit(basicConnectionPool));
     }
 

@@ -9,15 +9,15 @@ public class DeleteStudent implements UserOption {
     StudentDao studentDao;
     Scanner scanner;
 
-    public DeleteStudent(StudentDao studentDao) {
+    public DeleteStudent(StudentDao studentDao, Scanner scanner) {
         this.studentDao = studentDao;
-        scanner = new Scanner(System.in);
+        this.scanner =scanner;
     }
 
     @Override
     public void execute() {
         System.out.println("Enter student id");
-        int id = scanner.nextInt();
+        int id = Integer.parseInt(scanner.nextLine());
         deleteStudent(studentDao.searchById(id));
     }
 

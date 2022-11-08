@@ -10,19 +10,19 @@ public class AddStudentToCourse implements UserOption {
     CourseDao courseDao;
     Scanner scanner;
 
-    public AddStudentToCourse(StudentDao studentDao, CourseDao courseDao) {
+    public AddStudentToCourse(StudentDao studentDao, CourseDao courseDao, Scanner scanner) {
         this.studentDao = studentDao;
         this.courseDao = courseDao;
-        scanner = new Scanner(System.in);
+        this.scanner = scanner;
 
     }
 
     @Override
     public void execute() {
         System.out.println("Enter student id");
-        int studentId = scanner.nextInt();
+        int studentId = Integer.parseInt(scanner.nextLine());
         System.out.println("Enter course id");
-        int courseId = scanner.nextInt();
+        int courseId = Integer.parseInt(scanner.nextLine());
         addStudentToCourse(studentId, courseId);
     }
 

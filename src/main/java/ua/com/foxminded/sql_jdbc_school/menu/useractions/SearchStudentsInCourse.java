@@ -10,9 +10,9 @@ public class SearchStudentsInCourse implements UserOption {
     CourseDao courseDao;
     Scanner scanner;
 
-    public SearchStudentsInCourse(CourseDao courseDao) {
+    public SearchStudentsInCourse(CourseDao courseDao, Scanner scanner) {
         this.courseDao = courseDao;
-        scanner = new Scanner(System.in);
+        this.scanner = scanner;
     }
 
     @Override
