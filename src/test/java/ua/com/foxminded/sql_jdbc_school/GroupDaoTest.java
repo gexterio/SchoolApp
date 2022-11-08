@@ -8,28 +8,28 @@ import ua.com.foxminded.sql_jdbc_school.dto.GroupDTO;
 
 import java.util.List;
 
-public class GroupDaoTest extends DataSourceDBUnitTest {
-    GroupDao groupDao;
+ class GroupDaoTest extends DataSourceDBUnitTest {
+    GroupDao dao;
 
     @BeforeEach
     public void setUp() throws Exception {
         super.setUp();
-        groupDao = new GroupDao(new BasicConnectionPool(props.getProperty("JDBC_URL"), props.getProperty("USER"), props.getProperty("PASSWORD")));
+        dao = new GroupDao(new BasicConnectionPool(props.getProperty("JDBC_URL"), props.getProperty("USER"), props.getProperty("PASSWORD")));
     }
 
     @Test
-    public void createShouldCreateNewGroupsInDBWithInputData() {
+     void createShouldCreateNewGroupsInDBWithInputData() {
         GroupDTO dto = new GroupDTO.GroupBuilder("99-ZZ").setId(6).build();
-        groupDao.create(dto);
-        List<GroupDTO> list = groupDao.getAll();
+        dao.create(dto);
+        List<GroupDTO> list = dao.getAll();
         String expected = dto.toString();
         String actual = list.get(list.size() - 1).toString();
         assertEquals(expected, actual);
     }
 
     @Test
-    public void getAllShouldReturnAllGroupsFromDB() {
-        List<GroupDTO> all = groupDao.getAll();
+     void getAllShouldReturnAllGroupsFromDB() {
+        List<GroupDTO> all = dao.getAll();
         int expectedSize = 5;
         int actualSize = all.size();
         assertEquals(expectedSize, actualSize);

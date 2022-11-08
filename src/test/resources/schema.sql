@@ -32,7 +32,7 @@ create table if not exists personal_courses
     foreign key (course_id)
         references courses (course_id),
    foreign key (student_id)
-        references students (student_id)
+        references students (student_id) ON DELETE cascade
 );
 
 
