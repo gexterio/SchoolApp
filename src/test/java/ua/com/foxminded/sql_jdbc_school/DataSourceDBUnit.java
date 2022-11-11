@@ -5,12 +5,9 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
 import org.h2.jdbcx.JdbcDataSource;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ua.com.foxminded.sql_jdbc_school.dao.connection.BasicConnectionPool;
 import ua.com.foxminded.sql_jdbc_school.util.FileReader;
 
 import javax.sql.DataSource;
@@ -19,9 +16,10 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.util.Properties;
 
-class DataSourceDBUnitTest extends DataSourceBasedDBTestCase {
+class DataSourceDBUnit extends DataSourceBasedDBTestCase {
     public final static String TEST_DB = "testDBProperties.properties";
     Connection connection;
+    IDataSet beforeData;
     public final Properties props = new Properties();
 
     @Override
@@ -40,10 +38,8 @@ class DataSourceDBUnitTest extends DataSourceBasedDBTestCase {
     }
 
     @Override
-    protected IDataSet getDataSet() throws Exception {
-        try (InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("data.xml")) {
-            return new FlatXmlDataSetBuilder().build(resourceAsStream);
-        }
+    protected IDataSet getDataSet()  {
+       return beforeData;
     }
 
     @Override
@@ -58,13 +54,7 @@ class DataSourceDBUnitTest extends DataSourceBasedDBTestCase {
 
     @BeforeEach
     public void setUp() throws Exception {
-        super.setUp();
         connection = getConnection().getConnection();
-    }
-
-    @AfterEach
-    public void tearDown() throws Exception {
-        super.tearDown();
     }
 
     @Test

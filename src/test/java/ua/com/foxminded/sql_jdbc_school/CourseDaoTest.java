@@ -9,7 +9,7 @@ import ua.com.foxminded.sql_jdbc_school.dto.CourseDTO;
 
 import java.util.List;
 
- class CourseDaoTest extends DataSourceDBUnitTest {
+ class CourseDaoTest extends DataSourceDBUnit {
     CourseDao courseDao;
     StudentDao studentDao;
     BasicConnectionPool connectionPool;
