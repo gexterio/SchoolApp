@@ -21,7 +21,7 @@ create table IF NOT EXISTS students
     group_id integer,
      primary key (student_id),
      foreign key (group_id)
-        references groups (group_id)
+        references groups (group_id) ON DELETE SET NULL
 );
 
 create table if not exists personal_courses
@@ -30,7 +30,7 @@ create table if not exists personal_courses
     course_id integer not null,
    primary key (student_id, course_id),
     foreign key (course_id)
-        references courses (course_id),
+        references courses (course_id) ON DELETE cascade ,
    foreign key (student_id)
         references students (student_id) ON DELETE cascade
 );

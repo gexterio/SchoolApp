@@ -2,24 +2,19 @@ package ua.com.foxminded.sql_jdbc_school;
 
 import org.dbunit.DataSourceBasedDBTestCase;
 import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
 import org.h2.jdbcx.JdbcDataSource;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import ua.com.foxminded.sql_jdbc_school.util.FileReader;
 
 import javax.sql.DataSource;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.util.Properties;
 
 class DataSourceDBUnit extends DataSourceBasedDBTestCase {
     public final static String TEST_DB = "testDBProperties.properties";
     Connection connection;
-    IDataSet beforeData;
+    IDataSet dataSource;
     public final Properties props = new Properties();
 
     @Override
@@ -37,30 +32,19 @@ class DataSourceDBUnit extends DataSourceBasedDBTestCase {
         return dataSource;
     }
 
-    @Override
-    protected IDataSet getDataSet()  {
-       return beforeData;
-    }
 
     @Override
-    protected DatabaseOperation getSetUpOperation() {
-        return DatabaseOperation.REFRESH;
+    protected IDataSet getDataSet() {
+        return dataSource;
     }
 
     @Override
-    protected DatabaseOperation getTearDownOperation() {
-        return DatabaseOperation.DELETE_ALL;
+    protected DatabaseOperation getTearDownOperation() throws Exception {
+        return super.getTearDownOperation();
     }
 
-    @BeforeEach
-    public void setUp() throws Exception {
-        connection = getConnection().getConnection();
+    @Override
+    protected DatabaseOperation getSetUpOperation() throws Exception {
+        return super.getSetUpOperation();
     }
-
-    @Test
-    void isTablesCreated() throws Exception {
-        IDataSet dataSet = getConnection().createDataSet();
-        assertNotNull(dataSet);
-    }
-
 }

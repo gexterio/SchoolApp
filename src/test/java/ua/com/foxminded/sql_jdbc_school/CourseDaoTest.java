@@ -1,5 +1,6 @@
 package ua.com.foxminded.sql_jdbc_school;
 
+import org.dbunit.operation.DatabaseOperation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ua.com.foxminded.sql_jdbc_school.dao.CourseDao;
@@ -61,4 +62,6 @@ import java.util.List;
         String actual = courseDao.searchById(1).toString();
         assertEquals(expected, actual);
     }
-}
+
+
+ }
