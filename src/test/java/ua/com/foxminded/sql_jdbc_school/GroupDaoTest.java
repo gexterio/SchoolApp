@@ -4,6 +4,7 @@ import org.dbunit.Assertion;
 import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ua.com.foxminded.sql_jdbc_school.dao.GroupDao;
@@ -43,6 +44,15 @@ class GroupDaoTest extends DataSourceDBUnit {
     }
 
     @Test
+    void createShouldThrowExceptionWhenInputIsNull () {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> dao.create(null));
+    }
+    @Test
+    void createShouldThrowExceptionInGroupDTOValidationWhenInputNameInvalid () {
+       Assertions.assertThrows(Exception.class,
+               () ->  new GroupDTO.GroupBuilder("invalidName").build());
+    }
+    @Test
     void getAllShouldReturnAllGroupsFromDB() throws Exception {
         dao.create(new GroupDTO.GroupBuilder("11-AA").build());
         dao.create(new GroupDTO.GroupBuilder("22-BB").build());
@@ -52,4 +62,11 @@ class GroupDaoTest extends DataSourceDBUnit {
         int expectedSize = getConnection().createDataSet().getTable("groups").getRowCount();
         assertEquals(expectedSize, actualSize);
     }
+
+    @Test
+    void getAllShouldReturnEmptyListWhenDBEmpty () {
+        int actualSize = dao.getAll().size();
+        assertEquals(0,actualSize);
+    }
+
 }
