@@ -14,7 +14,7 @@ import java.util.Properties;
 class DataSourceDBUnit extends DataSourceBasedDBTestCase {
     public final static String TEST_DB = "testDBProperties.properties";
     Connection connection;
-    IDataSet dataSource;
+    IDataSet dataSet;
     public final Properties props = new Properties();
 
     @Override
@@ -35,16 +35,16 @@ class DataSourceDBUnit extends DataSourceBasedDBTestCase {
 
     @Override
     protected IDataSet getDataSet() {
-        return dataSource;
+        return dataSet;
     }
 
     @Override
-    protected DatabaseOperation getTearDownOperation() throws Exception {
-        return super.getTearDownOperation();
+    protected DatabaseOperation getTearDownOperation()  {
+        return DatabaseOperation.DELETE_ALL;
     }
 
     @Override
-    protected DatabaseOperation getSetUpOperation() throws Exception {
-        return super.getSetUpOperation();
+    protected DatabaseOperation getSetUpOperation()  {
+        return DatabaseOperation.CLEAN_INSERT;
     }
 }
