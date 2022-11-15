@@ -92,6 +92,9 @@ public class StudentDaoTest extends DataSourceDBUnit {
 
     @Test
     void addStudentToGroupShouldUpdateStudentInDBWhenInputValid() throws Exception {
+        dataSet = new FlatXmlDataSetBuilder().build(getClass().getClassLoader()
+                .getResourceAsStream("afterData/createGroupDaoTest_data.xml"));
+        super.setUp();
         ITable expectedTable = new FlatXmlDataSetBuilder().build(getClass().getClassLoader()
                 .getResourceAsStream("afterData/addStudentToGroup_data.xml")).getTable("students");
         studentDao.create(new StudentDTO.StudentBuilder("FirstName", "LastName").build());

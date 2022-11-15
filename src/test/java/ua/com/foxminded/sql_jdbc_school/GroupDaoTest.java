@@ -26,13 +26,14 @@ class GroupDaoTest extends DataSourceDBUnit {
 
     @Test
     void createShouldCreateNewGroupInDB() throws Exception {
-        GroupDTO dto = new GroupDTO.GroupBuilder("99-ZZ").build();
-        dao.create(dto);
         ITable expectedTable = new FlatXmlDataSetBuilder()
                 .build(getClass().getClassLoader()
-                        .getResourceAsStream("afterData/createGroupDaoTestCreate_data.xml"))
+                        .getResourceAsStream("afterData/createGroupDaoTest_data.xml"))
                 .getTable("groups");
+        GroupDTO dto = new GroupDTO.GroupBuilder("99-ZZ").build();
+        dao.create(dto);
         ITable actualTable = getConnection().createDataSet().getTable("groups");
+        System.out.println(actualTable.getValue(0, "group_name"));
         Assertion.assertEqualsIgnoreCols(expectedTable, actualTable, new String[]{"group_id"});
     }
 
