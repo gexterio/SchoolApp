@@ -28,7 +28,10 @@ public class StudentDao {
         this.connectionPool = pool;
     }
 
-    public StudentDTO searchById(int id) {
+    public StudentDTO searchById(Integer id) {
+        if (id ==0) {
+            throw new IllegalArgumentException("id can't be 0");
+        }
         Connection connection = connectionPool.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID)) {
             statement.setInt(1, id);
@@ -44,7 +47,10 @@ public class StudentDao {
         throw new IllegalArgumentException("Student not found");
     }
 
-    public void addStudentToGroup(StudentDTO student, Integer groupId) {
+    public void addStudentToGroup(StudentDTO student, int groupId) {
+        if (student.getStudentID() == null) {
+            throw new IllegalArgumentException("student id can't be NULL");
+        }
         Connection connection = connectionPool.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(SET_GROUP_ID)) {
             statement.setInt(1, groupId);
@@ -137,7 +143,6 @@ public class StudentDao {
         }
         throw new IllegalArgumentException("Invalid groupId");
     }
-
 
     public void delete(StudentDTO student) {
         Connection connection = connectionPool.getConnection();

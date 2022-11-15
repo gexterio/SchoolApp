@@ -58,7 +58,15 @@ public class CourseDTO {
         }
 
         private void validateCourseDTO(CourseDTO course) {
-
+            if (course.getCourseName() == null) {
+                throw new IllegalArgumentException("groupName can't be NULL");
+            }
+            if (course.getCourseName().isEmpty()) {
+                throw new IllegalArgumentException("groupName can't be EMPTY");
+            }
+            if (course.getCourseName().isBlank()) {
+                throw new IllegalArgumentException("groupName can't be BLANK");
+            }
         }
     }
 }

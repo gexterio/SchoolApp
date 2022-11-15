@@ -95,6 +95,9 @@ public class CourseDao {
     }
 
     public void create(CourseDTO course) {
+        if (course == null) {
+            throw new IllegalArgumentException("courseDTO can't be NULL");
+        }
         Connection connection = connectionPool.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(CREATE_COURSE)) {
             statement.setString(1, course.getCourseName());

@@ -4,6 +4,7 @@ import org.dbunit.DataSourceBasedDBTestCase;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.operation.DatabaseOperation;
 import org.h2.jdbcx.JdbcDataSource;
+import org.junit.jupiter.api.AfterEach;
 import ua.com.foxminded.sql_jdbc_school.util.FileReader;
 
 import javax.sql.DataSource;
@@ -17,6 +18,10 @@ class DataSourceDBUnit extends DataSourceBasedDBTestCase {
     IDataSet dataSet;
     public final Properties props = new Properties();
 
+    @AfterEach
+    public void tearDown() throws Exception {
+        super.tearDown();
+    }
     @Override
     protected DataSource getDataSource() {
         try {

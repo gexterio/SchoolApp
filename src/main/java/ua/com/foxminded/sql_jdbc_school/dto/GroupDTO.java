@@ -40,10 +40,10 @@ public class GroupDTO {
             return group;
         }
         private void validateGroupDTO (GroupDTO group) {
-            if (groupName == null) {
+            if (group.getGroupName() == null) {
                 throw new IllegalArgumentException("groupName can't be NULL");
             }
-            if (!group.groupName.matches("^\\d{2}+-+[A-Z]{2}")) {
+            if (!group.getGroupName().matches("^\\d{2}+-+[A-Z]{2}")) {
                 throw new IllegalArgumentException("invalidGroupName");
             }
         }

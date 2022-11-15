@@ -3,7 +3,6 @@ package ua.com.foxminded.sql_jdbc_school;
 import org.dbunit.Assertion;
 import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,41 +18,37 @@ class GroupDaoTest extends DataSourceDBUnit {
     @BeforeEach
     public void setUp() throws Exception {
         dataSet = new FlatXmlDataSetBuilder().build(getClass().getClassLoader()
-                .getResourceAsStream("beforeData/emptyGroupDaoTest_data.xml"));
+                .getResourceAsStream("beforeData/emptyDaoTest_data.xml"));
         super.setUp();
         connection = getConnection().getConnection();
         dao = new GroupDao(new BasicConnectionPool(props.getProperty("JDBC_URL"), props.getProperty("USER"), props.getProperty("PASSWORD")));
     }
 
-
-    @AfterEach
-    public void tearDown() throws Exception {
-        super.tearDown();
-    }
-
     @Test
-    void createShouldCreateNewGroupInDBWithInputData() throws Exception {
+    void createShouldCreateNewGroupInDB() throws Exception {
         GroupDTO dto = new GroupDTO.GroupBuilder("99-ZZ").build();
         dao.create(dto);
         ITable expectedTable = new FlatXmlDataSetBuilder()
                 .build(getClass().getClassLoader()
-                        .getResourceAsStream("afterData/after_groupDaoTestCreate_data.xml"))
+                        .getResourceAsStream("afterData/createGroupDaoTestCreate_data.xml"))
                 .getTable("groups");
         ITable actualTable = getConnection().createDataSet().getTable("groups");
-        Assertion.assertEqualsIgnoreCols(expectedTable, actualTable, new String[] {"group_id"});
+        Assertion.assertEqualsIgnoreCols(expectedTable, actualTable, new String[]{"group_id"});
     }
 
     @Test
-    void createShouldThrowExceptionWhenInputIsNull () {
+    void createShouldThrowExceptionWhenInputIsNull() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> dao.create(null));
     }
+
     @Test
-    void createShouldThrowExceptionInGroupDTOValidationWhenInputNameInvalid () {
-       Assertions.assertThrows(Exception.class,
-               () ->  new GroupDTO.GroupBuilder("invalidName").build());
+    void createShouldThrowExceptionInGroupDTOValidationWhenInputNameInvalid() {
+        Assertions.assertThrows(Exception.class,
+                () -> new GroupDTO.GroupBuilder("invalidName").build());
     }
+
     @Test
-    void getAllShouldReturnAllGroupsFromDB() throws Exception {
+    void getAllShouldReturnListWithAllGroupsFromDB() throws Exception {
         dao.create(new GroupDTO.GroupBuilder("11-AA").build());
         dao.create(new GroupDTO.GroupBuilder("22-BB").build());
         dao.create(new GroupDTO.GroupBuilder("33-CC").build());
@@ -64,9 +59,9 @@ class GroupDaoTest extends DataSourceDBUnit {
     }
 
     @Test
-    void getAllShouldReturnEmptyListWhenDBEmpty () {
+    void getAllShouldReturnEmptyListWhenDBEmpty() {
         int actualSize = dao.getAll().size();
-        assertEquals(0,actualSize);
+        assertEquals(0, actualSize);
     }
 
 }

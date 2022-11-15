@@ -3,8 +3,8 @@ package ua.com.foxminded.sql_jdbc_school.dto;
 public class StudentDTO {
     private final String firstName;
     private final String lastName;
-    private Integer studentId;
-    private Integer groupId;
+    private final Integer studentId;
+    private final Integer groupId;
 
     public StudentDTO(StudentBuilder builder) {
         this.studentId = builder.studentId;
@@ -67,7 +67,21 @@ public class StudentDTO {
         }
 
         private void validateStudentDTO(StudentDTO student) {
-
+            if (student == null) {
+                throw new IllegalArgumentException("studentDTO can't be NULL");
+            }
+            if (student.getFirstName() == null) {
+                throw new IllegalArgumentException("firstName can't be NULL");
+            }
+            if (student.getFirstName().isBlank() || student.getFirstName().isEmpty()) {
+                throw new IllegalArgumentException("firstName can't be Blank or Empty");
+            }
+            if (student.getLastName() == null) {
+                throw new IllegalArgumentException("firstName can't be NULL");
+            }
+            if (student.getLastName().isBlank() || student.getLastName().isEmpty()) {
+                throw new IllegalArgumentException("lastName can't be Blank or Empty");
+            }
         }
     }
 
