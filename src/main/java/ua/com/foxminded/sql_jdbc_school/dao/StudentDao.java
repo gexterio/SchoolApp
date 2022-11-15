@@ -71,6 +71,7 @@ public class StudentDao {
             statement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new IllegalArgumentException("Issue with addStudentToCourse");
         } finally {
             connectionPool.releaseConnection(connection);
         }
@@ -124,6 +125,9 @@ public class StudentDao {
     }
 
     public Map<Integer, Integer> searchGroupsByStudentCount(int studentCount) {
+        if (studentCount <0) {
+            throw new IllegalArgumentException("studentCount can't be <0");
+        }
         Connection connection = connectionPool.getConnection();
         Map<Integer, Integer> result;
         try (PreparedStatement statement = connection.prepareStatement(SELECT_COUNT_STUDENTS_IN_GROUP)) {
@@ -141,7 +145,7 @@ public class StudentDao {
         } finally {
             connectionPool.releaseConnection(connection);
         }
-        throw new IllegalArgumentException("Invalid groupId");
+        throw new IllegalArgumentException("Something issue in searchGroupsByStudentCount");
     }
 
     public void delete(StudentDTO student) {

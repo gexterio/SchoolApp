@@ -6,7 +6,6 @@
     <students student_id='1' first_name='Alex' last_name='Loc' group_id='1'/>
     <students student_id='2' first_name='Lanny' last_name='Don' group_id='1'/>
     <students student_id='3' first_name='Penny' last_name='Wice' group_id='1'/>
-    <personal_courses student_id='1' course_id = '1'/>
     <personal_courses student_id='2' course_id = '1'/>
     <personal_courses student_id='3' course_id = '1'/>
 </dataset>

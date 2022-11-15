@@ -1,9 +1,9 @@
 package ua.com.foxminded.sql_jdbc_school.dto;
 
 public class StudentDTO {
+    private final Integer studentId;
     private final String firstName;
     private final String lastName;
-    private final Integer studentId;
     private final Integer groupId;
 
     public StudentDTO(StudentBuilder builder) {
@@ -31,12 +31,10 @@ public class StudentDTO {
 
     @Override
     public String toString() {
-        return "StudentDTO{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", studentID=" + studentId +
-                ", groupId=" + groupId +
-                '}';
+        return "\nstudent_id = " +studentId +
+                "\nfirst_name = " +firstName +
+                "\nlast_name = " +lastName +
+                "\ngroup_id = " +groupId;
     }
 
     public static class StudentBuilder {
