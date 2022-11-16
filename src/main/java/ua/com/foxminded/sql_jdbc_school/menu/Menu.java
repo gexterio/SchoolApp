@@ -40,13 +40,12 @@ public class Menu {
     }
 
     private void addOptions(BasicConnectionPool basicConnectionPool, StudentDao studentDao, CourseDao courseDao) {
-        Scanner scanner = new Scanner(System.in);
-        userOptions.put(0, new AddStudent(studentDao, scanner));
-        userOptions.put(1, new AddStudentToCourse(studentDao, courseDao, scanner));
-        userOptions.put(2, new DeleteStudent(studentDao, scanner));
-        userOptions.put(3, new RemoveStudentFromCourse(studentDao, courseDao,scanner));
-        userOptions.put(4, new SearchGroups(studentDao,scanner));
-        userOptions.put(5, new SearchStudentsInCourse(courseDao,scanner));
+        userOptions.put(0, new AddStudent(studentDao));
+        userOptions.put(1, new AddStudentToCourse(studentDao, courseDao));
+        userOptions.put(2, new DeleteStudent(studentDao));
+        userOptions.put(3, new RemoveStudentFromCourse(studentDao, courseDao));
+        userOptions.put(4, new SearchGroups(studentDao));
+        userOptions.put(5, new SearchStudentsInCourse(courseDao));
         userOptions.put(6, new Exit(basicConnectionPool));
     }
 

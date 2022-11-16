@@ -7,15 +7,14 @@ import java.util.Scanner;
 
 public class DeleteStudent implements UserOption {
     StudentDao studentDao;
-    Scanner scanner;
 
-    public DeleteStudent(StudentDao studentDao, Scanner scanner) {
+    public DeleteStudent(StudentDao studentDao) {
         this.studentDao = studentDao;
-        this.scanner =scanner;
     }
 
     @Override
     public void execute() {
+        Scanner scanner = new Scanner(System.in);
         System.out.println("Enter student id");
         int id = Integer.parseInt(scanner.nextLine());
         deleteStudent(studentDao.searchById(id));

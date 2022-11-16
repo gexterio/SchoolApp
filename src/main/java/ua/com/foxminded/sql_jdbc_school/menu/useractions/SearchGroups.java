@@ -7,15 +7,14 @@ import java.util.Scanner;
 
 public class SearchGroups implements UserOption {
     StudentDao studentDao;
-    Scanner scanner;
 
-    public SearchGroups(StudentDao studentDao, Scanner scanner) {
+    public SearchGroups(StudentDao studentDao) {
         this.studentDao = studentDao;
-        this.scanner = scanner;
     }
 
     @Override
     public void execute() {
+        Scanner scanner = new Scanner(System.in);
         System.out.println("Enter students count");
         int count = Integer.parseInt(scanner.nextLine());
         System.out.println(searchGroups(count));

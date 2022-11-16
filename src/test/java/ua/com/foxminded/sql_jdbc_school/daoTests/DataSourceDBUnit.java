@@ -1,4 +1,4 @@
-package ua.com.foxminded.sql_jdbc_school;
+package ua.com.foxminded.sql_jdbc_school.daoTests;
 
 import org.dbunit.DataSourceBasedDBTestCase;
 import org.dbunit.dataset.IDataSet;

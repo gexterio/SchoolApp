@@ -8,17 +8,17 @@ import java.util.Scanner;
 public class AddStudentToCourse implements UserOption {
     StudentDao studentDao;
     CourseDao courseDao;
-    Scanner scanner;
 
-    public AddStudentToCourse(StudentDao studentDao, CourseDao courseDao, Scanner scanner) {
+
+    public AddStudentToCourse(StudentDao studentDao, CourseDao courseDao) {
         this.studentDao = studentDao;
         this.courseDao = courseDao;
-        this.scanner = scanner;
 
     }
 
     @Override
     public void execute() {
+        Scanner scanner = new Scanner(System.in);
         System.out.println("Enter student id");
         int studentId = Integer.parseInt(scanner.nextLine());
         System.out.println("Enter course id");

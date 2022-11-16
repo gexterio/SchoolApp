@@ -8,15 +8,15 @@ import java.util.Scanner;
 
 public class SearchStudentsInCourse implements UserOption {
     CourseDao courseDao;
-    Scanner scanner;
 
-    public SearchStudentsInCourse(CourseDao courseDao, Scanner scanner) {
+    public SearchStudentsInCourse(CourseDao courseDao) {
         this.courseDao = courseDao;
-        this.scanner = scanner;
     }
 
     @Override
     public void execute() {
+        Scanner scanner = new Scanner(System.in);
+
         System.out.println("Enter course name");
         String courseName = scanner.nextLine();
         System.out.println(searchStudentsInCourse(courseName));
