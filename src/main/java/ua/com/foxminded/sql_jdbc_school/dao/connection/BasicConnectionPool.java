@@ -13,7 +13,7 @@ public class BasicConnectionPool implements ConnectionPool {
     private final String user;
     private final String password;
     private List<Connection> connectionPool;
-    private List<Connection> usedConnections = new ArrayList<>();
+    private final List<Connection> usedConnections = new ArrayList<>();
     private static final int INITIAL_POOL_SIZE = 10;
 
     public BasicConnectionPool(String url, String user, String password) {

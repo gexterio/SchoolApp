@@ -17,9 +17,21 @@ public class AddStudent implements UserOption {
     public void execute() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter First Name");
-        String firstName = scanner.nextLine();
+        String firstName;
+        String lastName;
+        try {
+            firstName = scanner.nextLine();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException("issue with Entering First Name");
+        }
         System.out.println("Enter Last Name");
-        String lastName = scanner.nextLine();
+        try {
+            lastName = scanner.nextLine();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException("issue with Entering Last Name");
+        }
         addStudent(new StudentDTO.StudentBuilder(firstName, lastName).build());
     }
 

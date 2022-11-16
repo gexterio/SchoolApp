@@ -2,12 +2,10 @@ package ua.com.foxminded.sql_jdbc_school.dao;
 
 import ua.com.foxminded.sql_jdbc_school.dao.connection.BasicConnectionPool;
 
-import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class DBInitializer {

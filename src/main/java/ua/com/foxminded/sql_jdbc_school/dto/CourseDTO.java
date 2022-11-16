@@ -32,7 +32,7 @@ public class CourseDTO {
                 '}';
     }
 
-    public static class CourseBuilder  {
+    public static class CourseBuilder {
         private final String courseName;
         private Integer courseId;
         private String courseDescription;
@@ -46,12 +46,12 @@ public class CourseDTO {
             return this;
         }
 
-        public CourseBuilder setDescription (String description) {
+        public CourseBuilder setDescription(String description) {
             this.courseDescription = description;
             return this;
         }
 
-        public CourseDTO build () {
+        public CourseDTO build() {
             CourseDTO course = new CourseDTO(this);
             validateCourseDTO(course);
             return course;

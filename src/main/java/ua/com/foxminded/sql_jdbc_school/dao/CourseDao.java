@@ -50,8 +50,8 @@ public class CourseDao {
             return new CourseDTO.CourseBuilder(name).setId(courseId).setDescription(courseDescription).build();
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new IllegalArgumentException(COURSE_NOT_FOUND);
         }
-        throw new IllegalArgumentException(COURSE_NOT_FOUND);
     }
 
     public List<Integer> searchStudentsInCourse(String courseName) {
@@ -66,10 +66,10 @@ public class CourseDao {
                 list.add(studentId);
             }
             return list;
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            throw new IllegalArgumentException(COURSE_NOT_FOUND);
         }
-        throw new IllegalArgumentException(COURSE_NOT_FOUND);
     }
 
     public List<CourseDTO> getAll() {

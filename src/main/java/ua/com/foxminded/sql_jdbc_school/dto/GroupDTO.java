@@ -30,16 +30,19 @@ public class GroupDTO {
         public GroupBuilder(String groupName) {
             this.groupName = groupName;
         }
-        public GroupBuilder setId (int id) {
+
+        public GroupBuilder setId(int id) {
             this.groupId = id;
             return this;
         }
-        public GroupDTO build () {
+
+        public GroupDTO build() {
             GroupDTO group = new GroupDTO(this);
             validateGroupDTO(group);
             return group;
         }
-        private void validateGroupDTO (GroupDTO group) {
+
+        private void validateGroupDTO(GroupDTO group) {
             if (group.getGroupName() == null) {
                 throw new IllegalArgumentException("groupName can't be NULL");
             }

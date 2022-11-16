@@ -8,7 +8,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class StudentDao {
 
@@ -29,7 +33,7 @@ public class StudentDao {
     }
 
     public StudentDTO searchById(Integer id) {
-        if (id ==0) {
+        if (id == 0) {
             throw new IllegalArgumentException("id can't be 0");
         }
         Connection connection = connectionPool.getConnection();
@@ -98,6 +102,7 @@ public class StudentDao {
             statement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new IllegalArgumentException("issue with create student");
         } finally {
             connectionPool.releaseConnection(connection);
         }
@@ -117,6 +122,7 @@ public class StudentDao {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new IllegalArgumentException("issue with getAll students");
         } finally {
             connectionPool.releaseConnection(connection);
         }
@@ -125,7 +131,7 @@ public class StudentDao {
     }
 
     public Map<Integer, Integer> searchGroupsByStudentCount(int studentCount) {
-        if (studentCount <0) {
+        if (studentCount < 0) {
             throw new IllegalArgumentException("studentCount can't be <0");
         }
         Connection connection = connectionPool.getConnection();
@@ -142,10 +148,10 @@ public class StudentDao {
             return result;
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new IllegalArgumentException("issue with searchGroupsByStudentCount");
         } finally {
             connectionPool.releaseConnection(connection);
         }
-        throw new IllegalArgumentException("Something issue in searchGroupsByStudentCount");
     }
 
     public void delete(StudentDTO student) {
@@ -155,6 +161,7 @@ public class StudentDao {
             statement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new IllegalArgumentException("issue with delete students");
         } finally {
             connectionPool.releaseConnection(connection);
         }

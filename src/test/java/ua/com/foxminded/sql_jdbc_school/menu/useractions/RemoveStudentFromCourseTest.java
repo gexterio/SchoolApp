@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -39,6 +40,7 @@ class RemoveStudentFromCourseTest {
     }
 
     @ParameterizedTest
+    @EmptySource
     @ValueSource(strings = {
             "1" + "\n" + "", "1" + "\n" + "  ", "" + "\n" + "1",
             "   " + "\n" + "1", "" + "\n" + "", " " + "\n" + "  "})

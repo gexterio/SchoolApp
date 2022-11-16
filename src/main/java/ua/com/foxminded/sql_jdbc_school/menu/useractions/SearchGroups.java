@@ -16,7 +16,13 @@ public class SearchGroups implements UserOption {
     public void execute() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter students count");
-        int count = Integer.parseInt(scanner.nextLine());
+        int count;
+        try {
+            count = Integer.parseInt(scanner.nextLine());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException("input must be number");
+        }
         System.out.println(searchGroups(count));
     }
 

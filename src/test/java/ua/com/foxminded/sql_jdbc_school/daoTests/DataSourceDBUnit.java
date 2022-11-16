@@ -22,6 +22,7 @@ class DataSourceDBUnit extends DataSourceBasedDBTestCase {
     public void tearDown() throws Exception {
         super.tearDown();
     }
+
     @Override
     protected DataSource getDataSource() {
         try {
@@ -44,12 +45,12 @@ class DataSourceDBUnit extends DataSourceBasedDBTestCase {
     }
 
     @Override
-    protected DatabaseOperation getTearDownOperation()  {
+    protected DatabaseOperation getTearDownOperation() {
         return DatabaseOperation.DELETE_ALL;
     }
 
     @Override
-    protected DatabaseOperation getSetUpOperation()  {
+    protected DatabaseOperation getSetUpOperation() {
         return DatabaseOperation.CLEAN_INSERT;
     }
 }

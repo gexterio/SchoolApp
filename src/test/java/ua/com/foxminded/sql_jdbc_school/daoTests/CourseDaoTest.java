@@ -88,7 +88,7 @@ class CourseDaoTest extends DataSourceDBUnit {
 
     @Test
     void searchStudentsInCourseShouldThrowNewExceptionWhenInputInvalid() {
-        Assertions.assertThrows(Exception.class, () -> courseDao.searchByName("InvalidName"));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> courseDao.searchByName("InvalidName"));
     }
 
     @Test

@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class FileReader {
     public List<String> readFile(String file) {
-        if (file == null || file.isEmpty() ||  file.isBlank()) {
+        if (file == null || file.isEmpty() || file.isBlank()) {
             return Collections.emptyList();
         }
         if (getClass().getClassLoader().getResourceAsStream(file) == null) {
@@ -24,7 +24,7 @@ public class FileReader {
         }
     }
 
-    public InputStream readProperties (String fileName) {
+    public InputStream readProperties(String fileName) {
         return getClass().getClassLoader().getResourceAsStream(fileName);
 
     }

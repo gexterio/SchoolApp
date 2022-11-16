@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class Application {
-    
+
     public static void main(String[] args) throws IOException {
         Properties prop = new Properties();
         prop.load(new FileReader().readProperties("properties.properties"));

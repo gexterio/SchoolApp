@@ -5,9 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import ua.com.foxminded.sql_jdbc_school.dao.connection.BasicConnectionPool;
-import ua.com.foxminded.sql_jdbc_school.menu.useractions.Exit;
 
-public class ExitTest {
+class ExitTest {
     @Mock
     BasicConnectionPool connectionPool;
 

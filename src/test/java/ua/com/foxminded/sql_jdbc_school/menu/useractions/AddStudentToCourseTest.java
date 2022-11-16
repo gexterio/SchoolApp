@@ -4,17 +4,17 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import ua.com.foxminded.sql_jdbc_school.dao.CourseDao;
 import ua.com.foxminded.sql_jdbc_school.dao.StudentDao;
-import ua.com.foxminded.sql_jdbc_school.menu.useractions.AddStudentToCourse;
 
 import java.io.ByteArrayInputStream;
 
-public class AddStudentToCourseTest {
+class AddStudentToCourseTest {
 
     @Mock
     StudentDao studentDaoMock;
@@ -41,6 +41,7 @@ public class AddStudentToCourseTest {
     }
 
     @ParameterizedTest
+    @EmptySource
     @ValueSource(strings = {
             "1" + "\n" + "", "1" + "\n" + "  ", "" + "\n" + "1",
             "   " + "\n" + "1", "" + "\n" + "", " " + "\n" + "  "})

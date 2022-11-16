@@ -39,7 +39,7 @@ public class GroupDao {
 
     public void create(GroupDTO group) {
         Connection connection = connectionPool.getConnection();
-        if (group == null){
+        if (group == null) {
             throw new IllegalArgumentException("GroupDTO can't be NULL");
         }
         try (PreparedStatement statement = connection.prepareStatement(CREATE_GROUP)) {

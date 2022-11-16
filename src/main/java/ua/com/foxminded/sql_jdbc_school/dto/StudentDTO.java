@@ -31,10 +31,10 @@ public class StudentDTO {
 
     @Override
     public String toString() {
-        return "\nstudent_id = " +studentId +
-                "\nfirst_name = " +firstName +
-                "\nlast_name = " +lastName +
-                "\ngroup_id = " +groupId;
+        return "\nstudent_id = " + studentId +
+                "\nfirst_name = " + firstName +
+                "\nlast_name = " + lastName +
+                "\ngroup_id = " + groupId;
     }
 
     public static class StudentBuilder {
