@@ -1,5 +1,7 @@
 package ua.com.foxminded.sqlJdbcSchool.dto;
 
+import ua.com.foxminded.sqlJdbcSchool.util.DTOInputValidator;
+
 import java.util.Objects;
 
 public class StudentDTO {
@@ -7,6 +9,7 @@ public class StudentDTO {
     private final String firstName;
     private final String lastName;
     private final Integer groupId;
+    private static final DTOInputValidator validator = new DTOInputValidator();
 
     public StudentDTO(StudentBuilder builder) {
         this.studentId = builder.studentId;
@@ -75,27 +78,11 @@ public class StudentDTO {
 
         public StudentDTO build() {
             StudentDTO student = new StudentDTO(this);
-            validateStudentDTO(student);
+            validator.validateStudent(student);
             return student;
         }
 
-        private void validateStudentDTO(StudentDTO student) {
-            if (student == null) {
-                throw new IllegalArgumentException("studentDTO can't be NULL");
-            }
-            if (student.getFirstName() == null) {
-                throw new IllegalArgumentException("firstName can't be NULL");
-            }
-            if (student.getFirstName().isBlank() || student.getFirstName().isEmpty()) {
-                throw new IllegalArgumentException("firstName can't be Blank or Empty");
-            }
-            if (student.getLastName() == null) {
-                throw new IllegalArgumentException("firstName can't be NULL");
-            }
-            if (student.getLastName().isBlank() || student.getLastName().isEmpty()) {
-                throw new IllegalArgumentException("lastName can't be Blank or Empty");
-            }
-        }
+
     }
 
 }

@@ -1,11 +1,14 @@
 package ua.com.foxminded.sqlJdbcSchool.dto;
 
+import ua.com.foxminded.sqlJdbcSchool.util.DTOInputValidator;
+
 import java.util.Objects;
 
 public class CourseDTO {
     private final Integer courseId;
     private final String courseName;
     private final String courseDescription;
+    private static final DTOInputValidator validator = new DTOInputValidator();
 
     public CourseDTO(CourseBuilder builder) {
         this.courseDescription = builder.courseDescription;
@@ -69,20 +72,8 @@ public class CourseDTO {
 
         public CourseDTO build() {
             CourseDTO course = new CourseDTO(this);
-            validateCourseDTO(course);
+            validator.validateCourse(course);
             return course;
-        }
-
-        private void validateCourseDTO(CourseDTO course) {
-            if (course.getCourseName() == null) {
-                throw new IllegalArgumentException("groupName can't be NULL");
-            }
-            if (course.getCourseName().isEmpty()) {
-                throw new IllegalArgumentException("groupName can't be EMPTY");
-            }
-            if (course.getCourseName().isBlank()) {
-                throw new IllegalArgumentException("groupName can't be BLANK");
-            }
         }
     }
 }

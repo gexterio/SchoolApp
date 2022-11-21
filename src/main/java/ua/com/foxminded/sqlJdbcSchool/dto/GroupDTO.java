@@ -1,18 +1,17 @@
 package ua.com.foxminded.sqlJdbcSchool.dto;
 
+import ua.com.foxminded.sqlJdbcSchool.util.DTOInputValidator;
+
 import java.util.Objects;
 
 public class GroupDTO {
+    private static final DTOInputValidator validator = new DTOInputValidator();
     private final Integer groupId;
     private final String groupName;
 
     public GroupDTO(GroupBuilder builder) {
         this.groupId = builder.groupId;
         this.groupName = builder.groupName;
-    }
-
-    public Integer getGroupId() {
-        return groupId;
     }
 
     public String getGroupName() {
@@ -53,17 +52,8 @@ public class GroupDTO {
 
         public GroupDTO build() {
             GroupDTO group = new GroupDTO(this);
-            validateGroupDTO(group);
+            validator.validateGroup(group);
             return group;
-        }
-
-        private void validateGroupDTO(GroupDTO group) {
-            if (group.getGroupName() == null) {
-                throw new IllegalArgumentException("groupName can't be NULL");
-            }
-            if (!group.getGroupName().matches("^\\d{2}+-+[A-Z]{2}")) {
-                throw new IllegalArgumentException("invalidGroupName");
-            }
         }
     }
 }
