@@ -27,13 +27,14 @@ class AddStudentTest {
 
 
     @Test
-    void execute_addedStudent_inputIsValid() {
+    void execute_addedStudent_inputIsFirstNameAndLastName() {
         String inputString = "FirstName" + "\n" + "LastName";
         ByteArrayInputStream in = new ByteArrayInputStream(inputString.getBytes());
         System.setIn(in);
+        StudentDTO student = new StudentDTO.StudentBuilder("FirstName", "LastName").build();
+        Mockito.doNothing().when(studentDaoMock).create(student);
         addStudent.execute();
-        Mockito.verify(studentDaoMock, Mockito.times(1))
-                .create(new StudentDTO.StudentBuilder("FirstName","LastName").build());
+        Mockito.verify(studentDaoMock, Mockito.times(1)).create(student);
     }
 
     @Test

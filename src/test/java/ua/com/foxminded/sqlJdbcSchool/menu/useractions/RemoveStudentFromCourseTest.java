@@ -8,6 +8,8 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import ua.com.foxminded.sqlJdbcSchool.dao.CourseDao;
 import ua.com.foxminded.sqlJdbcSchool.dao.StudentDao;
+import ua.com.foxminded.sqlJdbcSchool.dto.CourseDTO;
+import ua.com.foxminded.sqlJdbcSchool.dto.StudentDTO;
 
 import java.io.ByteArrayInputStream;
 
@@ -26,18 +28,21 @@ class RemoveStudentFromCourseTest {
     }
 
     @Test
-    void execute_removeStudentFromCourse_inputIsValid() {
+    void execute_removeStudentFromCourse_inputIsStudentIdAndCourseId() {
         String inputString = "1" + "\n" + "1";
         ByteArrayInputStream in = new ByteArrayInputStream(inputString.getBytes());
         System.setIn(in);
+        StudentDTO student = new StudentDTO.StudentBuilder("FirstName", "LastName").setStudentId(1).build();
+        CourseDTO course = new CourseDTO.CourseBuilder("CourseName").setCourseId(1).build();
+        Mockito.when(studentDaoMock.searchById(1)).thenReturn(student);
+        Mockito.when(courseDaoMock.searchById(1)).thenReturn(course);
+        Mockito.doNothing().when(studentDaoMock).deleteStudentFromCourse(student, course);
         removeStudentFromCourse.execute();
         Mockito.verify(studentDaoMock, Mockito.times(1))
-                .deleteStudentFromCourse(Mockito.any(), Mockito.any());
+                .deleteStudentFromCourse(student, course);
     }
 
 
-    //            "1" + "\n" + "", "1" + "\n" + "  ", "" + "\n" + "1",
-//            "   " + "\n" + "1", "" + "\n" + "", " " + "\n" + "  "})
     @Test
     void execute_thrownIllegalArgumentException_inputIsEmpty() {
         String inputString = "" + "\n" + "";

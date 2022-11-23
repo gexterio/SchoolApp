@@ -9,6 +9,7 @@ import org.mockito.MockitoAnnotations;
 import ua.com.foxminded.sqlJdbcSchool.dao.CourseDao;
 
 import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
 
 class SearchStudentsInCourseTest {
 
@@ -25,13 +26,16 @@ class SearchStudentsInCourseTest {
 
 
     @Test
-    void execute_searchStudentsInCourse_inputIsValid() {
+    void execute_searchStudentsInCourse_inputIsCourseName() {
         String inputString = "Music";
         ByteArrayInputStream in = new ByteArrayInputStream(inputString.getBytes());
         System.setIn(in);
+        Mockito.when(courseDaoMock.searchStudentsInCourse(inputString)).thenReturn(new ArrayList<>() {{
+            add(1);
+        }});
         searchStudentsInCourse.execute();
         Mockito.verify(courseDaoMock, Mockito.times(1))
-                .searchStudentsInCourse(Mockito.any());
+                .searchStudentsInCourse(inputString);
     }
 
     @Test
@@ -42,7 +46,7 @@ class SearchStudentsInCourseTest {
         Assertions.assertThrows(Exception.class, () -> searchStudentsInCourse.execute());
     }
 
- @Test
+    @Test
     void execute_thrownIllegalArgumentException_inputIsBlank() {
         String inputString = "  ";
         ByteArrayInputStream in = new ByteArrayInputStream(inputString.getBytes());

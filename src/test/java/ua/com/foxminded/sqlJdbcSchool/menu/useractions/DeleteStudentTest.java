@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import ua.com.foxminded.sqlJdbcSchool.dao.StudentDao;
+import ua.com.foxminded.sqlJdbcSchool.dto.StudentDTO;
 
 import java.io.ByteArrayInputStream;
 
@@ -24,13 +25,15 @@ class DeleteStudentTest {
 
 
     @Test
-    void execute_deletedStudentFromDB_InputIsValid() {
+    void execute_deletedStudentFromDB_InputIsStudentId() {
         String inputString = "1";
         ByteArrayInputStream in = new ByteArrayInputStream(inputString.getBytes());
         System.setIn(in);
+        StudentDTO student = new StudentDTO.StudentBuilder("FirstName", "LastName").setStudentId(1).setGroupId(1).build();
+        Mockito.when(studentDaoMock.searchById(Integer.parseInt(inputString))).thenReturn(student);
+        Mockito.doNothing().when(studentDaoMock).delete(student);
         deleteStudent.execute();
-        Mockito.verify(studentDaoMock, Mockito.times(1))
-                .delete(Mockito.any());
+        Mockito.verify(studentDaoMock, Mockito.times(1)).delete(student);
     }
 
     @Test
