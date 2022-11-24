@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <groups group_id='1' group_name='11-AA'/>
+    <groups group_id='2' group_name='12-AA'/>
+    <groups group_id='3' group_name='13-AA'/>
+    <groups group_id='4' group_name='14-AA'/>
+    <groups group_id='5' group_name='15-AA'/>
+    <courses course_id='1' course_name='History' course_description='description'/>
+    <courses course_id='2' course_name='Math' course_description='description'/>
+    <courses course_id='3' course_name='Law' course_description='description'/>
+    <courses course_id='4' course_name='Art' course_description='description'/>
+    <courses course_id='5' course_name='Music' course_description='description'/>
+    <students student_id='1' first_name='Alex' last_name='Loc' group_id='1'/>
+    <students student_id='2' first_name='Lanny' last_name='Don' group_id='2'/>
+    <students student_id='3' first_name='Penny' last_name='Wice' group_id='2'/>
+    <students student_id='4' first_name='Jack' last_name='London' group_id='5'/>
+    <students student_id='5' first_name='Stew' last_name='Richmand' group_id='5'/>
+</dataset>
