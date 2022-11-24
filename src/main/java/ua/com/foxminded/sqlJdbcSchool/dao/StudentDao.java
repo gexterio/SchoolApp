@@ -1,5 +1,7 @@
 package ua.com.foxminded.sqlJdbcSchool.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ua.com.foxminded.sqlJdbcSchool.dao.connection.BasicConnectionPool;
 import ua.com.foxminded.sqlJdbcSchool.dto.CourseDTO;
 import ua.com.foxminded.sqlJdbcSchool.dto.StudentDTO;
@@ -14,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Component
 public class StudentDao {
 
     public static final String CREATE_STUDENT = "INSERT INTO students (student_id, first_name, last_name) VALUES (DEFAULT, (?), (?))";
@@ -28,6 +31,7 @@ public class StudentDao {
     private static final String SET_GROUP_ID = "UPDATE students SET group_id = (?) WHERE student_id = (?);";
     private final BasicConnectionPool connectionPool;
 
+    @Autowired
     public StudentDao(BasicConnectionPool pool) {
 
         this.connectionPool = pool;

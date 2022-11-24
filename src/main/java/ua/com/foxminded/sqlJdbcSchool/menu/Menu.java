@@ -1,5 +1,7 @@
 package ua.com.foxminded.sqlJdbcSchool.menu;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ua.com.foxminded.sqlJdbcSchool.dao.CourseDao;
 import ua.com.foxminded.sqlJdbcSchool.dao.StudentDao;
 import ua.com.foxminded.sqlJdbcSchool.dao.connection.BasicConnectionPool;
@@ -12,15 +14,28 @@ import ua.com.foxminded.sqlJdbcSchool.menu.useractions.SearchGroups;
 import ua.com.foxminded.sqlJdbcSchool.menu.useractions.SearchStudentsInCourse;
 import ua.com.foxminded.sqlJdbcSchool.menu.useractions.UserOption;
 
+import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.IntStream;
 
+@Component
 public class Menu {
-    private final Map<Integer, UserOption> userOptions;
+    private final BasicConnectionPool basicConnectionPool;
+    private final StudentDao studentDao;
+    private final CourseDao courseDao;
+    private Map<Integer, UserOption> userOptions;
 
+    @Autowired
     public Menu(BasicConnectionPool basicConnectionPool, StudentDao studentDao, CourseDao courseDao) {
+        this.basicConnectionPool = basicConnectionPool;
+        this.studentDao = studentDao;
+        this.courseDao = courseDao;
+    }
+
+    @PostConstruct
+    private void setUp() {
         userOptions = new HashMap<>();
         addOptions(basicConnectionPool, studentDao, courseDao);
     }

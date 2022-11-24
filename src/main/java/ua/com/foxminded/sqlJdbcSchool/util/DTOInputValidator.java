@@ -1,9 +1,11 @@
 package ua.com.foxminded.sqlJdbcSchool.util;
 
+import org.springframework.stereotype.Component;
 import ua.com.foxminded.sqlJdbcSchool.dto.CourseDTO;
 import ua.com.foxminded.sqlJdbcSchool.dto.GroupDTO;
 import ua.com.foxminded.sqlJdbcSchool.dto.StudentDTO;
 
+@Component
 public class DTOInputValidator {
 
     public void validateStudent(StudentDTO student) {

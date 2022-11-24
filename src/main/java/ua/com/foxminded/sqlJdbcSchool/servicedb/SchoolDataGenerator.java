@@ -1,5 +1,7 @@
 package ua.com.foxminded.sqlJdbcSchool.servicedb;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ua.com.foxminded.sqlJdbcSchool.dao.CourseDao;
 import ua.com.foxminded.sqlJdbcSchool.dao.GroupDao;
 import ua.com.foxminded.sqlJdbcSchool.dao.StudentDao;
@@ -9,35 +11,43 @@ import ua.com.foxminded.sqlJdbcSchool.dto.GroupDTO;
 import ua.com.foxminded.sqlJdbcSchool.dto.StudentDTO;
 import ua.com.foxminded.sqlJdbcSchool.util.FileParser;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+@Component
 public class SchoolDataGenerator {
+    public static final Integer GROUPS_COUNT = 10;
+    private static final Integer STUDENTS_COUNT = 200;
     BasicConnectionPool connectionPool;
     StudentDao studentDao;
     GroupDao groupDao;
     CourseDao courseDao;
     Random random;
     FileParser parser;
-    public static final Integer GROUPS_COUNT = 10;
-    private static final Integer STUDENTS_COUNT = 200;
     private Integer courseCount = 0;
 
-    public SchoolDataGenerator(BasicConnectionPool connectionPool, StudentDao studentDao, GroupDao groupDao,
+    @Autowired
+    public SchoolDataGenerator(BasicConnectionPool connectionPool,
+                               FileParser parser,
+                               StudentDao studentDao,
+                               GroupDao groupDao,
                                CourseDao courseDao) {
         this.connectionPool = connectionPool;
         this.studentDao = studentDao;
         this.groupDao = groupDao;
         this.courseDao = courseDao;
-        random = new Random();
+        this.parser = parser;
     }
 
-    public void generateSchoolData() {
+    @PostConstruct
+    private void generateSchoolData() {
+        random = new Random();
         generateGroups();
-        generateCourses();
-        generateStudents();
+        generateCourses(parser);
+        generateStudents(parser, random);
         addStudentsToGroups();
         addStudentToCourses();
     }
@@ -76,9 +86,7 @@ public class SchoolDataGenerator {
                 studentDao.addStudentToGroup(student, i);
                 studentDTOList.remove(student);
             }
-
         }
-
     }
 
     private void generateGroups() {
@@ -88,9 +96,7 @@ public class SchoolDataGenerator {
         }
     }
 
-    private void generateStudents() {
-        parser = new FileParser();
-        random = new Random();
+    private void generateStudents(FileParser parser, Random random) {
         List<String> firstNames = parser.parseStudent("students_first_names");
         List<String> lastNames = parser.parseStudent("students_last_names");
         for (int i = 0; i < STUDENTS_COUNT; i++) {
@@ -100,8 +106,7 @@ public class SchoolDataGenerator {
         }
     }
 
-    private void generateCourses() {
-        parser = new FileParser();
+    private void generateCourses(FileParser parser) {
         List<String> courses = parser.parseCourses("courses");
         for (int i = 0; i < courses.size(); i++) {
             String[] line = courses.get(i).split("_");

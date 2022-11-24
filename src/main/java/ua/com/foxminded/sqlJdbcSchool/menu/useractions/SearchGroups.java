@@ -1,13 +1,17 @@
 package ua.com.foxminded.sqlJdbcSchool.menu.useractions;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ua.com.foxminded.sqlJdbcSchool.dao.StudentDao;
 
 import java.util.Map;
 import java.util.Scanner;
 
+@Component
 public class SearchGroups implements UserOption {
     StudentDao studentDao;
 
+    @Autowired
     public SearchGroups(StudentDao studentDao) {
         this.studentDao = studentDao;
     }
