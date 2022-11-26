@@ -31,7 +31,6 @@ public class BasicConnectionPool implements ConnectionPool {
         setUp();
     }
 
-//    @PostConstruct   TODO make tests run with this Annotation
     public void setUp() {
         try {
             this.connectionPool = initConnectionPool(url, user, password);

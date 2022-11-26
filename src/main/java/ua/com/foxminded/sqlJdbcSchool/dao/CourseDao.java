@@ -2,6 +2,7 @@ package ua.com.foxminded.sqlJdbcSchool.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ua.com.foxminded.sqlJdbcSchool.dao.connection.BasicConnectionPool;
 import ua.com.foxminded.sqlJdbcSchool.dto.CourseDTO;
 
@@ -12,7 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Repository
 public class CourseDao {
     public static final String COURSE_DESCRIPTION = "course_description";
     public static final String COURSE_NOT_FOUND = "Course not found.";

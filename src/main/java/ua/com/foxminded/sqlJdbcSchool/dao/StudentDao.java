@@ -2,6 +2,7 @@ package ua.com.foxminded.sqlJdbcSchool.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ua.com.foxminded.sqlJdbcSchool.dao.connection.BasicConnectionPool;
 import ua.com.foxminded.sqlJdbcSchool.dto.CourseDTO;
 import ua.com.foxminded.sqlJdbcSchool.dto.StudentDTO;
@@ -16,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Component
+@Repository
 public class StudentDao {
 
     public static final String CREATE_STUDENT = "INSERT INTO students (student_id, first_name, last_name) VALUES (DEFAULT, (?), (?))";

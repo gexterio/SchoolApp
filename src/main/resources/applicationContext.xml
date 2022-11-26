@@ -9,6 +9,4 @@
 <context:property-placeholder location="properties.properties"/>
 <context:component-scan base-package="ua.com.foxminded.sqlJdbcSchool"/>
 
-
-
 </beans>
