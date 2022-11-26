@@ -2,17 +2,17 @@ package ua.com.foxminded.sqlJdbcSchool.menu.useractions;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ua.com.foxminded.sqlJdbcSchool.dao.StudentDao;
+import ua.com.foxminded.sqlJdbcSchool.dao.JDBC_Template.StudentDAO;
 import ua.com.foxminded.sqlJdbcSchool.dto.StudentDTO;
 
 import java.util.Scanner;
 
 @Component
 public class DeleteStudent implements UserOption {
-    StudentDao studentDao;
+    StudentDAO studentDao;
 
     @Autowired
-    public DeleteStudent(StudentDao studentDao) {
+    public DeleteStudent(StudentDAO studentDao) {
         this.studentDao = studentDao;
     }
 

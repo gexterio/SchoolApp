@@ -1,7 +1,6 @@
-package ua.com.foxminded.sqlJdbcSchool.dao;
+package ua.com.foxminded.sqlJdbcSchool.dao.JDBC;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import ua.com.foxminded.sqlJdbcSchool.dao.connection.BasicConnectionPool;
 
 import javax.annotation.PostConstruct;
@@ -11,7 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+
 public class DbInitializer {
     public static final String CREATE_COURSES = "CREATE TABLE courses (course_id SERIAL NOT NULL PRIMARY KEY, course_name VARCHAR(32) NOT NULL,course_description VARCHAR(256) NOT NULL);";
     public static final String CREATE_STUDENTS = "CREATE TABLE students (student_id SERIAL NOT NULL PRIMARY KEY, first_name VARCHAR(32) NOT NULL,last_name VARCHAR(32) NOT NULL, group_id INTEGER  REFERENCES groups(group_id))";

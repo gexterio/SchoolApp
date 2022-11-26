@@ -1,7 +1,6 @@
-package ua.com.foxminded.sqlJdbcSchool.dao;
+package ua.com.foxminded.sqlJdbcSchool.dao.JDBC;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import ua.com.foxminded.sqlJdbcSchool.dao.connection.BasicConnectionPool;
 import ua.com.foxminded.sqlJdbcSchool.dto.GroupDTO;

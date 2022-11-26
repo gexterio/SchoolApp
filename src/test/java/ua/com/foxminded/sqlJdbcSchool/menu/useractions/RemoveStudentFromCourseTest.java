@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import ua.com.foxminded.sqlJdbcSchool.dao.CourseDao;
-import ua.com.foxminded.sqlJdbcSchool.dao.StudentDao;
+import ua.com.foxminded.sqlJdbcSchool.dao.JDBC.CourseDao;
+import ua.com.foxminded.sqlJdbcSchool.dao.JDBC_Template.StudentDAO;
 import ua.com.foxminded.sqlJdbcSchool.dto.CourseDTO;
 import ua.com.foxminded.sqlJdbcSchool.dto.StudentDTO;
 
@@ -15,7 +15,7 @@ import java.io.ByteArrayInputStream;
 
 class RemoveStudentFromCourseTest {
     @Mock
-    StudentDao studentDaoMock;
+    StudentDAO studentDaoMock;
     @Mock
     CourseDao courseDaoMock;
 

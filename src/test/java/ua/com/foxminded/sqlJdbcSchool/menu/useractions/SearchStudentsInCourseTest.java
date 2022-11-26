@@ -6,7 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import ua.com.foxminded.sqlJdbcSchool.dao.CourseDao;
+import ua.com.foxminded.sqlJdbcSchool.dao.JDBC.CourseDao;
+import ua.com.foxminded.sqlJdbcSchool.dao.JDBC_Template.CourseDAO;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 class SearchStudentsInCourseTest {
 
     @Mock
-    CourseDao courseDaoMock;
+    CourseDAO courseDaoMock;
 
     SearchStudentsInCourse searchStudentsInCourse;
 

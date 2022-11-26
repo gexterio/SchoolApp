@@ -6,7 +6,7 @@ import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ua.com.foxminded.sqlJdbcSchool.dao.CourseDao;
+import ua.com.foxminded.sqlJdbcSchool.dao.JDBC.CourseDao;
 import ua.com.foxminded.sqlJdbcSchool.dao.connection.BasicConnectionPool;
 import ua.com.foxminded.sqlJdbcSchool.dto.CourseDTO;
 

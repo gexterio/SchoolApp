@@ -2,7 +2,7 @@ package ua.com.foxminded.sqlJdbcSchool.menu.useractions;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ua.com.foxminded.sqlJdbcSchool.dao.CourseDao;
+import ua.com.foxminded.sqlJdbcSchool.dao.JDBC_Template.CourseDAO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,10 +10,10 @@ import java.util.Scanner;
 
 @Component
 public class SearchStudentsInCourse implements UserOption {
-    CourseDao courseDao;
+    CourseDAO courseDao;
 
     @Autowired
-    public SearchStudentsInCourse(CourseDao courseDao) {
+    public SearchStudentsInCourse(CourseDAO courseDao) {
         this.courseDao = courseDao;
     }
 
