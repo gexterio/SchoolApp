@@ -3,6 +3,7 @@ package ua.com.foxminded.sqlJdbcSchool.menu.useractions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ua.com.foxminded.sqlJdbcSchool.dao.JDBC.CourseDao;
+import ua.com.foxminded.sqlJdbcSchool.dao.JDBC_Template.CourseDAO;
 import ua.com.foxminded.sqlJdbcSchool.dao.JDBC_Template.StudentDAO;
 
 import java.util.Scanner;
@@ -10,10 +11,10 @@ import java.util.Scanner;
 @Component
 public class RemoveStudentFromCourse implements UserOption {
     StudentDAO studentDao;
-    CourseDao courseDao;
+    CourseDAO courseDao;
 
     @Autowired
-    public RemoveStudentFromCourse(StudentDAO studentDao, CourseDao courseDao) {
+    public RemoveStudentFromCourse(StudentDAO studentDao, CourseDAO courseDao) {
         this.studentDao = studentDao;
         this.courseDao = courseDao;
     }

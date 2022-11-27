@@ -8,6 +8,7 @@ import ua.com.foxminded.sqlJdbcSchool.dao.JDBC_Template.Mappers.StudentCountMapp
 import ua.com.foxminded.sqlJdbcSchool.dao.JDBC_Template.Mappers.StudentMapper;
 import ua.com.foxminded.sqlJdbcSchool.dto.CourseDTO;
 import ua.com.foxminded.sqlJdbcSchool.dto.StudentDTO;
+import ua.com.foxminded.sqlJdbcSchool.util.DTOInputValidator;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -28,10 +29,12 @@ public class StudentDAO {
     private static final String CREATE_STUDENT_QUERY = "INSERT INTO students (student_id, first_name, last_name) VALUES (DEFAULT, ?, ?)";
 
     private final JdbcTemplate jdbcTemplate;
+    private final DTOInputValidator validator;
 
     @Autowired
-    public StudentDAO(JdbcTemplate jdbcTemplate) {
+    public StudentDAO(JdbcTemplate jdbcTemplate, DTOInputValidator validator) {
         this.jdbcTemplate = jdbcTemplate;
+        this.validator = validator;
     }
 
     public StudentDTO searchById(Integer id) {
@@ -41,14 +44,27 @@ public class StudentDAO {
     }
 
     public void addStudentToGroup(StudentDTO student, Integer groupId) {
-        jdbcTemplate.update(ADD_STUDENT_TO_GROUP_QUERY, groupId, student.getStudentID());
+        validator.validateStudent(student);
+        if (jdbcTemplate.update(ADD_STUDENT_TO_GROUP_QUERY, groupId, student.getStudentID()) == 0){
+            throw new IllegalArgumentException("can't add student to group: " + groupId);
+        }
     }
 
     public void addStudentToCourse(StudentDTO student, CourseDTO course) {
+        validator.validateStudent(student);
+        validator.validateCourse(course);
+        if (student == null) {
+            throw new IllegalArgumentException("student can't be null");
+        }
+        if (course == null) {
+            throw new IllegalArgumentException("course can't be null");
+        }
         jdbcTemplate.update(ADD_STUDENT_TO_COURSE_QUERY, student.getStudentID(), course.getCourseId());
     }
 
     public void deleteStudentFromCourse(StudentDTO student, CourseDTO course) {
+        validator.validateStudent(student);
+        validator.validateCourse(course);
         jdbcTemplate.update(DELETE_STUDENT_FROM_COURSE_QUERY, student.getStudentID(), course.getCourseId());
     }
 
@@ -57,6 +73,12 @@ public class StudentDAO {
     }
 
     public Map<Integer, Integer> searchGroupsByStudentCount(Integer studentCount) {
+        if (studentCount == null) {
+            throw new IllegalArgumentException("student count can't be null");
+        }
+        if (studentCount < 0) {
+            throw new IllegalArgumentException("student count can't be less than zero");
+        }
         return jdbcTemplate.query(SEARCH_GROUPS_BY_STUDENT_COUNT_QUERY,
                         new Object[]{studentCount}, new StudentCountMapper()).stream()
                 .collect(Collectors.toMap(
@@ -65,15 +87,18 @@ public class StudentDAO {
     }
 
     public void delete(StudentDTO student) {
+        validator.validateStudent(student);
         jdbcTemplate.update(DELETE_STUDENT_QUERY, student.getStudentID());
     }
 
     public void create(StudentDTO student) {
+        validator.validateStudent(student);
         jdbcTemplate.update(CREATE_STUDENT_QUERY,
                 student.getFirstName(), student.getLastName());
     }
 
     public void batchCreate(List<StudentDTO> students) {
+        students.forEach(validator::validateStudent);
         jdbcTemplate.batchUpdate(CREATE_STUDENT_QUERY, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
@@ -89,6 +114,7 @@ public class StudentDAO {
     }
 
     public void batchAddStudentToGroup(List<StudentDTO> students) {
+        students.forEach(validator::validateStudent);
         jdbcTemplate.batchUpdate(ADD_STUDENT_TO_GROUP_QUERY, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {

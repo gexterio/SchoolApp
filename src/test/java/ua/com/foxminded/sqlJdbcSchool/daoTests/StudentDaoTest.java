@@ -6,13 +6,14 @@ import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ua.com.foxminded.sqlJdbcSchool.dao.JDBC.StudentDao;
-import ua.com.foxminded.sqlJdbcSchool.dao.connection.BasicConnectionPool;
+import org.springframework.dao.DuplicateKeyException;
+import ua.com.foxminded.sqlJdbcSchool.dao.JDBC_Template.StudentDAO;
 import ua.com.foxminded.sqlJdbcSchool.dto.CourseDTO;
 import ua.com.foxminded.sqlJdbcSchool.dto.StudentDTO;
+import ua.com.foxminded.sqlJdbcSchool.util.DTOInputValidator;
 
 class StudentDaoTest extends DataSourceDBUnit {
-    StudentDao studentDao;
+    StudentDAO studentDao;
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -20,7 +21,7 @@ class StudentDaoTest extends DataSourceDBUnit {
                 .getResourceAsStream("beforeData/emptyDaoTest_data.xml"));
         super.setUp();
         connection = getConnection().getConnection();
-        studentDao = new StudentDao(new BasicConnectionPool(props.getProperty("JDBC_URL"), props.getProperty("USER"), props.getProperty("PASSWORD")));
+        studentDao = new StudentDAO(jdbcTemplate, new DTOInputValidator());
     }
 
     @Test
@@ -144,13 +145,13 @@ class StudentDaoTest extends DataSourceDBUnit {
     }
 
     @Test
-    void addStudentToCourse_thrownIllegalArgumentException_studentAlreadyAddedToInputCourse() throws Exception {
+    void addStudentToCourse_thrownDuplicateKeyException_studentAlreadyAddedToInputCourse() throws Exception {
         dataSet = new FlatXmlDataSetBuilder().build(getClass().getClassLoader()
                 .getResourceAsStream("beforeData/coursesAndStudents_data.xml"));
         super.setUp();
         StudentDTO student = new StudentDTO.StudentBuilder("Alex", "Loc").setGroupId(1).setStudentId(1).build();
         CourseDTO course = new CourseDTO.CourseBuilder("Music").setDescription("description").setCourseId(1).build();
-        Assertions.assertThrows(IllegalArgumentException.class, () -> studentDao.addStudentToCourse(student, course));
+        Assertions.assertThrows(DuplicateKeyException.class, () -> studentDao.addStudentToCourse(student, course));
     }
 
     @Test
