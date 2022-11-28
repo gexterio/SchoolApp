@@ -1,14 +1,18 @@
 package ua.com.foxminded.sqlJdbcSchool.menu.useractions;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ua.com.foxminded.sqlJdbcSchool.dao.CourseDao;
 import ua.com.foxminded.sqlJdbcSchool.dao.StudentDao;
 
 import java.util.Scanner;
 
+@Component
 public class RemoveStudentFromCourse implements UserOption {
     StudentDao studentDao;
     CourseDao courseDao;
 
+    @Autowired
     public RemoveStudentFromCourse(StudentDao studentDao, CourseDao courseDao) {
         this.studentDao = studentDao;
         this.courseDao = courseDao;

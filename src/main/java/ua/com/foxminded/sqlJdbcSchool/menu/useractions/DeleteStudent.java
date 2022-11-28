@@ -1,13 +1,17 @@
 package ua.com.foxminded.sqlJdbcSchool.menu.useractions;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ua.com.foxminded.sqlJdbcSchool.dao.StudentDao;
 import ua.com.foxminded.sqlJdbcSchool.dto.StudentDTO;
 
 import java.util.Scanner;
 
+@Component
 public class DeleteStudent implements UserOption {
     StudentDao studentDao;
 
+    @Autowired
     public DeleteStudent(StudentDao studentDao) {
         this.studentDao = studentDao;
     }
@@ -19,11 +23,10 @@ public class DeleteStudent implements UserOption {
         int id;
         try {
             id = Integer.parseInt(scanner.nextLine());
-            if (id <=0) {
+            if (id <= 0) {
                 throw new IllegalArgumentException("id can't be less or equals than 0");
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new IllegalArgumentException("Issue with Entering id");
         }
         deleteStudent(studentDao.searchById(id));
