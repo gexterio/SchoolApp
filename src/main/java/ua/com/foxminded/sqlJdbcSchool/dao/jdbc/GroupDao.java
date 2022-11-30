@@ -1,7 +1,8 @@
-package ua.com.foxminded.sqlJdbcSchool.dao.JDBC;
+package ua.com.foxminded.sqlJdbcSchool.dao.jdbc;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import ua.com.foxminded.sqlJdbcSchool.dao.Dao;
 import ua.com.foxminded.sqlJdbcSchool.dao.connection.BasicConnectionPool;
 import ua.com.foxminded.sqlJdbcSchool.dto.GroupDTO;
 
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class GroupDao {
+public class GroupDao implements Dao<GroupDTO> {
     private static final String SELECT_ALL_GROUPS = "SELECT group_id, group_name FROM groups;";
     private static final String CREATE_GROUP = "INSERT INTO groups (group_id, group_name) VALUES (DEFAULT, (?))";
     private final BasicConnectionPool connectionPool;
@@ -23,6 +24,7 @@ public class GroupDao {
         this.connectionPool = connectionPool;
     }
 
+    @Override
     public List<GroupDTO> getAll() {
         Connection connection = connectionPool.getConnection();
         List<GroupDTO> groupDTOList = new ArrayList<>();
@@ -42,6 +44,7 @@ public class GroupDao {
         return groupDTOList;
     }
 
+    @Override
     public void create(GroupDTO group) {
         if (group == null) {
             throw new IllegalArgumentException("GroupDTO can't be NULL");

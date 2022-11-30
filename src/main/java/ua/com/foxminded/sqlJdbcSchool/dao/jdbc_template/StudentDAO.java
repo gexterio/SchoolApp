@@ -1,11 +1,12 @@
-package ua.com.foxminded.sqlJdbcSchool.dao.JDBC_Template;
+package ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import ua.com.foxminded.sqlJdbcSchool.dao.JDBC_Template.Mappers.StudentCountMapper;
-import ua.com.foxminded.sqlJdbcSchool.dao.JDBC_Template.Mappers.StudentMapper;
+import ua.com.foxminded.sqlJdbcSchool.dao.Dao;
+import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.Mappers.StudentCountMapper;
+import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.Mappers.StudentMapper;
 import ua.com.foxminded.sqlJdbcSchool.dto.CourseDTO;
 import ua.com.foxminded.sqlJdbcSchool.dto.StudentDTO;
 import ua.com.foxminded.sqlJdbcSchool.util.DTOInputValidator;
@@ -18,7 +19,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Repository
-public class StudentDAO {
+public class StudentDAO implements Dao<StudentDTO> {
     private static final String SEARCH_GROUPS_BY_STUDENT_COUNT_QUERY = "SELECT group_id, Count(student_id) as cnt FROM students WHERE group_id>0 GROUP BY students.group_id HAVING COUNT (student_id)<=? ORDER BY students.group_id";
     private static final String SEARCH_STUDENT_BY_ID_QUERY = "SELECT  student_id, first_name, last_name, group_id FROM students WHERE student_id = ?";
     private static final String ADD_STUDENT_TO_GROUP_QUERY = "UPDATE students SET group_id = ? WHERE student_id = ?";
@@ -30,22 +31,27 @@ public class StudentDAO {
 
     private final JdbcTemplate jdbcTemplate;
     private final DTOInputValidator validator;
+    private final StudentMapper studentMapper;
+    private final StudentCountMapper studentCountMapper;
 
     @Autowired
-    public StudentDAO(JdbcTemplate jdbcTemplate, DTOInputValidator validator) {
+    public StudentDAO(JdbcTemplate jdbcTemplate, DTOInputValidator validator, StudentMapper studentMapper,
+                      StudentCountMapper studentCountMapper) {
         this.jdbcTemplate = jdbcTemplate;
         this.validator = validator;
+        this.studentMapper = studentMapper;
+        this.studentCountMapper = studentCountMapper;
     }
 
     public StudentDTO searchById(Integer id) {
         return jdbcTemplate.query(SEARCH_STUDENT_BY_ID_QUERY,
-                        new Object[]{id}, new StudentMapper()).stream().findAny()
+                        new Object[]{id}, studentMapper).stream().findAny()
                 .orElseThrow(() -> new IllegalArgumentException("student with id: " + id + " not found"));
     }
 
     public void addStudentToGroup(StudentDTO student, Integer groupId) {
         validator.validateStudent(student);
-        if (jdbcTemplate.update(ADD_STUDENT_TO_GROUP_QUERY, groupId, student.getStudentID()) == 0){
+        if (jdbcTemplate.update(ADD_STUDENT_TO_GROUP_QUERY, groupId, student.getStudentID()) == 0) {
             throw new IllegalArgumentException("can't add student to group: " + groupId);
         }
     }
@@ -68,8 +74,9 @@ public class StudentDAO {
         jdbcTemplate.update(DELETE_STUDENT_FROM_COURSE_QUERY, student.getStudentID(), course.getCourseId());
     }
 
+    @Override
     public List<StudentDTO> getAll() {
-        return jdbcTemplate.query(GET_ALL_STUDENTS_QUERY, new StudentMapper());
+        return jdbcTemplate.query(GET_ALL_STUDENTS_QUERY, studentMapper);
     }
 
     public Map<Integer, Integer> searchGroupsByStudentCount(Integer studentCount) {
@@ -80,7 +87,7 @@ public class StudentDAO {
             throw new IllegalArgumentException("student count can't be less than zero");
         }
         return jdbcTemplate.query(SEARCH_GROUPS_BY_STUDENT_COUNT_QUERY,
-                        new Object[]{studentCount}, new StudentCountMapper()).stream()
+                        new Object[]{studentCount}, studentCountMapper).stream()
                 .collect(Collectors.toMap(
                         key -> Integer.valueOf(key.split("_")[0]),
                         value -> Integer.valueOf(value.split("_")[1])));
@@ -91,6 +98,7 @@ public class StudentDAO {
         jdbcTemplate.update(DELETE_STUDENT_QUERY, student.getStudentID());
     }
 
+    @Override
     public void create(StudentDTO student) {
         validator.validateStudent(student);
         jdbcTemplate.update(CREATE_STUDENT_QUERY,

@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import ua.com.foxminded.sqlJdbcSchool.dao.JDBC_Template.CourseDAO;
-import ua.com.foxminded.sqlJdbcSchool.dao.JDBC_Template.StudentDAO;
+import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.CourseDAO;
+import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.StudentDAO;
 import ua.com.foxminded.sqlJdbcSchool.dto.CourseDTO;
 import ua.com.foxminded.sqlJdbcSchool.dto.StudentDTO;
 

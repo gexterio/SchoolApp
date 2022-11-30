@@ -1,18 +1,12 @@
 package ua.com.foxminded.sqlJdbcSchool.daoTests;
 
 import org.dbunit.Assertion;
-import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
-import ua.com.foxminded.sqlJdbcSchool.dao.JDBC.CourseDao;
-import ua.com.foxminded.sqlJdbcSchool.dao.JDBC_Template.CourseDAO;
-import ua.com.foxminded.sqlJdbcSchool.dao.connection.BasicConnectionPool;
+import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.CourseDAO;
 import ua.com.foxminded.sqlJdbcSchool.dto.CourseDTO;
 import ua.com.foxminded.sqlJdbcSchool.util.DTOInputValidator;
 
@@ -25,7 +19,7 @@ class CourseDaoTest extends DataSourceDBUnit {
                 .getResourceAsStream("beforeData/emptyDaoTest_data.xml"));
         super.setUp();
         connection = getConnection().getConnection();
-        courseDao = new CourseDAO(jdbcTemplate, new DTOInputValidator());
+        courseDao = new CourseDAO(jdbcTemplate, new DTOInputValidator(), );
     }
 
     @Test

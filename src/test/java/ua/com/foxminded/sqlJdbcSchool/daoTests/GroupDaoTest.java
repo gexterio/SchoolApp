@@ -6,9 +6,8 @@ import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ua.com.foxminded.sqlJdbcSchool.dao.JDBC.GroupDao;
-import ua.com.foxminded.sqlJdbcSchool.dao.JDBC_Template.GroupDAO;
-import ua.com.foxminded.sqlJdbcSchool.dao.connection.BasicConnectionPool;
+import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.GroupDAO;
+import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.Mappers.GroupMapper;
 import ua.com.foxminded.sqlJdbcSchool.dto.GroupDTO;
 import ua.com.foxminded.sqlJdbcSchool.util.DTOInputValidator;
 
@@ -21,7 +20,7 @@ class GroupDaoTest extends DataSourceDBUnit {
                 .getResourceAsStream("beforeData/emptyDaoTest_data.xml"));
         super.setUp();
         connection = getConnection().getConnection();
-        dao = new GroupDAO(jdbcTemplate, new DTOInputValidator());
+        dao = new GroupDAO(jdbcTemplate, new DTOInputValidator(), new GroupMapper());
     }
 
     @Test

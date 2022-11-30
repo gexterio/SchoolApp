@@ -1,7 +1,8 @@
-package ua.com.foxminded.sqlJdbcSchool.dao.JDBC;
+package ua.com.foxminded.sqlJdbcSchool.dao.jdbc;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import ua.com.foxminded.sqlJdbcSchool.dao.Dao;
 import ua.com.foxminded.sqlJdbcSchool.dao.connection.BasicConnectionPool;
 import ua.com.foxminded.sqlJdbcSchool.dto.CourseDTO;
 import ua.com.foxminded.sqlJdbcSchool.dto.StudentDTO;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class StudentDao {
+public class StudentDao implements Dao<StudentDTO> {
 
     public static final String CREATE_STUDENT = "INSERT INTO students (student_id, first_name, last_name) VALUES (DEFAULT, (?), (?))";
     public static final String GROUP_ID = "group_id";
@@ -123,6 +124,7 @@ public class StudentDao {
         }
     }
 
+    @Override
     public void create(StudentDTO student) {
         if (student == null) {
             throw new IllegalArgumentException("StudentDTO can't be NULL");
@@ -140,6 +142,7 @@ public class StudentDao {
         }
     }
 
+    @Override
     public List<StudentDTO> getAll() {
         Connection connection = connectionPool.getConnection();
         List<StudentDTO> studentDTOList = new ArrayList<>();

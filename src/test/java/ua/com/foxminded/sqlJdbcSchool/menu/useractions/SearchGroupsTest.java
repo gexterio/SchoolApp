@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import ua.com.foxminded.sqlJdbcSchool.dao.JDBC_Template.StudentDAO;
+import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.StudentDAO;
 
 import java.io.ByteArrayInputStream;
 import java.util.HashMap;

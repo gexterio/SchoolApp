@@ -2,8 +2,8 @@ package ua.com.foxminded.sqlJdbcSchool.menu.useractions;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ua.com.foxminded.sqlJdbcSchool.dao.JDBC_Template.CourseDAO;
-import ua.com.foxminded.sqlJdbcSchool.dao.JDBC_Template.StudentDAO;
+import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.CourseDAO;
+import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.StudentDAO;
 
 import java.util.Scanner;
 

@@ -2,16 +2,15 @@ package ua.com.foxminded.sqlJdbcSchool.servicedb;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ua.com.foxminded.sqlJdbcSchool.dao.JDBC_Template.CourseDAO;
-import ua.com.foxminded.sqlJdbcSchool.dao.JDBC_Template.GroupDAO;
-import ua.com.foxminded.sqlJdbcSchool.dao.JDBC_Template.StudentDAO;
+import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.CourseDAO;
+import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.GroupDAO;
+import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.StudentDAO;
 import ua.com.foxminded.sqlJdbcSchool.dao.connection.BasicConnectionPool;
 import ua.com.foxminded.sqlJdbcSchool.dto.CourseDTO;
 import ua.com.foxminded.sqlJdbcSchool.dto.GroupDTO;
 import ua.com.foxminded.sqlJdbcSchool.dto.StudentDTO;
 import ua.com.foxminded.sqlJdbcSchool.util.FileParser;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -44,8 +43,8 @@ public class SchoolDataGenerator {
         this.parser = parser;
     }
 
-    @PostConstruct
-    private void generateSchoolData() {
+
+    public void generateSchoolData() {
         random = new Random();
         generateGroups();
         generateCourses(parser);

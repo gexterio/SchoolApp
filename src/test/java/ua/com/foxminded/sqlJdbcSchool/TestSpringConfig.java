@@ -1,4 +1,5 @@
 package ua.com.foxminded.sqlJdbcSchool;
+import oracle.ucp.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

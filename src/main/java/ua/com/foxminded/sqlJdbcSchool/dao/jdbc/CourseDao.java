@@ -1,7 +1,8 @@
-package ua.com.foxminded.sqlJdbcSchool.dao.JDBC;
+package ua.com.foxminded.sqlJdbcSchool.dao.jdbc;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import ua.com.foxminded.sqlJdbcSchool.dao.Dao;
 import ua.com.foxminded.sqlJdbcSchool.dao.connection.BasicConnectionPool;
 import ua.com.foxminded.sqlJdbcSchool.dto.CourseDTO;
 
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class CourseDao {
+public class CourseDao implements Dao<CourseDTO> {
     public static final String COURSE_DESCRIPTION = "course_description";
     public static final String COURSE_NOT_FOUND = "Course not found.";
     private static final String SELECT_COURSE_BY_ID = "SELECT  course_name, course_description FROM courses WHERE course_id = (?);";
@@ -80,6 +81,7 @@ public class CourseDao {
         }
     }
 
+    @Override
     public List<CourseDTO> getAll() {
         Connection connection = connectionPool.getConnection();
         List<CourseDTO> courseDTOList = new ArrayList<>();
@@ -103,6 +105,7 @@ public class CourseDao {
         return courseDTOList;
     }
 
+    @Override
     public void create(CourseDTO course) {
         if (course == null) {
             throw new IllegalArgumentException("courseDTO can't be NULL");

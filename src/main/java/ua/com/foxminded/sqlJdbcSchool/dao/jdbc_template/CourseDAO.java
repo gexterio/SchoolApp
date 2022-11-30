@@ -1,10 +1,11 @@
-package ua.com.foxminded.sqlJdbcSchool.dao.JDBC_Template;
+package ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import ua.com.foxminded.sqlJdbcSchool.dao.JDBC_Template.Mappers.CourseMapper;
+import ua.com.foxminded.sqlJdbcSchool.dao.Dao;
+import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.Mappers.CourseMapper;
 import ua.com.foxminded.sqlJdbcSchool.dto.CourseDTO;
 import ua.com.foxminded.sqlJdbcSchool.util.DTOInputValidator;
 
@@ -13,7 +14,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Repository
-public class CourseDAO {
+public class CourseDAO implements Dao<CourseDTO> {
 
     public static final String SEARCH_STUDENTS_IN_COURSE_QUERY = "SELECT student_id FROM personal_courses WHERE course_id = ?";
     public static final String SEARCH_COURSE_BY_NAME_QUERY = "SELECT  course_id, course_name, course_description FROM courses WHERE course_name = ?";
@@ -21,12 +22,15 @@ public class CourseDAO {
     public static final String GET_ALL_COURSES_QUERY = "SELECT course_id, course_name, course_description FROM courses;";
     public static final String SEARCH_COURSE_BY_ID_QUERY = "SELECT course_id, course_name, course_description FROM courses WHERE course_id = ?";
     private final JdbcTemplate jdbcTemplate;
-    private  DTOInputValidator validator;
+    private final DTOInputValidator validator;
+    private final CourseMapper courseMapper;
+
 
     @Autowired
-    public CourseDAO(JdbcTemplate jdbcTemplate, DTOInputValidator validator) {
+    public CourseDAO(JdbcTemplate jdbcTemplate, DTOInputValidator validator, CourseMapper courseMapper) {
         this.jdbcTemplate = jdbcTemplate;
         this.validator = validator;
+        this.courseMapper = courseMapper;
     }
 
     public List<Integer> searchStudentsInCourse(String courseName) {
@@ -41,12 +45,14 @@ public class CourseDAO {
                 .orElseThrow(() -> new IllegalArgumentException("course with name: " + name + " not found"));
     }
 
+    @Override
     public void create(CourseDTO course) {
         validator.validateCourse(course);
         jdbcTemplate.update(CREATE_COURSE_QUERY,
                 course.getCourseName(), course.getCourseDescription());
     }
 
+    @Override
     public List<CourseDTO> getAll() {
         return jdbcTemplate.query(GET_ALL_COURSES_QUERY,
                 new CourseMapper());
@@ -54,7 +60,7 @@ public class CourseDAO {
 
     public CourseDTO searchById(int id) {
         return jdbcTemplate.query(SEARCH_COURSE_BY_ID_QUERY,
-                        new Object[]{id}, new CourseMapper()).stream().findAny()
+                        new Object[]{id}, courseMapper).stream().findAny()
                 .orElseThrow(() -> new IllegalArgumentException("course with id: " + id + " not found"));
     }
 
