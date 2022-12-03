@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import ua.com.foxminded.sqlJdbcSchool.dao.Dao;
+import ua.com.foxminded.sqlJdbcSchool.dao.GroupDao;
 import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.Mappers.GroupMapper;
 import ua.com.foxminded.sqlJdbcSchool.dto.GroupDTO;
 import ua.com.foxminded.sqlJdbcSchool.util.DTOInputValidator;
@@ -14,7 +14,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Repository
-public class GroupDAO implements Dao<GroupDTO> {
+public class GroupDAO implements GroupDao {
 
     private static final String GET_ALL_GROUPS_QUERY = "SELECT group_id, group_name FROM groups";
     private static final String CREATE_GROUP_QUERY = "INSERT INTO groups (group_id, group_name) VALUES (DEFAULT, ?)";

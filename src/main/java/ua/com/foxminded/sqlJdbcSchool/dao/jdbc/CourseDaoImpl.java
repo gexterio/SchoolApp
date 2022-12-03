@@ -2,7 +2,7 @@ package ua.com.foxminded.sqlJdbcSchool.dao.jdbc;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import ua.com.foxminded.sqlJdbcSchool.dao.Dao;
+import ua.com.foxminded.sqlJdbcSchool.dao.CourseDao;
 import ua.com.foxminded.sqlJdbcSchool.dao.connection.BasicConnectionPool;
 import ua.com.foxminded.sqlJdbcSchool.dto.CourseDTO;
 
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class CourseDao implements Dao<CourseDTO> {
+public class CourseDaoImpl implements CourseDao {
     public static final String COURSE_DESCRIPTION = "course_description";
     public static final String COURSE_NOT_FOUND = "Course not found.";
     private static final String SELECT_COURSE_BY_ID = "SELECT  course_name, course_description FROM courses WHERE course_id = (?);";
@@ -25,10 +25,11 @@ public class CourseDao implements Dao<CourseDTO> {
     private final BasicConnectionPool connectionPool;
 
     @Autowired
-    public CourseDao(BasicConnectionPool connectionPool) {
+    public CourseDaoImpl(BasicConnectionPool connectionPool) {
         this.connectionPool = connectionPool;
     }
 
+    @Override
     public CourseDTO searchById(int id) {
         Connection connection = connectionPool.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(SELECT_COURSE_BY_ID)) {
@@ -44,6 +45,7 @@ public class CourseDao implements Dao<CourseDTO> {
         }
     }
 
+    @Override
     public CourseDTO searchByName(String name) {
         Connection connection = connectionPool.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(SELECT_COURSE_BY_NAME)) {
@@ -61,6 +63,7 @@ public class CourseDao implements Dao<CourseDTO> {
         }
     }
 
+    @Override
     public List<Integer> searchStudentsInCourse(String courseName) {
         int courseId = searchByName(courseName).getCourseId();
         Connection connection = connectionPool.getConnection();

@@ -2,7 +2,7 @@ package ua.com.foxminded.sqlJdbcSchool.dao.jdbc;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import ua.com.foxminded.sqlJdbcSchool.dao.Dao;
+import ua.com.foxminded.sqlJdbcSchool.dao.GroupDao;
 import ua.com.foxminded.sqlJdbcSchool.dao.connection.BasicConnectionPool;
 import ua.com.foxminded.sqlJdbcSchool.dto.GroupDTO;
 
@@ -14,13 +14,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class GroupDao implements Dao<GroupDTO> {
+public class GroupDaoImpl implements GroupDao {
     private static final String SELECT_ALL_GROUPS = "SELECT group_id, group_name FROM groups;";
     private static final String CREATE_GROUP = "INSERT INTO groups (group_id, group_name) VALUES (DEFAULT, (?))";
     private final BasicConnectionPool connectionPool;
 
     @Autowired
-    public GroupDao(BasicConnectionPool connectionPool) {
+    public GroupDaoImpl(BasicConnectionPool connectionPool) {
         this.connectionPool = connectionPool;
     }
 

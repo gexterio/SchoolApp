@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import ua.com.foxminded.sqlJdbcSchool.dao.Dao;
+import ua.com.foxminded.sqlJdbcSchool.dao.StudentDao;
 import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.Mappers.StudentCountMapper;
 import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.Mappers.StudentMapper;
 import ua.com.foxminded.sqlJdbcSchool.dto.CourseDTO;
@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Repository
-public class StudentDAO implements Dao<StudentDTO> {
+public class StudentDAO implements StudentDao {
     private static final String SEARCH_GROUPS_BY_STUDENT_COUNT_QUERY = "SELECT group_id, Count(student_id) as cnt FROM students WHERE group_id>0 GROUP BY students.group_id HAVING COUNT (student_id)<=? ORDER BY students.group_id";
     private static final String SEARCH_STUDENT_BY_ID_QUERY = "SELECT  student_id, first_name, last_name, group_id FROM students WHERE student_id = ?";
     private static final String ADD_STUDENT_TO_GROUP_QUERY = "UPDATE students SET group_id = ? WHERE student_id = ?";
@@ -43,12 +43,14 @@ public class StudentDAO implements Dao<StudentDTO> {
         this.studentCountMapper = studentCountMapper;
     }
 
+    @Override
     public StudentDTO searchById(Integer id) {
         return jdbcTemplate.query(SEARCH_STUDENT_BY_ID_QUERY,
                         new Object[]{id}, studentMapper).stream().findAny()
                 .orElseThrow(() -> new IllegalArgumentException("student with id: " + id + " not found"));
     }
 
+    @Override
     public void addStudentToGroup(StudentDTO student, Integer groupId) {
         validator.validateStudent(student);
         if (jdbcTemplate.update(ADD_STUDENT_TO_GROUP_QUERY, groupId, student.getStudentID()) == 0) {
@@ -56,6 +58,7 @@ public class StudentDAO implements Dao<StudentDTO> {
         }
     }
 
+    @Override
     public void addStudentToCourse(StudentDTO student, CourseDTO course) {
         validator.validateStudent(student);
         validator.validateCourse(course);
@@ -68,6 +71,7 @@ public class StudentDAO implements Dao<StudentDTO> {
         jdbcTemplate.update(ADD_STUDENT_TO_COURSE_QUERY, student.getStudentID(), course.getCourseId());
     }
 
+    @Override
     public void deleteStudentFromCourse(StudentDTO student, CourseDTO course) {
         validator.validateStudent(student);
         validator.validateCourse(course);
@@ -79,6 +83,7 @@ public class StudentDAO implements Dao<StudentDTO> {
         return jdbcTemplate.query(GET_ALL_STUDENTS_QUERY, studentMapper);
     }
 
+    @Override
     public Map<Integer, Integer> searchGroupsByStudentCount(Integer studentCount) {
         if (studentCount == null) {
             throw new IllegalArgumentException("student count can't be null");
@@ -93,6 +98,7 @@ public class StudentDAO implements Dao<StudentDTO> {
                         value -> Integer.valueOf(value.split("_")[1])));
     }
 
+    @Override
     public void delete(StudentDTO student) {
         validator.validateStudent(student);
         jdbcTemplate.update(DELETE_STUDENT_QUERY, student.getStudentID());

@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import ua.com.foxminded.sqlJdbcSchool.dao.Dao;
+import ua.com.foxminded.sqlJdbcSchool.dao.CourseDao;
 import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.Mappers.CourseMapper;
 import ua.com.foxminded.sqlJdbcSchool.dto.CourseDTO;
 import ua.com.foxminded.sqlJdbcSchool.util.DTOInputValidator;
@@ -14,7 +14,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Repository
-public class CourseDAO implements Dao<CourseDTO> {
+public class CourseDAO implements CourseDao {
 
     public static final String SEARCH_STUDENTS_IN_COURSE_QUERY = "SELECT student_id FROM personal_courses WHERE course_id = ?";
     public static final String SEARCH_COURSE_BY_NAME_QUERY = "SELECT  course_id, course_name, course_description FROM courses WHERE course_name = ?";
@@ -33,12 +33,14 @@ public class CourseDAO implements Dao<CourseDTO> {
         this.courseMapper = courseMapper;
     }
 
+    @Override
     public List<Integer> searchStudentsInCourse(String courseName) {
         Integer courseId = searchByName(courseName).getCourseId();
         return jdbcTemplate.query(SEARCH_STUDENTS_IN_COURSE_QUERY, new Object[]{courseId},
                 (rs, rowNum) -> rs.getInt("student_id"));
     }
 
+    @Override
     public CourseDTO searchByName(String name) {
         return jdbcTemplate.query(SEARCH_COURSE_BY_NAME_QUERY,
                         new Object[]{name}, new CourseMapper()).stream().findAny()
@@ -58,12 +60,12 @@ public class CourseDAO implements Dao<CourseDTO> {
                 new CourseMapper());
     }
 
+    @Override
     public CourseDTO searchById(int id) {
         return jdbcTemplate.query(SEARCH_COURSE_BY_ID_QUERY,
                         new Object[]{id}, courseMapper).stream().findAny()
                 .orElseThrow(() -> new IllegalArgumentException("course with id: " + id + " not found"));
     }
-
 
     public void batchCreate(List<CourseDTO> courses) {
         courses.forEach(validator::validateCourse);

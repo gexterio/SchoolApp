@@ -2,7 +2,7 @@ package ua.com.foxminded.sqlJdbcSchool.dao.jdbc;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import ua.com.foxminded.sqlJdbcSchool.dao.Dao;
+import ua.com.foxminded.sqlJdbcSchool.dao.StudentDao;
 import ua.com.foxminded.sqlJdbcSchool.dao.connection.BasicConnectionPool;
 import ua.com.foxminded.sqlJdbcSchool.dto.CourseDTO;
 import ua.com.foxminded.sqlJdbcSchool.dto.StudentDTO;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class StudentDao implements Dao<StudentDTO> {
+public class StudentDaoImpl implements StudentDao {
 
     public static final String CREATE_STUDENT = "INSERT INTO students (student_id, first_name, last_name) VALUES (DEFAULT, (?), (?))";
     public static final String GROUP_ID = "group_id";
@@ -33,11 +33,12 @@ public class StudentDao implements Dao<StudentDTO> {
     private final BasicConnectionPool connectionPool;
 
     @Autowired
-    public StudentDao(BasicConnectionPool pool) {
+    public StudentDaoImpl(BasicConnectionPool pool) {
 
         this.connectionPool = pool;
     }
 
+    @Override
     public StudentDTO searchById(Integer id) {
         if (id == null) {
             throw new IllegalArgumentException("id can't be NULL");
@@ -62,6 +63,7 @@ public class StudentDao implements Dao<StudentDTO> {
         }
     }
 
+    @Override
     public void addStudentToGroup(StudentDTO student, Integer groupId) {
         if (student == null) {
             throw STUDENT_NULL_EXCEPTION;
@@ -84,6 +86,7 @@ public class StudentDao implements Dao<StudentDTO> {
         }
     }
 
+    @Override
     public void addStudentToCourse(StudentDTO student, CourseDTO course) {
         if (student == null) {
             throw STUDENT_NULL_EXCEPTION;
@@ -104,6 +107,7 @@ public class StudentDao implements Dao<StudentDTO> {
         }
     }
 
+    @Override
     public void deleteStudentFromCourse(StudentDTO student, CourseDTO course) {
         if (student == null) {
             throw STUDENT_NULL_EXCEPTION;
@@ -165,6 +169,7 @@ public class StudentDao implements Dao<StudentDTO> {
         return studentDTOList;
     }
 
+    @Override
     public Map<Integer, Integer> searchGroupsByStudentCount(Integer studentCount) {
         if (studentCount == null) {
             throw new IllegalArgumentException("studentCount can't be NULL");
@@ -192,6 +197,7 @@ public class StudentDao implements Dao<StudentDTO> {
         }
     }
 
+    @Override
     public void delete(StudentDTO student) {
         if (student == null) {
             throw STUDENT_NULL_EXCEPTION;
