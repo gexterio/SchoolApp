@@ -2,18 +2,18 @@ package ua.com.foxminded.sqlJdbcSchool.menu.useractions;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.CourseDAO;
-import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.StudentDAO;
+import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.JDBCTemplateCourseDao;
+import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.JDBCTemplateStudentDao;
 
 import java.util.Scanner;
 
 @Component
 public class AddStudentToCourse implements UserOption {
-    StudentDAO studentDao;
-    CourseDAO courseDao;
+    JDBCTemplateStudentDao studentDao;
+    JDBCTemplateCourseDao courseDao;
 
     @Autowired
-    public AddStudentToCourse(StudentDAO studentDao, CourseDAO courseDao) {
+    public AddStudentToCourse(JDBCTemplateStudentDao studentDao, JDBCTemplateCourseDao courseDao) {
         this.studentDao = studentDao;
         this.courseDao = courseDao;
 

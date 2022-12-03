@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class CourseDaoImpl implements CourseDao {
+public class JDBCCourseDao implements CourseDao {
     public static final String COURSE_DESCRIPTION = "course_description";
     public static final String COURSE_NOT_FOUND = "Course not found.";
     private static final String SELECT_COURSE_BY_ID = "SELECT  course_name, course_description FROM courses WHERE course_id = (?);";
@@ -25,7 +25,7 @@ public class CourseDaoImpl implements CourseDao {
     private final BasicConnectionPool connectionPool;
 
     @Autowired
-    public CourseDaoImpl(BasicConnectionPool connectionPool) {
+    public JDBCCourseDao(BasicConnectionPool connectionPool) {
         this.connectionPool = connectionPool;
     }
 

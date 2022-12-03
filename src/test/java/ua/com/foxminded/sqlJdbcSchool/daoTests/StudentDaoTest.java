@@ -9,13 +9,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.dao.DuplicateKeyException;
 import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.Mappers.StudentCountMapper;
 import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.Mappers.StudentMapper;
-import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.StudentDAO;
+import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.JDBCTemplateStudentDao;
 import ua.com.foxminded.sqlJdbcSchool.dto.CourseDTO;
 import ua.com.foxminded.sqlJdbcSchool.dto.StudentDTO;
 import ua.com.foxminded.sqlJdbcSchool.util.DTOInputValidator;
 
 class StudentDaoTest extends DataSourceDBUnit {
-    StudentDAO studentDao;
+    JDBCTemplateStudentDao studentDao;
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -23,7 +23,7 @@ class StudentDaoTest extends DataSourceDBUnit {
                 .getResourceAsStream("beforeData/emptyDaoTest_data.xml"));
         super.setUp();
         connection = getConnection().getConnection();
-        studentDao = new StudentDAO(jdbcTemplate, new DTOInputValidator(), new StudentMapper(), new StudentCountMapper());
+        studentDao = new JDBCTemplateStudentDao(jdbcTemplate, new DTOInputValidator(), new StudentMapper(), new StudentCountMapper());
     }
 
     @Test

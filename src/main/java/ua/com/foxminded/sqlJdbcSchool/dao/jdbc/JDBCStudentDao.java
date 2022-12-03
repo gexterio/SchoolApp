@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class StudentDaoImpl implements StudentDao {
+public class JDBCStudentDao implements StudentDao {
 
     public static final String CREATE_STUDENT = "INSERT INTO students (student_id, first_name, last_name) VALUES (DEFAULT, (?), (?))";
     public static final String GROUP_ID = "group_id";
@@ -33,7 +33,7 @@ public class StudentDaoImpl implements StudentDao {
     private final BasicConnectionPool connectionPool;
 
     @Autowired
-    public StudentDaoImpl(BasicConnectionPool pool) {
+    public JDBCStudentDao(BasicConnectionPool pool) {
 
         this.connectionPool = pool;
     }

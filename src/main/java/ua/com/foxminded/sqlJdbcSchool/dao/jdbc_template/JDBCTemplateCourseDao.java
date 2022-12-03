@@ -14,7 +14,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Repository
-public class CourseDAO implements CourseDao {
+public class JDBCTemplateCourseDao implements CourseDao {
 
     public static final String SEARCH_STUDENTS_IN_COURSE_QUERY = "SELECT student_id FROM personal_courses WHERE course_id = ?";
     public static final String SEARCH_COURSE_BY_NAME_QUERY = "SELECT  course_id, course_name, course_description FROM courses WHERE course_name = ?";
@@ -27,7 +27,7 @@ public class CourseDAO implements CourseDao {
 
 
     @Autowired
-    public CourseDAO(JdbcTemplate jdbcTemplate, DTOInputValidator validator, CourseMapper courseMapper) {
+    public JDBCTemplateCourseDao(JdbcTemplate jdbcTemplate, DTOInputValidator validator, CourseMapper courseMapper) {
         this.jdbcTemplate = jdbcTemplate;
         this.validator = validator;
         this.courseMapper = courseMapper;

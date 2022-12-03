@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Repository
-public class StudentDAO implements StudentDao {
+public class JDBCTemplateStudentDao implements StudentDao {
     private static final String SEARCH_GROUPS_BY_STUDENT_COUNT_QUERY = "SELECT group_id, Count(student_id) as cnt FROM students WHERE group_id>0 GROUP BY students.group_id HAVING COUNT (student_id)<=? ORDER BY students.group_id";
     private static final String SEARCH_STUDENT_BY_ID_QUERY = "SELECT  student_id, first_name, last_name, group_id FROM students WHERE student_id = ?";
     private static final String ADD_STUDENT_TO_GROUP_QUERY = "UPDATE students SET group_id = ? WHERE student_id = ?";
@@ -35,8 +35,8 @@ public class StudentDAO implements StudentDao {
     private final StudentCountMapper studentCountMapper;
 
     @Autowired
-    public StudentDAO(JdbcTemplate jdbcTemplate, DTOInputValidator validator, StudentMapper studentMapper,
-                      StudentCountMapper studentCountMapper) {
+    public JDBCTemplateStudentDao(JdbcTemplate jdbcTemplate, DTOInputValidator validator, StudentMapper studentMapper,
+                                  StudentCountMapper studentCountMapper) {
         this.jdbcTemplate = jdbcTemplate;
         this.validator = validator;
         this.studentMapper = studentMapper;

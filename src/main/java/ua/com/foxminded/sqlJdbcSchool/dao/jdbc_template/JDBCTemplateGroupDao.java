@@ -14,7 +14,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Repository
-public class GroupDAO implements GroupDao {
+public class JDBCTemplateGroupDao implements GroupDao {
 
     private static final String GET_ALL_GROUPS_QUERY = "SELECT group_id, group_name FROM groups";
     private static final String CREATE_GROUP_QUERY = "INSERT INTO groups (group_id, group_name) VALUES (DEFAULT, ?)";
@@ -23,7 +23,7 @@ public class GroupDAO implements GroupDao {
     private final GroupMapper groupMapper;
 
     @Autowired
-    public GroupDAO(JdbcTemplate jdbcTemplate, DTOInputValidator validator, GroupMapper groupMapper) {
+    public JDBCTemplateGroupDao(JdbcTemplate jdbcTemplate, DTOInputValidator validator, GroupMapper groupMapper) {
         this.jdbcTemplate = jdbcTemplate;
         this.validator = validator;
         this.groupMapper = groupMapper;

@@ -14,13 +14,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class GroupDaoImpl implements GroupDao {
+public class JDBCGroupDao implements GroupDao {
     private static final String SELECT_ALL_GROUPS = "SELECT group_id, group_name FROM groups;";
     private static final String CREATE_GROUP = "INSERT INTO groups (group_id, group_name) VALUES (DEFAULT, (?))";
     private final BasicConnectionPool connectionPool;
 
     @Autowired
-    public GroupDaoImpl(BasicConnectionPool connectionPool) {
+    public JDBCGroupDao(BasicConnectionPool connectionPool) {
         this.connectionPool = connectionPool;
     }
 

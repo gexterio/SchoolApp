@@ -1,6 +1,7 @@
 package ua.com.foxminded.sqlJdbcSchool.dao.jdbc;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import ua.com.foxminded.sqlJdbcSchool.dao.DbInitializer;
 import ua.com.foxminded.sqlJdbcSchool.dao.connection.BasicConnectionPool;
 
 import javax.annotation.PostConstruct;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class DbInitializer {
+public class JDBCDbInitializer implements DbInitializer {
     public static final String CREATE_COURSES = "CREATE TABLE courses (course_id SERIAL NOT NULL PRIMARY KEY, course_name VARCHAR(32) NOT NULL,course_description VARCHAR(256) NOT NULL);";
     public static final String CREATE_STUDENTS = "CREATE TABLE students (student_id SERIAL NOT NULL PRIMARY KEY, first_name VARCHAR(32) NOT NULL,last_name VARCHAR(32) NOT NULL, group_id INTEGER  REFERENCES groups(group_id))";
     public static final String CREATE_PERSONAL_COURSES = "CREATE TABLE personal_courses (student_id INTEGER NOT NULL  REFERENCES students(student_id) on delete cascade,course_id INTEGER NOT NULL REFERENCES courses(course_id),CONSTRAINT pair PRIMARY KEY (student_id, course_id));";
@@ -20,7 +21,7 @@ public class DbInitializer {
     private final BasicConnectionPool connectionPool;
 
     @Autowired
-    public DbInitializer(BasicConnectionPool connectionPool) {
+    public JDBCDbInitializer(BasicConnectionPool connectionPool) {
         this.connectionPool = connectionPool;
     }
 
@@ -31,7 +32,8 @@ public class DbInitializer {
         }
     }
 
-    private void initTable(String sqlQuery) {
+    @Override
+    public void initTable(String sqlQuery) {
         Connection connection = connectionPool.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(
                 sqlQuery)) {
@@ -43,7 +45,8 @@ public class DbInitializer {
         }
     }
 
-    private List<String> getSqlQuery() {
+    @Override
+    public List<String> getSqlQuery() {
         List<String> list = new ArrayList<>();
         list.add(DROP_TABLE);
         list.add(CREATE_GROUPS);

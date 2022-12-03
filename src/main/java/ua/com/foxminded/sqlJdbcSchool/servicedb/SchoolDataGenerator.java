@@ -2,9 +2,9 @@ package ua.com.foxminded.sqlJdbcSchool.servicedb;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.CourseDAO;
-import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.GroupDAO;
-import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.StudentDAO;
+import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.JDBCTemplateCourseDao;
+import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.JDBCTemplateGroupDao;
+import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.JDBCTemplateStudentDao;
 import ua.com.foxminded.sqlJdbcSchool.dao.connection.BasicConnectionPool;
 import ua.com.foxminded.sqlJdbcSchool.dto.CourseDTO;
 import ua.com.foxminded.sqlJdbcSchool.dto.GroupDTO;
@@ -22,9 +22,9 @@ import java.util.Random;
 public class SchoolDataGenerator {
     public static final Integer GROUPS_COUNT = 10;
     private static final Integer STUDENTS_COUNT = 200;
-    StudentDAO studentDao;
-    GroupDAO groupDao;
-    CourseDAO courseDao;
+    JDBCTemplateStudentDao studentDao;
+    JDBCTemplateGroupDao groupDao;
+    JDBCTemplateCourseDao courseDao;
     Random random;
     FileParser parser;
     private Integer courseCount = 0;
@@ -34,9 +34,9 @@ public class SchoolDataGenerator {
     @Autowired
     public SchoolDataGenerator(BasicConnectionPool connectionPool,
                                FileParser parser,
-                               StudentDAO studentDao,
-                               GroupDAO groupDao,
-                               CourseDAO courseDao) {
+                               JDBCTemplateStudentDao studentDao,
+                               JDBCTemplateGroupDao groupDao,
+                               JDBCTemplateCourseDao courseDao) {
         this.studentDao = studentDao;
         this.groupDao = groupDao;
         this.courseDao = courseDao;
