@@ -7,10 +7,14 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.context.event.ContextRefreshedEvent;
 import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.JDBCTemplateDBInitializer;
+import ua.com.foxminded.sqlJdbcSchool.servicedb.SchoolDataGenerator;
 
 class InitDBSpringEventListenerTest {
     @Mock
     JDBCTemplateDBInitializer dbInitializer;
+
+    @Mock
+    SchoolDataGenerator schoolDataGenerator;
     @Mock
     ContextRefreshedEvent event;
 
@@ -19,7 +23,7 @@ class InitDBSpringEventListenerTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        listener = new InitDBSpringEventListener(dbInitializer);
+        listener = new InitDBSpringEventListener(dbInitializer, schoolDataGenerator);
     }
 
     @Test

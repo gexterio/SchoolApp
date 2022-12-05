@@ -8,7 +8,6 @@ public class Application {
 
     public static void main(String[] args) {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
-        context.getBean("schoolDataGenerator", SchoolDataGenerator.class).generateSchoolData();
         context.getBean("menu", Menu.class).run();
         context.close();
     }
