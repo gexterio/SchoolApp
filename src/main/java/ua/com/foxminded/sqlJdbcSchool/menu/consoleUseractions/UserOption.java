@@ -1,4 +1,4 @@
-package ua.com.foxminded.sqlJdbcSchool.menu.useractions;
+package ua.com.foxminded.sqlJdbcSchool.menu.consoleUseractions;
 
 @FunctionalInterface
 public interface UserOption {

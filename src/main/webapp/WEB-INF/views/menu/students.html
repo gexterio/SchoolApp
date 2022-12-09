@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>students</title>
+</head>
+<body>
+<a href="menu"> return</a>
+<div th:each="student : ${students}">
+    <p><a th:text="${student.getFirstName()}">First Name</a>
+        <a th:text="${student.getLastName()}">Last Name</a></p>
+
+</div>
+</body>
+</html>

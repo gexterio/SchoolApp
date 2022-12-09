@@ -1,4 +1,4 @@
-package ua.com.foxminded.sqlJdbcSchool.menu.useractions;
+package ua.com.foxminded.sqlJdbcSchool.menu.consoleUseractions;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>studentsInCourses</title>
+</head>
+<body>
+<a href="menu">return</a>
+<br>
+<div th:each="course : ${studentsInCourse}">
+  <p th:text="${course}"></p>
+</div>
+</body>
+</html>

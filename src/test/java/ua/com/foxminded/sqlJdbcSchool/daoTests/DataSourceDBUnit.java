@@ -6,10 +6,8 @@ import org.dbunit.operation.DatabaseOperation;
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
-import ua.com.foxminded.sqlJdbcSchool.SpringConfig;
 import ua.com.foxminded.sqlJdbcSchool.TestSpringConfig;
 import ua.com.foxminded.sqlJdbcSchool.util.FileReader;
 

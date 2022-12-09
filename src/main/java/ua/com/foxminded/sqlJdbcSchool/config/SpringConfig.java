@@ -1,4 +1,4 @@
-package ua.com.foxminded.sqlJdbcSchool;
+package ua.com.foxminded.sqlJdbcSchool.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -8,14 +8,14 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import ua.com.foxminded.sqlJdbcSchool.menu.useractions.AddStudent;
-import ua.com.foxminded.sqlJdbcSchool.menu.useractions.AddStudentToCourse;
-import ua.com.foxminded.sqlJdbcSchool.menu.useractions.DeleteStudent;
-import ua.com.foxminded.sqlJdbcSchool.menu.useractions.Exit;
-import ua.com.foxminded.sqlJdbcSchool.menu.useractions.RemoveStudentFromCourse;
-import ua.com.foxminded.sqlJdbcSchool.menu.useractions.SearchGroups;
-import ua.com.foxminded.sqlJdbcSchool.menu.useractions.SearchStudentsInCourse;
-import ua.com.foxminded.sqlJdbcSchool.menu.useractions.UserOption;
+import ua.com.foxminded.sqlJdbcSchool.menu.consoleUseractions.AddStudent;
+import ua.com.foxminded.sqlJdbcSchool.menu.consoleUseractions.AddStudentToCourse;
+import ua.com.foxminded.sqlJdbcSchool.menu.consoleUseractions.DeleteStudent;
+import ua.com.foxminded.sqlJdbcSchool.menu.consoleUseractions.Exit;
+import ua.com.foxminded.sqlJdbcSchool.menu.consoleUseractions.RemoveStudentFromCourse;
+import ua.com.foxminded.sqlJdbcSchool.menu.consoleUseractions.SearchGroups;
+import ua.com.foxminded.sqlJdbcSchool.menu.consoleUseractions.SearchStudentsInCourse;
+import ua.com.foxminded.sqlJdbcSchool.menu.consoleUseractions.UserOption;
 
 import javax.sql.DataSource;
 import java.util.HashMap;

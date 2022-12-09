@@ -1,4 +1,4 @@
-package ua.com.foxminded.sqlJdbcSchool.menu.useractions;
+package ua.com.foxminded.sqlJdbcSchool.menu.consoleUseractions;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -7,50 +7,49 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.JDBCTemplateStudentDao;
+import ua.com.foxminded.sqlJdbcSchool.dto.StudentDTO;
 
 import java.io.ByteArrayInputStream;
-import java.util.HashMap;
 
-class SearchGroupsTest {
+class AddStudentTest {
+
+
     @Mock
     JDBCTemplateStudentDao studentDaoMock;
 
-    SearchGroups searchGroups;
+    AddStudent addStudent;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        searchGroups = new SearchGroups(studentDaoMock);
+        addStudent = new AddStudent(studentDaoMock);
     }
 
 
     @Test
-    void execute_searchGroups_inputIsStudentCount() {
-        String inputString = "10";
+    void execute_addedStudent_inputIsFirstNameAndLastName() {
+        String inputString = "FirstName" + "\n" + "LastName";
         ByteArrayInputStream in = new ByteArrayInputStream(inputString.getBytes());
         System.setIn(in);
-        Mockito.when(studentDaoMock.searchGroupsByStudentCount(Integer.parseInt(inputString)))
-                .thenReturn(new HashMap<>(1) {{
-                    put(1, 10);
-                }});
-        searchGroups.execute();
-        Mockito.verify(studentDaoMock, Mockito.times(1))
-                .searchGroupsByStudentCount(Integer.parseInt(inputString));
+        StudentDTO student = new StudentDTO.StudentBuilder("FirstName", "LastName").build();
+        Mockito.doNothing().when(studentDaoMock).create(student);
+        addStudent.execute();
+        Mockito.verify(studentDaoMock, Mockito.times(1)).create(student);
     }
 
     @Test
     void execute_thrownIllegalArgumentException_inputIsEmpty() {
-        String inputString = "";
+        String inputString = "" + "\n" + "";
         ByteArrayInputStream in = new ByteArrayInputStream(inputString.getBytes());
         System.setIn(in);
-        Assertions.assertThrows(IllegalArgumentException.class, () -> searchGroups.execute());
+        Assertions.assertThrows(IllegalArgumentException.class, () -> addStudent.execute());
     }
 
     @Test
     void execute_thrownIllegalArgumentException_inputIsBlank() {
-        String inputString = "   ";
+        String inputString = "   " + "\n" + "   ";
         ByteArrayInputStream in = new ByteArrayInputStream(inputString.getBytes());
         System.setIn(in);
-        Assertions.assertThrows(IllegalArgumentException.class, () -> searchGroups.execute());
+        Assertions.assertThrows(Exception.class, () -> addStudent.execute());
     }
 }

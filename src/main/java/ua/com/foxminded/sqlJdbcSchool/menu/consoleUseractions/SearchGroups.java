@@ -1,4 +1,4 @@
-package ua.com.foxminded.sqlJdbcSchool.menu.useractions;
+package ua.com.foxminded.sqlJdbcSchool.menu.consoleUseractions;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
