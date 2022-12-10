@@ -3,6 +3,7 @@ package ua.com.foxminded.sqlJdbcSchool.controllers.menuControllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.JDBCTemplateCourseDao;
 import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.JDBCTemplateStudentDao;
@@ -10,6 +11,7 @@ import ua.com.foxminded.sqlJdbcSchool.dto.CourseDTO;
 import ua.com.foxminded.sqlJdbcSchool.dto.StudentDTO;
 
 @Controller
+@RequestMapping("/menu")
 public class AddStudentToCourseController {
     private final JDBCTemplateStudentDao studentDao;
     private final JDBCTemplateCourseDao courseDao;
@@ -30,6 +32,6 @@ public class AddStudentToCourseController {
         StudentDTO student = studentDao.searchById(studentId);
         CourseDTO course = courseDao.searchById(courseId);
         studentDao.addStudentToCourse(student, course);
-        return "redirect:menu";
+        return "menu/addedToCourseSuccess";
     }
 }

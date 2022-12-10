@@ -5,7 +5,7 @@
     <title>students</title>
 </head>
 <body>
-<a href="menu"> return</a>
+<a href="/menu"> return</a>
 <div th:each="student : ${students}">
     <p ><span th:text="${student.getFirstName()}"></span>
         <span th:text="${student.getLastName()}"></span> </p>

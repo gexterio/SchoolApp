@@ -25,27 +25,27 @@ public class MenuController {
         this.studentDao = studentDao;
     }
 
-    @GetMapping("/")
+    @GetMapping()
     public String indexPage () {
         return "menu/menu";
     }
-    @GetMapping("/menu")
+    @GetMapping("menu")
     public String menuPage() {
         return "menu/menu";
     }
 
-    @GetMapping("/searchStudent")
+    @GetMapping("menu/searchStudent")
     public String studentInfoPage() {
         return "menu/searchStudent";
     }
 
-    @GetMapping("/studentInfo")
+    @GetMapping("menu/studentInfo")
     public String studentInfoPage(@RequestParam(value = "studentId") Integer studentId, Model model) {
         StudentDTO student = studentDao.searchById(studentId);
         model.addAttribute("student", student);
         return "menu/studentInfo";
     }
-    @GetMapping("/students")
+    @GetMapping("menu/students")
     public String studentsPage(Model model) {
         model.addAttribute("students", studentDao.getAll());
         return "menu/students";
