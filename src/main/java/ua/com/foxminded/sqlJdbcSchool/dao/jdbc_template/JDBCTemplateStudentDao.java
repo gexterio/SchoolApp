@@ -53,7 +53,7 @@ public class JDBCTemplateStudentDao implements StudentDao {
     @Override
     public void addStudentToGroup(StudentDTO student, Integer groupId) {
         validator.validateStudent(student);
-        if (jdbcTemplate.update(ADD_STUDENT_TO_GROUP_QUERY, groupId, student.getStudentID()) == 0) {
+        if (jdbcTemplate.update(ADD_STUDENT_TO_GROUP_QUERY, groupId, student.getStudentId()) == 0) {
             throw new IllegalArgumentException("can't add student to group: " + groupId);
         }
     }
@@ -68,14 +68,14 @@ public class JDBCTemplateStudentDao implements StudentDao {
         if (course == null) {
             throw new IllegalArgumentException("course can't be null");
         }
-        jdbcTemplate.update(ADD_STUDENT_TO_COURSE_QUERY, student.getStudentID(), course.getCourseId());
+        jdbcTemplate.update(ADD_STUDENT_TO_COURSE_QUERY, student.getStudentId(), course.getCourseId());
     }
 
     @Override
     public void deleteStudentFromCourse(StudentDTO student, CourseDTO course) {
         validator.validateStudent(student);
         validator.validateCourse(course);
-        jdbcTemplate.update(DELETE_STUDENT_FROM_COURSE_QUERY, student.getStudentID(), course.getCourseId());
+        jdbcTemplate.update(DELETE_STUDENT_FROM_COURSE_QUERY, student.getStudentId(), course.getCourseId());
     }
 
     @Override
@@ -101,7 +101,7 @@ public class JDBCTemplateStudentDao implements StudentDao {
     @Override
     public void delete(StudentDTO student) {
         validator.validateStudent(student);
-        jdbcTemplate.update(DELETE_STUDENT_QUERY, student.getStudentID());
+        jdbcTemplate.update(DELETE_STUDENT_QUERY, student.getStudentId());
     }
 
     @Override
@@ -133,7 +133,7 @@ public class JDBCTemplateStudentDao implements StudentDao {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
                 ps.setInt(1, students.get(i).getGroupId());
-                ps.setInt(2, students.get(i).getStudentID());
+                ps.setInt(2, students.get(i).getStudentId());
             }
 
             @Override
@@ -153,7 +153,7 @@ public class JDBCTemplateStudentDao implements StudentDao {
         jdbcTemplate.batchUpdate(ADD_STUDENT_TO_COURSE_QUERY, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
-                ps.setInt(1, students.get(i).getStudentID());
+                ps.setInt(1, students.get(i).getStudentId());
                 ps.setInt(2, courses.get(i).getCourseId());
             }
 

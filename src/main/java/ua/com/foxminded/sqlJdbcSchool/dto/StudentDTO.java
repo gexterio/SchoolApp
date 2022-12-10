@@ -18,7 +18,7 @@ public class StudentDTO {
         this.groupId = builder.groupId;
     }
 
-    public Integer getStudentID() {
+    public Integer getStudentId() {
         return studentId;
     }
 

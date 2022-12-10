@@ -7,9 +7,8 @@
 <body>
 <a href="menu"> return</a>
 <div th:each="student : ${students}">
-    <p><a th:text="${student.getFirstName()}">First Name</a>
-        <a th:text="${student.getLastName()}">Last Name</a></p>
-
+    <p ><span th:text="${student.getFirstName()}"></span>
+        <span th:text="${student.getLastName()}"></span> </p>
 </div>
 </body>
 </html>

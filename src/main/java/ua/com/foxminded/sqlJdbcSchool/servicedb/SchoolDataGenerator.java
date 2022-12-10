@@ -89,7 +89,7 @@ public class SchoolDataGenerator {
                 StudentDTO student = studentDTOList.get(j);
                 studentsWithGroupsList.add(new StudentDTO.StudentBuilder(student.getFirstName(),
                         student.getLastName())
-                        .setStudentId(student.getStudentID())
+                        .setStudentId(student.getStudentId())
                         .setGroupId(i).build());
                 studentDTOList.remove(student);
             }

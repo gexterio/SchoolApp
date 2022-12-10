@@ -71,13 +71,13 @@ public class JDBCStudentDao implements StudentDao {
         if (groupId == null) {
             throw new IllegalArgumentException("groupId can't be NULL");
         }
-        if (student.getStudentID() == null) {
+        if (student.getStudentId() == null) {
             throw new IllegalArgumentException("student id can't be NULL");
         }
         Connection connection = connectionPool.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(SET_GROUP_ID)) {
             statement.setInt(1, groupId);
-            statement.setInt(2, student.getStudentID());
+            statement.setInt(2, student.getStudentId());
             statement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -96,7 +96,7 @@ public class JDBCStudentDao implements StudentDao {
         }
         Connection connection = connectionPool.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(ADD_STUDENT_TO_COURSE)) {
-            statement.setInt(1, student.getStudentID());
+            statement.setInt(1, student.getStudentId());
             statement.setInt(2, course.getCourseId());
             statement.execute();
         } catch (SQLException e) {
@@ -117,7 +117,7 @@ public class JDBCStudentDao implements StudentDao {
         }
         Connection connection = connectionPool.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(DELETE_STUDENT_FROM_COURSE)) {
-            statement.setInt(1, student.getStudentID());
+            statement.setInt(1, student.getStudentId());
             statement.setInt(2, course.getCourseId());
             statement.execute();
         } catch (SQLException e) {
@@ -165,7 +165,7 @@ public class JDBCStudentDao implements StudentDao {
         } finally {
             connectionPool.releaseConnection(connection);
         }
-        studentDTOList.sort(Comparator.comparing(StudentDTO::getStudentID));
+        studentDTOList.sort(Comparator.comparing(StudentDTO::getStudentId));
         return studentDTOList;
     }
 
@@ -204,7 +204,7 @@ public class JDBCStudentDao implements StudentDao {
         }
         Connection connection = connectionPool.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(DELETE_STUDENT)) {
-            statement.setInt(1, student.getStudentID());
+            statement.setInt(1, student.getStudentId());
             statement.execute();
         } catch (SQLException e) {
             e.printStackTrace();

@@ -16,7 +16,6 @@ public class InitDBSpringEventListener implements ApplicationListener<ContextRef
     public InitDBSpringEventListener(JDBCTemplateDBInitializer dbInitializer, SchoolDataGenerator schoolDataGenerator) {
         this.dbInitializer = dbInitializer;
         this.schoolDataGenerator = schoolDataGenerator;
-    System.out.println("DB is created");
     }
 
 
