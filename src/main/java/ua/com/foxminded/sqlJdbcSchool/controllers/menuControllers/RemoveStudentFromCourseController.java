@@ -2,9 +2,7 @@ package ua.com.foxminded.sqlJdbcSchool.controllers.menuControllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.JDBCTemplateCourseDao;
 import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.JDBCTemplateStudentDao;
 import ua.com.foxminded.sqlJdbcSchool.dto.CourseDTO;
@@ -26,7 +24,7 @@ public class RemoveStudentFromCourseController {
         return "menu/removeStudentFromCourse";
     }
 
-    @GetMapping("/removedStudentFromCourse")
+    @PostMapping("/removedStudentFromCourse")
     public String removedStudentFromCoursePage(@RequestParam("studentId") Integer studentId,
                                                @RequestParam("courseId") Integer courseId) {
         StudentDTO student = studentDao.searchById(studentId);

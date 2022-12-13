@@ -2,9 +2,7 @@ package ua.com.foxminded.sqlJdbcSchool.controllers.menuControllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.JDBCTemplateStudentDao;
 
 @Controller
@@ -21,7 +19,7 @@ public class DeleteStudentController {
         return "menu/deleteStudent";
     }
 
-    @GetMapping("/deletedStudent")
+    @PostMapping("/deletedStudent")
     public String deletedStudentPage(@RequestParam("studentId") Integer studentId) {
         studentDao.delete(studentDao.searchById(studentId));
         return "menu/deletedStudent";

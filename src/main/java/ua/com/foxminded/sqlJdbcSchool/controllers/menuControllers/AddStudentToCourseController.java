@@ -3,6 +3,7 @@ package ua.com.foxminded.sqlJdbcSchool.controllers.menuControllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.JDBCTemplateCourseDao;
@@ -26,7 +27,7 @@ public class AddStudentToCourseController {
         return "menu/addStudentToCourse";
     }
 
-    @GetMapping("/addedToCourseSuccess")
+    @PostMapping("/addedToCourseSuccess")
     public String addedToCoursePage(@RequestParam("studentId") Integer studentId,
                                     @RequestParam("courseId") Integer courseId) {
         StudentDTO student = studentDao.searchById(studentId);

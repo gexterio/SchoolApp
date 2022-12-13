@@ -18,8 +18,6 @@ import java.util.List;
 public class MenuController {
     private final JDBCTemplateStudentDao studentDao;
 
-
-
     @Autowired
     public MenuController(JDBCTemplateStudentDao studentDao) {
         this.studentDao = studentDao;
