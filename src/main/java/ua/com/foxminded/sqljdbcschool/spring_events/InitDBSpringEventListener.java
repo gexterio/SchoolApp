@@ -10,9 +10,12 @@ import ua.com.foxminded.sqljdbcschool.service_db.SchoolDataGenerator;
 @Component
 public class InitDBSpringEventListener implements ApplicationListener<ContextRefreshedEvent> {
 
-    private JDBCTemplateDBInitializer dbInitializer;
-    private SchoolDataGenerator schoolDataGenerator;
-@Autowired
+    private final JDBCTemplateDBInitializer dbInitializer;
+    private final SchoolDataGenerator schoolDataGenerator;
+
+    private int callCounter;
+
+    @Autowired
     public InitDBSpringEventListener(JDBCTemplateDBInitializer dbInitializer, SchoolDataGenerator schoolDataGenerator) {
         this.dbInitializer = dbInitializer;
         this.schoolDataGenerator = schoolDataGenerator;
@@ -21,7 +24,11 @@ public class InitDBSpringEventListener implements ApplicationListener<ContextRef
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        dbInitializer.initAllTables();
-        schoolDataGenerator.generateSchoolData();
+        if (callCounter == 0) {
+            dbInitializer.initAllTables();
+            schoolDataGenerator.generateSchoolData();
+        }
+        callCounter++;
+        System.out.println("callCounter = " + callCounter);
     }
 }
