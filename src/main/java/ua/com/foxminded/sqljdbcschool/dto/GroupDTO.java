@@ -1,13 +1,26 @@
 package ua.com.foxminded.sqljdbcschool.dto;
 
+import jakarta.persistence.*;
 import ua.com.foxminded.sqljdbcschool.util.DTOInputValidator;
 
 import java.util.Objects;
-
+@Entity
+@Table(name = "groups")
 public class GroupDTO {
+    @Id
+    @Column(name = "group_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private  Integer groupId;
+    @Column(name = "group_name")
+    private  String groupName;
     private static final DTOInputValidator validator = new DTOInputValidator();
-    private final Integer groupId;
-    private final String groupName;
+
+    public GroupDTO() {
+    }
+
+    public GroupDTO(String groupName) {
+        this.groupName = groupName;
+    }
 
     public GroupDTO(GroupBuilder builder) {
         this.groupId = builder.groupId;
@@ -16,6 +29,18 @@ public class GroupDTO {
 
     public String getGroupName() {
         return groupName;
+    }
+
+    public Integer getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Integer groupId) {
+        this.groupId = groupId;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
 
     @Override

@@ -1,20 +1,40 @@
 package ua.com.foxminded.sqljdbcschool.dto;
 
+import jakarta.persistence.*;
 import ua.com.foxminded.sqljdbcschool.util.DTOInputValidator;
 
+import java.util.List;
 import java.util.Objects;
-
+@Entity
+@Table(name = "courses")
 public class CourseDTO {
-    private final Integer courseId;
-    private final String courseName;
-    private final String courseDescription;
+    @Id
+    @Column(name = "course_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer courseId;
+    @Column(name = "course_name")
+    private String courseName;
+    @Column(name = "course_description")
+    private String courseDescription;
+
+    @ManyToMany(mappedBy = "courses")
+    private List<StudentDTO> students;
     private static final DTOInputValidator validator = new DTOInputValidator();
+
+    public CourseDTO() {
+    }
+
+    public CourseDTO(String courseName, String courseDescription) {
+        this.courseName = courseName;
+        this.courseDescription = courseDescription;
+    }
 
     public CourseDTO(CourseBuilder builder) {
         this.courseDescription = builder.courseDescription;
         this.courseId = builder.courseId;
         this.courseName = builder.courseName;
     }
+
 
     public Integer getCourseId() {
         return courseId;
@@ -26,6 +46,26 @@ public class CourseDTO {
 
     public String getCourseDescription() {
         return courseDescription;
+    }
+
+    public void setCourseId(Integer courseId) {
+        this.courseId = courseId;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
+    public void setCourseDescription(String courseDescription) {
+        this.courseDescription = courseDescription;
+    }
+
+    public List<StudentDTO> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<StudentDTO> students) {
+        this.students = students;
     }
 
     @Override

@@ -1,15 +1,35 @@
 package ua.com.foxminded.sqljdbcschool.dto;
 
+import jakarta.persistence.*;
 import ua.com.foxminded.sqljdbcschool.util.DTOInputValidator;
 
+import java.util.List;
 import java.util.Objects;
 
+@Entity
+@Table(name = "students")
 public class StudentDTO {
-    private final Integer studentId;
-    private final String firstName;
-    private final String lastName;
-    private final Integer groupId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "student_id")
+    private Integer studentId;
+    @Column(name = "first_name")
+    private String firstName;
+    @Column(name = "last_name")
+    private String lastName;
+    @Column(name = "group_id")
+    private Integer groupId;
+
+    @ManyToMany
+    @JoinTable(name = "personal_courses",
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id"))
+    private List<CourseDTO> courses;
     private static final DTOInputValidator validator = new DTOInputValidator();
+
+    public StudentDTO() {
+
+    }
 
     public StudentDTO(StudentBuilder builder) {
         this.studentId = builder.studentId;
@@ -32,6 +52,14 @@ public class StudentDTO {
 
     public Integer getGroupId() {
         return groupId;
+    }
+
+    public List<CourseDTO> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<CourseDTO> courses) {
+        this.courses = courses;
     }
 
     @Override
