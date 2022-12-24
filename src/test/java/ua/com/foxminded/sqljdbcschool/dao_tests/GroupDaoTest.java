@@ -20,7 +20,7 @@ class GroupDaoTest extends DataSourceDBUnit {
                 .getResourceAsStream("beforeData/emptyDaoTest_data.xml"));
         super.setUp();
         connection = getConnection().getConnection();
-        dao = new JDBCTemplateGroupDao(jdbcTemplate, new DTOInputValidator(), new GroupMapper());
+//        dao = new JDBCTemplateGroupDao(jdbcTemplate, new DTOInputValidator(), new GroupMapper());
     }
 
     @Test

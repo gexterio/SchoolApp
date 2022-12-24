@@ -85,6 +85,11 @@ public class JDBCCourseDao implements CourseDao {
     }
 
     @Override
+    public void batchCreate(List<CourseDTO> courses) {
+
+    }
+
+    @Override
     public List<CourseDTO> getAll() {
         Connection connection = connectionPool.getConnection();
         List<CourseDTO> courseDTOList = new ArrayList<>();

@@ -6,15 +6,23 @@ import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
+import org.springframework.test.context.web.AnnotationConfigWebContextLoader;
+import org.springframework.test.context.web.WebAppConfiguration;
+//import ua.com.foxminded.sqljdbcschool.TestSpringConfig;
 import ua.com.foxminded.sqljdbcschool.dao.jdbc_template.JDBCTemplateCourseDao;
 import ua.com.foxminded.sqljdbcschool.dto.CourseDTO;
 
-@Component
+@ExtendWith(SpringExtension.class)
+//@ContextConfiguration(classes = TestSpringConfig.class, loader = AnnotationConfigContextLoader.class)
 public class CourseDaoTest extends DataSourceDBUnit {
-    @Autowired
+//    @Autowired
     JDBCTemplateCourseDao courseDao;
 
     @BeforeEach
@@ -23,7 +31,6 @@ public class CourseDaoTest extends DataSourceDBUnit {
                 .getResourceAsStream("beforeData/emptyDaoTest_data.xml"));
         super.setUp();
         connection = getConnection().getConnection();
-//        courseDao = new JDBCTemplateCourseDao(jdbcTemplate, new DTOInputValidator(), new CourseMapper());
     }
 
     @Test

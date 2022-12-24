@@ -1,10 +1,21 @@
 package ua.com.foxminded.sqljdbcschool.dto;
 
-import jakarta.persistence.*;
+
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import ua.com.foxminded.sqljdbcschool.util.DTOInputValidator;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import java.util.List;
 import java.util.Objects;
+
 @Entity
 @Table(name = "courses")
 public class CourseDTO {
@@ -17,17 +28,12 @@ public class CourseDTO {
     @Column(name = "course_description")
     private String courseDescription;
 
-    @ManyToMany(mappedBy = "courses")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "courses")
     private List<StudentDTO> students;
-    private static final DTOInputValidator validator = new DTOInputValidator();
 
     public CourseDTO() {
     }
 
-    public CourseDTO(String courseName, String courseDescription) {
-        this.courseName = courseName;
-        this.courseDescription = courseDescription;
-    }
 
     public CourseDTO(CourseBuilder builder) {
         this.courseDescription = builder.courseDescription;
@@ -112,7 +118,6 @@ public class CourseDTO {
 
         public CourseDTO build() {
             CourseDTO course = new CourseDTO(this);
-            validator.validateCourse(course);
             return course;
         }
     }

@@ -1,8 +1,16 @@
 package ua.com.foxminded.sqljdbcschool.dto;
 
-import jakarta.persistence.*;
-import ua.com.foxminded.sqljdbcschool.util.DTOInputValidator;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import java.util.List;
 import java.util.Objects;
 
@@ -20,12 +28,11 @@ public class StudentDTO {
     @Column(name = "group_id")
     private Integer groupId;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "personal_courses",
             joinColumns = @JoinColumn(name = "student_id"),
             inverseJoinColumns = @JoinColumn(name = "course_id"))
     private List<CourseDTO> courses;
-    private static final DTOInputValidator validator = new DTOInputValidator();
 
     public StudentDTO() {
 
@@ -60,6 +67,22 @@ public class StudentDTO {
 
     public void setCourses(List<CourseDTO> courses) {
         this.courses = courses;
+    }
+
+    public void setStudentId(Integer studentId) {
+        this.studentId = studentId;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setGroupId(Integer groupId) {
+        this.groupId = groupId;
     }
 
     @Override
@@ -106,7 +129,6 @@ public class StudentDTO {
 
         public StudentDTO build() {
             StudentDTO student = new StudentDTO(this);
-            validator.validateStudent(student);
             return student;
         }
 

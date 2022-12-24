@@ -1,8 +1,9 @@
 package ua.com.foxminded.sqljdbcschool.dao.connection;
 
 
-import java.sql.Connection;
+import org.springframework.stereotype.Component;
 
+import java.sql.Connection;
 public interface ConnectionPool {
     Connection getConnection();
 

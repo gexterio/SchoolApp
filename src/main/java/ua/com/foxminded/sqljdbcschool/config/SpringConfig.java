@@ -10,8 +10,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import ua.com.foxminded.sqljdbcschool.dao.hibernate.HibernateCourseDao;
+import ua.com.foxminded.sqljdbcschool.dao.hibernate.HibernateStudentDao;
 import ua.com.foxminded.sqljdbcschool.menu.consoleuseractions.*;
 
 import javax.sql.DataSource;
@@ -23,8 +26,7 @@ import java.util.Properties;
 @Configuration
 @ComponentScan("ua.com.foxminded.sqljdbcschool")
 @PropertySource("classpath:properties.properties")
-//@PropertySource("classpath:hibernate.properties")
-@EnableTransactionManagement
+@EnableTransactionManagement(proxyTargetClass = true)
 public class SpringConfig {
 
     private final Environment environment;
@@ -74,6 +76,8 @@ public class SpringConfig {
         Properties properties = new Properties();
         properties.put("hibernate.dialect", environment.getRequiredProperty("hibernate.dialect"));
         properties.put("hibernate.show_sql", environment.getRequiredProperty("hibernate.show_sql"));
+        properties.put("hibernate.jdbc.batch_size", environment.getRequiredProperty("hibernate.jdbc.batch_size"));
+        properties.put("hibernate.generate_statistics", environment.getRequiredProperty("hibernate.generate_statistics"));
         return properties;
     }
 

@@ -23,7 +23,7 @@ class StudentDaoTest extends DataSourceDBUnit {
                 .getResourceAsStream("beforeData/emptyDaoTest_data.xml"));
         super.setUp();
         connection = getConnection().getConnection();
-        studentDao = new JDBCTemplateStudentDao(jdbcTemplate, new DTOInputValidator(), new StudentMapper(), new StudentCountMapper());
+//        studentDao = new JDBCTemplateStudentDao(jdbcTemplate, new DTOInputValidator(), new StudentMapper(), new StudentCountMapper());
     }
 
     @Test

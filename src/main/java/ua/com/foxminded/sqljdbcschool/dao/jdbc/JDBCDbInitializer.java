@@ -3,6 +3,7 @@ package ua.com.foxminded.sqljdbcschool.dao.jdbc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ua.com.foxminded.sqljdbcschool.dao.DbInitializer;
+import ua.com.foxminded.sqljdbcschool.dao.connection.BasicConnectionPool;
 import ua.com.foxminded.sqljdbcschool.dao.connection.ConnectionPool;
 
 import javax.annotation.PostConstruct;
@@ -12,7 +13,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
 public class JDBCDbInitializer implements DbInitializer {
     public static final String CREATE_COURSES = "CREATE TABLE courses (course_id SERIAL NOT NULL PRIMARY KEY, course_name VARCHAR(32) NOT NULL,course_description VARCHAR(256) NOT NULL);";
     public static final String CREATE_STUDENTS = "CREATE TABLE students (student_id SERIAL NOT NULL PRIMARY KEY, first_name VARCHAR(32) NOT NULL,last_name VARCHAR(32) NOT NULL, group_id INTEGER  REFERENCES groups(group_id))";
@@ -21,12 +21,11 @@ public class JDBCDbInitializer implements DbInitializer {
     private static final String DROP_TABLE = "DROP TABLE IF EXISTS personal_courses, students, groups, courses;";
     private final ConnectionPool connectionPool;
 
-    @Autowired
-    public JDBCDbInitializer(ConnectionPool connectionPool) {
+    public JDBCDbInitializer(BasicConnectionPool connectionPool) {
         this.connectionPool = connectionPool;
     }
 
-    @PostConstruct
+
     public void initAllTables() {
         for (String s : getSqlQuery()) {
             initTable(s);

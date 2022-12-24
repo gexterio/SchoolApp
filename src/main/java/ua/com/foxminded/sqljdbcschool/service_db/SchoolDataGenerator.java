@@ -2,6 +2,12 @@ package ua.com.foxminded.sqljdbcschool.service_db;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ua.com.foxminded.sqljdbcschool.dao.CourseDao;
+import ua.com.foxminded.sqljdbcschool.dao.GroupDao;
+import ua.com.foxminded.sqljdbcschool.dao.StudentDao;
+import ua.com.foxminded.sqljdbcschool.dao.hibernate.HibernateCourseDao;
+import ua.com.foxminded.sqljdbcschool.dao.hibernate.HibernateGroupDao;
+import ua.com.foxminded.sqljdbcschool.dao.hibernate.HibernateStudentDao;
 import ua.com.foxminded.sqljdbcschool.dao.jdbc_template.JDBCTemplateCourseDao;
 import ua.com.foxminded.sqljdbcschool.dao.jdbc_template.JDBCTemplateGroupDao;
 import ua.com.foxminded.sqljdbcschool.dao.jdbc_template.JDBCTemplateStudentDao;
@@ -22,9 +28,9 @@ import java.util.Random;
 public class SchoolDataGenerator {
     public static final Integer GROUPS_COUNT = 10;
     private static final Integer STUDENTS_COUNT = 200;
-    JDBCTemplateStudentDao studentDao;
-    JDBCTemplateGroupDao groupDao;
-    JDBCTemplateCourseDao courseDao;
+    StudentDao studentDao;
+    GroupDao groupDao;
+    CourseDao courseDao;
     Random random;
     FileParser parser;
     private Integer courseCount = 0;
@@ -32,11 +38,10 @@ public class SchoolDataGenerator {
 
 
     @Autowired
-    public SchoolDataGenerator(BasicConnectionPool connectionPool,
-                               FileParser parser,
-                               JDBCTemplateStudentDao studentDao,
-                               JDBCTemplateGroupDao groupDao,
-                               JDBCTemplateCourseDao courseDao) {
+    public SchoolDataGenerator(FileParser parser,
+                               HibernateStudentDao studentDao,
+                               HibernateGroupDao groupDao,
+                               HibernateCourseDao courseDao) {
         this.studentDao = studentDao;
         this.groupDao = groupDao;
         this.courseDao = courseDao;
@@ -101,7 +106,7 @@ public class SchoolDataGenerator {
         List<GroupDTO> groups = new ArrayList<>();
         for (int i = 0; i < GROUPS_COUNT; i++) {
             String groupName = groupNameGenerator();
-            groups.add(new GroupDTO.GroupBuilder(groupName).setId(i).build());
+            groups.add(new GroupDTO.GroupBuilder(groupName).build()); //TODO here i remove setID
         }
         groupDao.batchCreate(groups);
     }
@@ -124,7 +129,7 @@ public class SchoolDataGenerator {
         for (int i = 0; i < courses.size(); i++) {
             String[] line = courses.get(i).split("_");
             courseList.add(new CourseDTO.CourseBuilder(line[0])
-                    .setCourseId(i)
+//                    .setCourseId(i) //TODO here i remove setID
                     .setDescription(line[1])
                     .build());
             courseCount++;

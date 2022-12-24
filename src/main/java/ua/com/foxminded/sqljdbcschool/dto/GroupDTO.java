@@ -1,25 +1,26 @@
 package ua.com.foxminded.sqljdbcschool.dto;
 
-import jakarta.persistence.*;
 import ua.com.foxminded.sqljdbcschool.util.DTOInputValidator;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
+
 @Entity
 @Table(name = "groups")
 public class GroupDTO {
     @Id
     @Column(name = "group_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  Integer groupId;
+    private Integer groupId;
     @Column(name = "group_name")
-    private  String groupName;
-    private static final DTOInputValidator validator = new DTOInputValidator();
+    private String groupName;
 
     public GroupDTO() {
-    }
-
-    public GroupDTO(String groupName) {
-        this.groupName = groupName;
     }
 
     public GroupDTO(GroupBuilder builder) {
@@ -77,7 +78,6 @@ public class GroupDTO {
 
         public GroupDTO build() {
             GroupDTO group = new GroupDTO(this);
-            validator.validateGroup(group);
             return group;
         }
     }

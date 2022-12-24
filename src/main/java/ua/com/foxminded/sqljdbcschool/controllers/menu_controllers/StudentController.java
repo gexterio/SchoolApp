@@ -1,6 +1,7 @@
 package ua.com.foxminded.sqljdbcschool.controllers.menu_controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ua.com.foxminded.sqljdbcschool.dao.CourseDao;
 import ua.com.foxminded.sqljdbcschool.dao.StudentDao;
-import ua.com.foxminded.sqljdbcschool.dao.jdbc_template.JDBCTemplateCourseDao;
-import ua.com.foxminded.sqljdbcschool.dao.jdbc_template.JDBCTemplateStudentDao;
+import ua.com.foxminded.sqljdbcschool.dao.hibernate.HibernateCourseDao;
+import ua.com.foxminded.sqljdbcschool.dao.hibernate.HibernateStudentDao;
 import ua.com.foxminded.sqljdbcschool.dto.CourseDTO;
 import ua.com.foxminded.sqljdbcschool.dto.StudentDTO;
 
@@ -25,7 +26,7 @@ public class StudentController {
     private final CourseDao courseDao;
 
     @Autowired
-    public StudentController(JDBCTemplateStudentDao studentDao, JDBCTemplateCourseDao courseDao) {
+    public StudentController(@Qualifier("hibernateStudentDao") StudentDao studentDao, HibernateCourseDao courseDao) {
         this.studentDao = studentDao;
         this.courseDao = courseDao;
     }

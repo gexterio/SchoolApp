@@ -61,4 +61,9 @@ public class JDBCGroupDao implements GroupDao {
         }
     }
 
+    @Override
+    public void batchCreate(List<GroupDTO> list) {
+
+    }
+
 }

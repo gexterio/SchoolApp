@@ -198,6 +198,21 @@ public class JDBCStudentDao implements StudentDao {
     }
 
     @Override
+    public void batchCreate(List<StudentDTO> students) {
+
+    }
+
+    @Override
+    public void batchAddStudentToGroup(List<StudentDTO> students) {
+
+    }
+
+    @Override
+    public void batchAddStudentToCourse(Map<StudentDTO, CourseDTO> studentCoursesMap) {
+
+    }
+
+    @Override
     public void delete(StudentDTO student) {
         if (student == null) {
             throw STUDENT_NULL_EXCEPTION;
