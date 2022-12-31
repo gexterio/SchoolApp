@@ -35,7 +35,7 @@ public class Menu {
         }
     }
 
-    private Integer findExitCommandKey()  {
+    private Integer findExitCommandKey() {
         Optional<Integer> exitKeyOptional = userOptionsMap.entrySet().stream()
                 .filter(entry -> exit.equals(entry.getValue()))
                 .map(Map.Entry::getKey)

@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ua.com.foxminded.sqlJdbcSchool.dao.CourseDao;
 import ua.com.foxminded.sqlJdbcSchool.dao.StudentDao;
+import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.JDBCTemplateCourseDao;
+import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.JDBCTemplateStudentDao;
 
 import java.util.Scanner;
 
@@ -13,7 +15,7 @@ public class RemoveStudentFromCourse implements UserOption {
     CourseDao courseDao;
 
     @Autowired
-    public RemoveStudentFromCourse(StudentDao studentDao, CourseDao courseDao) {
+    public RemoveStudentFromCourse(JDBCTemplateStudentDao studentDao, JDBCTemplateCourseDao courseDao) {
         this.studentDao = studentDao;
         this.courseDao = courseDao;
     }

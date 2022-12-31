@@ -6,14 +6,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import ua.com.foxminded.sqlJdbcSchool.dao.StudentDao;
+import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.JDBCTemplateStudentDao;
 import ua.com.foxminded.sqlJdbcSchool.dto.StudentDTO;
 
 import java.io.ByteArrayInputStream;
 
 class DeleteStudentTest {
     @Mock
-    StudentDao studentDaoMock;
+    JDBCTemplateStudentDao studentDaoMock;
 
     DeleteStudent deleteStudent;
 

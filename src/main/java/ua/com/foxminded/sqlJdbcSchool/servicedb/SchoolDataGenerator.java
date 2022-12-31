@@ -2,48 +2,49 @@ package ua.com.foxminded.sqlJdbcSchool.servicedb;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ua.com.foxminded.sqlJdbcSchool.dao.CourseDao;
-import ua.com.foxminded.sqlJdbcSchool.dao.GroupDao;
-import ua.com.foxminded.sqlJdbcSchool.dao.StudentDao;
+import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.JDBCTemplateCourseDao;
+import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.JDBCTemplateGroupDao;
+import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.JDBCTemplateStudentDao;
 import ua.com.foxminded.sqlJdbcSchool.dao.connection.BasicConnectionPool;
 import ua.com.foxminded.sqlJdbcSchool.dto.CourseDTO;
 import ua.com.foxminded.sqlJdbcSchool.dto.GroupDTO;
 import ua.com.foxminded.sqlJdbcSchool.dto.StudentDTO;
 import ua.com.foxminded.sqlJdbcSchool.util.FileParser;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 @Component
 public class SchoolDataGenerator {
     public static final Integer GROUPS_COUNT = 10;
     private static final Integer STUDENTS_COUNT = 200;
-    BasicConnectionPool connectionPool;
-    StudentDao studentDao;
-    GroupDao groupDao;
-    CourseDao courseDao;
+    JDBCTemplateStudentDao studentDao;
+    JDBCTemplateGroupDao groupDao;
+    JDBCTemplateCourseDao courseDao;
     Random random;
     FileParser parser;
     private Integer courseCount = 0;
+    private Map<StudentDTO, CourseDTO> studentCoursesMap;
+
 
     @Autowired
     public SchoolDataGenerator(BasicConnectionPool connectionPool,
                                FileParser parser,
-                               StudentDao studentDao,
-                               GroupDao groupDao,
-                               CourseDao courseDao) {
-        this.connectionPool = connectionPool;
+                               JDBCTemplateStudentDao studentDao,
+                               JDBCTemplateGroupDao groupDao,
+                               JDBCTemplateCourseDao courseDao) {
         this.studentDao = studentDao;
         this.groupDao = groupDao;
         this.courseDao = courseDao;
         this.parser = parser;
     }
 
-    @PostConstruct
-    private void generateSchoolData() {
+
+    public void generateSchoolData() {
         random = new Random();
         generateGroups();
         generateCourses(parser);
@@ -55,7 +56,9 @@ public class SchoolDataGenerator {
     private void addStudentToCourses() {
         List<StudentDTO> studentList = studentDao.getAll();
         List<CourseDTO> courses = courseDao.getAll();
+        studentCoursesMap = new HashMap<>();
         studentList.forEach(student -> addStudentToRandomCourse(courses, student));
+        studentDao.batchAddStudentToCourse(studentCoursesMap);
     }
 
     private void addStudentToRandomCourse(List<CourseDTO> courses, StudentDTO student) {
@@ -65,12 +68,13 @@ public class SchoolDataGenerator {
         }
         Collections.shuffle(integers);
         for (int j = 0; j < random.nextInt(3) + 1; j++) {
-            studentDao.addStudentToCourse(student, courses.get(integers.get(j)));
+            studentCoursesMap.put(student, courses.get(integers.get(j)));
         }
     }
 
     private void addStudentsToGroups() {
         List<StudentDTO> studentDTOList = studentDao.getAll();
+        List<StudentDTO> studentsWithGroupsList = new ArrayList<>();
         Collections.shuffle(studentDTOList);
         for (int i = 1; i <= GROUPS_COUNT; i++) {
             int chanceToEmptyGroup = random.nextInt(100);
@@ -83,40 +87,49 @@ public class SchoolDataGenerator {
             }
             for (int j = limit; j > 0; j--) {
                 StudentDTO student = studentDTOList.get(j);
-                studentDao.addStudentToGroup(student, i);
+                studentsWithGroupsList.add(new StudentDTO.StudentBuilder(student.getFirstName(),
+                        student.getLastName())
+                        .setStudentId(student.getStudentID())
+                        .setGroupId(i).build());
                 studentDTOList.remove(student);
             }
         }
+        studentDao.batchAddStudentToGroup(studentsWithGroupsList);
     }
 
     private void generateGroups() {
+        List<GroupDTO> groups = new ArrayList<>();
         for (int i = 0; i < GROUPS_COUNT; i++) {
             String groupName = groupNameGenerator();
-            groupDao.create(new GroupDTO.GroupBuilder(groupName).setId(i).build());
+            groups.add(new GroupDTO.GroupBuilder(groupName).setId(i).build());
         }
+        groupDao.batchCreate(groups);
     }
 
     private void generateStudents(FileParser parser, Random random) {
         List<String> firstNames = parser.parseStudent("students_first_names");
         List<String> lastNames = parser.parseStudent("students_last_names");
+        List<StudentDTO> students = new ArrayList<>();
         for (int i = 0; i < STUDENTS_COUNT; i++) {
             String firstName = firstNames.get(random.nextInt(firstNames.size()));
             String lastName = lastNames.get(random.nextInt(lastNames.size()));
-            studentDao.create(new StudentDTO.StudentBuilder(firstName, lastName).setStudentId(i).build());
+            students.add(new StudentDTO.StudentBuilder(firstName, lastName).build());
         }
+        studentDao.batchCreate(students);
     }
 
     private void generateCourses(FileParser parser) {
         List<String> courses = parser.parseCourses("courses");
+        List<CourseDTO> courseList = new ArrayList<>();
         for (int i = 0; i < courses.size(); i++) {
             String[] line = courses.get(i).split("_");
-            courseDao.create(new CourseDTO.CourseBuilder(line[0])
+            courseList.add(new CourseDTO.CourseBuilder(line[0])
                     .setCourseId(i)
                     .setDescription(line[1])
                     .build());
             courseCount++;
         }
-
+        courseDao.batchCreate(courseList);
     }
 
     private String groupNameGenerator() {

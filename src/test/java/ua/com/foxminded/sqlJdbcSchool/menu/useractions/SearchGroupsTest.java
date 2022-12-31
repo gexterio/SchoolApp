@@ -6,14 +6,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import ua.com.foxminded.sqlJdbcSchool.dao.StudentDao;
+import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.JDBCTemplateStudentDao;
 
 import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 
 class SearchGroupsTest {
     @Mock
-    StudentDao studentDaoMock;
+    JDBCTemplateStudentDao studentDaoMock;
 
     SearchGroups searchGroups;
 

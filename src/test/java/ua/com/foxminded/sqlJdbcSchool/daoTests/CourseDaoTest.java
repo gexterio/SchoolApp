@@ -6,20 +6,21 @@ import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ua.com.foxminded.sqlJdbcSchool.dao.CourseDao;
-import ua.com.foxminded.sqlJdbcSchool.dao.connection.BasicConnectionPool;
+import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.JDBCTemplateCourseDao;
+import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.Mappers.CourseMapper;
 import ua.com.foxminded.sqlJdbcSchool.dto.CourseDTO;
+import ua.com.foxminded.sqlJdbcSchool.util.DTOInputValidator;
 
 class CourseDaoTest extends DataSourceDBUnit {
-    CourseDao courseDao;
 
+    JDBCTemplateCourseDao courseDao;
     @BeforeEach
     public void setUp() throws Exception {
         dataSet = new FlatXmlDataSetBuilder().build(getClass().getClassLoader()
                 .getResourceAsStream("beforeData/emptyDaoTest_data.xml"));
         super.setUp();
         connection = getConnection().getConnection();
-        courseDao = new CourseDao(new BasicConnectionPool(props.getProperty("JDBC_URL"), props.getProperty("USER"), props.getProperty("PASSWORD")));
+        courseDao = new JDBCTemplateCourseDao(jdbcTemplate, new DTOInputValidator(), new CourseMapper());
     }
 
     @Test

@@ -6,12 +6,13 @@ import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ua.com.foxminded.sqlJdbcSchool.dao.GroupDao;
-import ua.com.foxminded.sqlJdbcSchool.dao.connection.BasicConnectionPool;
+import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.JDBCTemplateGroupDao;
+import ua.com.foxminded.sqlJdbcSchool.dao.jdbc_template.Mappers.GroupMapper;
 import ua.com.foxminded.sqlJdbcSchool.dto.GroupDTO;
+import ua.com.foxminded.sqlJdbcSchool.util.DTOInputValidator;
 
 class GroupDaoTest extends DataSourceDBUnit {
-    GroupDao dao;
+    JDBCTemplateGroupDao dao;
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -19,7 +20,7 @@ class GroupDaoTest extends DataSourceDBUnit {
                 .getResourceAsStream("beforeData/emptyDaoTest_data.xml"));
         super.setUp();
         connection = getConnection().getConnection();
-        dao = new GroupDao(new BasicConnectionPool(props.getProperty("JDBC_URL"), props.getProperty("USER"), props.getProperty("PASSWORD")));
+        dao = new JDBCTemplateGroupDao(jdbcTemplate, new DTOInputValidator(), new GroupMapper());
     }
 
     @Test
