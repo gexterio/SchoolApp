@@ -23,7 +23,6 @@ public class JDBCTemplateDBInitializer implements DbInitializer {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @PostConstruct
     public void initAllTables() {
         for (String s : getSqlQuery()) {
             initTable(s);
