@@ -15,6 +15,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.util.List;
 import java.util.Objects;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "courses")
@@ -23,7 +24,9 @@ public class CourseDTO {
     @Column(name = "course_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer courseId;
+
     @Column(name = "course_name")
+    @NotEmpty
     private String courseName;
     @Column(name = "course_description")
     private String courseDescription;

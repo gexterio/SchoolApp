@@ -4,27 +4,36 @@ import org.dbunit.Assertion;
 import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
-import org.springframework.test.context.web.AnnotationConfigWebContextLoader;
-import org.springframework.test.context.web.WebAppConfiguration;
-//import ua.com.foxminded.sqljdbcschool.TestSpringConfig;
-import ua.com.foxminded.sqljdbcschool.dao.jdbc_template.JDBCTemplateCourseDao;
+import ua.com.foxminded.sqljdbcschool.TestSpringConfig;
+import ua.com.foxminded.sqljdbcschool.dao.CourseDao;
+import ua.com.foxminded.sqljdbcschool.dao.hibernate.HibernateCourseDao;
 import ua.com.foxminded.sqljdbcschool.dto.CourseDTO;
 
-@ExtendWith(SpringExtension.class)
-//@ContextConfiguration(classes = TestSpringConfig.class, loader = AnnotationConfigContextLoader.class)
-public class CourseDaoTest extends DataSourceDBUnit {
-//    @Autowired
-    JDBCTemplateCourseDao courseDao;
 
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = TestSpringConfig.class, loader = AnnotationConfigContextLoader.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+public class CourseDaoTest extends DataSourceDBUnit {
+    @Autowired
+    ApplicationContext context;
+
+    CourseDao courseDao;
+
+    @BeforeAll
+    public void setUpBeans() {
+        courseDao = context.getBean("hibernateCourseDao", HibernateCourseDao.class);
+    }
     @BeforeEach
     public void setUp() throws Exception {
         dataSet = new FlatXmlDataSetBuilder().build(getClass().getClassLoader()
@@ -94,6 +103,7 @@ public class CourseDaoTest extends DataSourceDBUnit {
                 .getResourceAsStream("beforeData/coursesAndStudents_data.xml"));
         super.setUp();
         int actualSize = courseDao.searchStudentsInCourse("Law").size();
+//        System.out.println(courseDao.searchStudentsInCourse("Law").get(0));
         Assertions.assertEquals(0, actualSize);
     }
 

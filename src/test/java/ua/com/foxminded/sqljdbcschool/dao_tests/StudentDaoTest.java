@@ -4,9 +4,22 @@ import org.dbunit.Assertion;
 import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
+import ua.com.foxminded.sqljdbcschool.TestSpringConfig;
+import ua.com.foxminded.sqljdbcschool.dao.CourseDao;
+import ua.com.foxminded.sqljdbcschool.dao.StudentDao;
+import ua.com.foxminded.sqljdbcschool.dao.hibernate.HibernateCourseDao;
+import ua.com.foxminded.sqljdbcschool.dao.hibernate.HibernateStudentDao;
 import ua.com.foxminded.sqljdbcschool.dao.jdbc_template.mappers.StudentCountMapper;
 import ua.com.foxminded.sqljdbcschool.dao.jdbc_template.mappers.StudentMapper;
 import ua.com.foxminded.sqljdbcschool.dao.jdbc_template.JDBCTemplateStudentDao;
@@ -14,8 +27,19 @@ import ua.com.foxminded.sqljdbcschool.dto.CourseDTO;
 import ua.com.foxminded.sqljdbcschool.dto.StudentDTO;
 import ua.com.foxminded.sqljdbcschool.util.DTOInputValidator;
 
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = TestSpringConfig.class, loader = AnnotationConfigContextLoader.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class StudentDaoTest extends DataSourceDBUnit {
-    JDBCTemplateStudentDao studentDao;
+    @Autowired
+    ApplicationContext context;
+
+    StudentDao studentDao;
+
+    @BeforeAll
+    public void setUpBeans() {
+        studentDao = context.getBean("hibernateStudentDao", HibernateStudentDao.class);
+    }
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -23,7 +47,6 @@ class StudentDaoTest extends DataSourceDBUnit {
                 .getResourceAsStream("beforeData/emptyDaoTest_data.xml"));
         super.setUp();
         connection = getConnection().getConnection();
-//        studentDao = new JDBCTemplateStudentDao(jdbcTemplate, new DTOInputValidator(), new StudentMapper(), new StudentCountMapper());
     }
 
     @Test

@@ -8,16 +8,22 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.foxminded.sqljdbcschool.dao.CourseDao;
 import ua.com.foxminded.sqljdbcschool.dto.CourseDTO;
+import ua.com.foxminded.sqljdbcschool.util.DTOInputValidator;
 
+import javax.persistence.NoResultException;
 import java.util.List;
 
 @Repository
 public class HibernateCourseDao implements CourseDao {
     private final SessionFactory sessionFactory;
 
+    private final DTOInputValidator inputValidator;
+
+
     @Autowired
-    public HibernateCourseDao(SessionFactory sessionFactory) {
+    public HibernateCourseDao(SessionFactory sessionFactory, DTOInputValidator inputValidator) {
         this.sessionFactory = sessionFactory;
+        this.inputValidator = inputValidator;
     }
 
     @Override
@@ -38,24 +44,33 @@ public class HibernateCourseDao implements CourseDao {
     @Transactional(readOnly = true)
     public CourseDTO searchById(int id) {
         Session session = sessionFactory.getCurrentSession();
-        return session.get(CourseDTO.class, id);
+        CourseDTO courseDTO = session.get(CourseDTO.class, id);
+        inputValidator.validateCourse(courseDTO);
+        return courseDTO;
     }
 
     @Override
     @Transactional(readOnly = true)
     public CourseDTO searchByName(String name) {
         Session session = sessionFactory.getCurrentSession();
-        return session.createQuery("select c from CourseDTO c where courseName = ?", CourseDTO.class)
-                .setParameter(0, name)
-                .getSingleResult();
+        try {
+            CourseDTO courseDTO = session.createQuery("select c from CourseDTO c where courseName = ?1", CourseDTO.class)
+                    .setParameter(1, name)
+                    .getSingleResult();
+            inputValidator.validateCourse(courseDTO);
+            return courseDTO;
+        } catch (NoResultException e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException("Can't find course with input name");
+        }
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Integer> searchStudentsInCourse(String courseName) {
         Session session = sessionFactory.getCurrentSession();
-        return (List<Integer>) session.createQuery("select c from CourseDTO c where courseName = ?")
-                .setParameter(0, courseName).getResultList();
+        return (List<Integer>) session.createQuery("select c from CourseDTO c where courseName = ?1")
+                .setParameter(1, courseName).getResultList();
     }
 
     @Override
