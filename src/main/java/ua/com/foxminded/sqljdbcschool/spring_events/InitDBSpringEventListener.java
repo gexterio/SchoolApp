@@ -29,6 +29,5 @@ public class InitDBSpringEventListener implements ApplicationListener<ContextRef
             schoolDataGenerator.generateSchoolData();
         }
         callCounter++;
-        System.out.println("callCounter = " + callCounter);
     }
 }
