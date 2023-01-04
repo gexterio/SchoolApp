@@ -11,6 +11,7 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import ua.com.foxminded.sqljdbcschool.dao.hibernate.HibernateCourseDao;
+import ua.com.foxminded.sqljdbcschool.dao.hibernate.HibernateGroupDao;
 import ua.com.foxminded.sqljdbcschool.dao.hibernate.HibernateStudentDao;
 import ua.com.foxminded.sqljdbcschool.util.DTOInputValidator;
 
@@ -50,6 +51,7 @@ public class TestSpringConfig {
         properties.put("hibernate.show_sql", environment.getRequiredProperty("hibernate.show_sql"));
         properties.put("hibernate.jdbc.batch_size", environment.getRequiredProperty("hibernate.jdbc.batch_size"));
         properties.put("hibernate.generate_statistics", environment.getRequiredProperty("hibernate.generate_statistics"));
+        properties.put("hibernate.openSessionInViewFilter", environment.getRequiredProperty("hibernate.openSessionInViewFilter"));
         return properties;
     }
 
@@ -75,6 +77,10 @@ public class TestSpringConfig {
     }
     @Bean
     public HibernateStudentDao hibernateStudentDao() {
-        return new HibernateStudentDao(testSessionFactory().getObject());
+        return new HibernateStudentDao(testSessionFactory().getObject(), new DTOInputValidator());
+    }
+    @Bean
+    public HibernateGroupDao hibernateGroupDao() {
+        return new HibernateGroupDao(testSessionFactory().getObject());
     }
 }

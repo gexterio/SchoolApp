@@ -11,26 +11,19 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import ua.com.foxminded.sqljdbcschool.TestSpringConfig;
-import ua.com.foxminded.sqljdbcschool.dao.CourseDao;
 import ua.com.foxminded.sqljdbcschool.dao.StudentDao;
-import ua.com.foxminded.sqljdbcschool.dao.hibernate.HibernateCourseDao;
 import ua.com.foxminded.sqljdbcschool.dao.hibernate.HibernateStudentDao;
-import ua.com.foxminded.sqljdbcschool.dao.jdbc_template.mappers.StudentCountMapper;
-import ua.com.foxminded.sqljdbcschool.dao.jdbc_template.mappers.StudentMapper;
-import ua.com.foxminded.sqljdbcschool.dao.jdbc_template.JDBCTemplateStudentDao;
 import ua.com.foxminded.sqljdbcschool.dto.CourseDTO;
 import ua.com.foxminded.sqljdbcschool.dto.StudentDTO;
-import ua.com.foxminded.sqljdbcschool.util.DTOInputValidator;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = TestSpringConfig.class, loader = AnnotationConfigContextLoader.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class StudentDaoTest extends DataSourceDBUnit {
+public class StudentDaoTest extends DataSourceDBUnit {
     @Autowired
     ApplicationContext context;
 
@@ -55,7 +48,7 @@ class StudentDaoTest extends DataSourceDBUnit {
                 .build(getClass().getClassLoader()
                         .getResourceAsStream("afterData/createStudentDaoTest_data.xml"))
                 .getTable("students");
-        StudentDTO dto = new StudentDTO.StudentBuilder("FirstName", "LastName").setGroupId(1).build();
+        StudentDTO dto = new StudentDTO.StudentBuilder("FirstName", "LastName").build();
         studentDao.create(dto);
         ITable actualTable = getConnection().createDataSet().getTable("students");
         Assertion.assertEqualsIgnoreCols(expectedTable, actualTable, new String[]{"student_id", "group_id"});
@@ -68,14 +61,16 @@ class StudentDaoTest extends DataSourceDBUnit {
 
     @Test
     void create_thrownException_inputIsEmpty() {
+        StudentDTO inputStudent = new StudentDTO.StudentBuilder("", "").build();
         Assertions.assertThrows(Exception.class,
-                () -> new StudentDTO.StudentBuilder("", "").build());
+                () -> studentDao.create(inputStudent));
     }
 
     @Test
     void create_throwException_inputIsBlank() {
+        StudentDTO inputStudent = new StudentDTO.StudentBuilder("     ", "  ").build();
         Assertions.assertThrows(Exception.class,
-                () -> new StudentDTO.StudentBuilder("     ", "  ").build());
+                () -> studentDao.create(inputStudent));
     }
 
     @Test
@@ -150,7 +145,7 @@ class StudentDaoTest extends DataSourceDBUnit {
         ITable expectedTable = new FlatXmlDataSetBuilder().build(getClass().getClassLoader()
                         .getResourceAsStream("afterData/addStudentToCourse_data.xml"))
                 .getTable("personal_courses");
-        StudentDTO student = new StudentDTO.StudentBuilder("Alex", "Loc").setGroupId(1).setStudentId(1).build();
+        StudentDTO student = studentDao.searchById(1);
         CourseDTO course = new CourseDTO.CourseBuilder("Law").setDescription("description").setCourseId(2).build();
         studentDao.addStudentToCourse(student, course);
         ITable actualTable = getConnection().createDataSet().getTable("personal_courses");
@@ -176,7 +171,7 @@ class StudentDaoTest extends DataSourceDBUnit {
         super.setUp();
         StudentDTO student = new StudentDTO.StudentBuilder("Alex", "Loc").setGroupId(1).setStudentId(1).build();
         CourseDTO course = new CourseDTO.CourseBuilder("Music").setDescription("description").setCourseId(1).build();
-        Assertions.assertThrows(DuplicateKeyException.class, () -> studentDao.addStudentToCourse(student, course));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> studentDao.addStudentToCourse(student, course));
     }
 
     @Test
@@ -187,9 +182,10 @@ class StudentDaoTest extends DataSourceDBUnit {
         ITable expectedTable = new FlatXmlDataSetBuilder().build(getClass().getClassLoader()
                         .getResourceAsStream("afterData/deleteStudentFromCourse_data.xml"))
                 .getTable("personal_courses");
-        StudentDTO student = new StudentDTO.StudentBuilder("Alex", "Loc").setGroupId(1).setStudentId(1).build();
-        CourseDTO course = new CourseDTO.CourseBuilder("Music").setDescription("description").setCourseId(1).build();
-        studentDao.deleteStudentFromCourse(student, course);
+        StudentDTO inputStudent = studentDao.searchById(1);
+        CourseDTO inputCourse = new CourseDTO.CourseBuilder("Music").setDescription("description").build();
+
+        studentDao.deleteStudentFromCourse(inputStudent, inputCourse);
         ITable actualTable = getConnection().createDataSet().getTable("personal_courses");
         Assertion.assertEqualsIgnoreCols(expectedTable, actualTable, new String[]{"student_id", "course_id"});
     }
@@ -211,15 +207,10 @@ class StudentDaoTest extends DataSourceDBUnit {
         dataSet = new FlatXmlDataSetBuilder().build(getClass().getClassLoader()
                 .getResourceAsStream("beforeData/coursesAndStudents_data.xml"));
         super.setUp();
-        int expectedSize = getConnection().createDataSet().getTable("personal_courses")
-                .getRowCount() - 1;
-        StudentDTO student = new StudentDTO.StudentBuilder("Alex", "Loc").setGroupId(1).setStudentId(1).build();
-        CourseDTO course = new CourseDTO.CourseBuilder("Music").setDescription("description").setCourseId(1).build();
-        studentDao.deleteStudentFromCourse(student, course);
-        studentDao.deleteStudentFromCourse(student, course);
-        studentDao.deleteStudentFromCourse(student, course);
-        int actualSize = getConnection().createDataSet().getTable("personal_courses").getRowCount();
-        Assertions.assertEquals(expectedSize, actualSize);
+        StudentDTO inputStudent = studentDao.searchById(1);
+        CourseDTO inputCourse = inputStudent.getCourses().get(0);
+        studentDao.deleteStudentFromCourse(inputStudent, inputCourse);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> studentDao.deleteStudentFromCourse(inputStudent, inputCourse));
     }
 
     @Test
@@ -248,10 +239,10 @@ class StudentDaoTest extends DataSourceDBUnit {
         super.setUp();
         int expectedSize = getConnection().createDataSet().getTable("students")
                 .getRowCount() - 1;
-        StudentDTO student = new StudentDTO.StudentBuilder("Alex", "Loc").setGroupId(1).setStudentId(1).build();
-        studentDao.delete(student);
-        studentDao.delete(student);
-        studentDao.delete(student);
+        StudentDTO inputStudent = studentDao.searchById(1);
+        studentDao.delete(inputStudent);
+        studentDao.delete(inputStudent);
+        studentDao.delete(inputStudent);
         int actualSize = getConnection().createDataSet().getTable("students").getRowCount();
         Assertions.assertEquals(expectedSize, actualSize);
     }

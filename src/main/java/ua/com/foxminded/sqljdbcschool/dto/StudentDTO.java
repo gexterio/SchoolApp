@@ -1,6 +1,7 @@
 package ua.com.foxminded.sqljdbcschool.dto;
 
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -28,7 +29,7 @@ public class StudentDTO {
     @Column(name = "group_id")
     private Integer groupId;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     @JoinTable(name = "personal_courses",
             joinColumns = @JoinColumn(name = "student_id"),
             inverseJoinColumns = @JoinColumn(name = "course_id"))
@@ -43,6 +44,20 @@ public class StudentDTO {
         this.firstName = builder.firstName;
         this.lastName = builder.lastName;
         this.groupId = builder.groupId;
+    }
+
+    public void addCourse(CourseDTO course) {
+        if (!courses.contains(course)) {
+            courses.add(course);
+        } else {
+            throw new IllegalArgumentException("student already in course: " + course.getCourseName());
+        }
+    }
+
+    public void removeCourse(CourseDTO course) {
+        if (courses.contains(course)) {
+            courses.remove(course);
+        } else throw new IllegalArgumentException("course not found");
     }
 
     public Integer getStudentId() {
@@ -128,8 +143,7 @@ public class StudentDTO {
         }
 
         public StudentDTO build() {
-            StudentDTO student = new StudentDTO(this);
-            return student;
+            return new StudentDTO(this);
         }
 
 

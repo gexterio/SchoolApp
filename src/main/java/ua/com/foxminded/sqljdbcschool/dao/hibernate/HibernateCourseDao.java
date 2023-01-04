@@ -8,10 +8,12 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.foxminded.sqljdbcschool.dao.CourseDao;
 import ua.com.foxminded.sqljdbcschool.dto.CourseDTO;
+import ua.com.foxminded.sqljdbcschool.dto.StudentDTO;
 import ua.com.foxminded.sqljdbcschool.util.DTOInputValidator;
 
 import javax.persistence.NoResultException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class HibernateCourseDao implements CourseDao {
@@ -29,6 +31,7 @@ public class HibernateCourseDao implements CourseDao {
     @Override
     @Transactional
     public void create(CourseDTO course) {
+        inputValidator.validateCourse(course);
         Session session = sessionFactory.getCurrentSession();
         session.persist(course);
     }
@@ -69,13 +72,17 @@ public class HibernateCourseDao implements CourseDao {
     @Transactional(readOnly = true)
     public List<Integer> searchStudentsInCourse(String courseName) {
         Session session = sessionFactory.getCurrentSession();
-        return (List<Integer>) session.createQuery("select c from CourseDTO c where courseName = ?1")
-                .setParameter(1, courseName).getResultList();
+        CourseDTO course =(CourseDTO) session.createQuery("select c from CourseDTO c where courseName = ?1")
+                .setParameter(1, courseName).getSingleResult();
+        return course.getStudents().stream().map(StudentDTO::getStudentId).collect(Collectors.toList());
     }
+
+
 
     @Override
     @Transactional
     public void batchCreate(List<CourseDTO> courses) {
+        courses.forEach(inputValidator::validateCourse);
         Session session = sessionFactory.getCurrentSession();
         for (CourseDTO course : courses) {
             session.persist(course);

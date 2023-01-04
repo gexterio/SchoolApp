@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -34,6 +33,7 @@ public class CourseDaoTest extends DataSourceDBUnit {
     public void setUpBeans() {
         courseDao = context.getBean("hibernateCourseDao", HibernateCourseDao.class);
     }
+
     @BeforeEach
     public void setUp() throws Exception {
         dataSet = new FlatXmlDataSetBuilder().build(getClass().getClassLoader()
@@ -61,14 +61,17 @@ public class CourseDaoTest extends DataSourceDBUnit {
 
     @Test
     void create_thrownException_inputIsEmpty() {
+        CourseDTO inputCourse = new CourseDTO();
         Assertions.assertThrows(Exception.class,
-                () -> new CourseDTO.CourseBuilder("").build());
+                () -> courseDao.create(inputCourse));
     }
 
     @Test
     void create_thrownException_inputIsBlank() {
+        CourseDTO inputCourse = new CourseDTO();
+        inputCourse.setCourseName("    ");
         Assertions.assertThrows(Exception.class,
-                () -> new CourseDTO.CourseBuilder("     ").build());
+                () -> courseDao.create(inputCourse));
     }
 
     @Test

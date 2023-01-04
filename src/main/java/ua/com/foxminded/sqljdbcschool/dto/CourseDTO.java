@@ -1,10 +1,7 @@
 package ua.com.foxminded.sqljdbcschool.dto;
 
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
-import ua.com.foxminded.sqljdbcschool.util.DTOInputValidator;
-
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,9 +10,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 import java.util.Objects;
-import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "courses")
@@ -31,7 +28,7 @@ public class CourseDTO {
     @Column(name = "course_description")
     private String courseDescription;
 
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "courses")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "courses", cascade = CascadeType.REFRESH)
     private List<StudentDTO> students;
 
     public CourseDTO() {
@@ -91,7 +88,7 @@ public class CourseDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CourseDTO courseDTO = (CourseDTO) o;
-        return courseId.equals(courseDTO.courseId) && courseName.equals(courseDTO.courseName) && courseDescription.equals(courseDTO.courseDescription);
+        return courseName.equals(courseDTO.courseName) && courseDescription.equals(courseDTO.courseDescription);
     }
 
     @Override
@@ -120,8 +117,7 @@ public class CourseDTO {
         }
 
         public CourseDTO build() {
-            CourseDTO course = new CourseDTO(this);
-            return course;
+            return new CourseDTO(this);
         }
     }
 }
