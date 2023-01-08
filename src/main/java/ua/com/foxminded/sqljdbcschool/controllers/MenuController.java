@@ -15,8 +15,5 @@ public class MenuController {
         return "menu/menu";
     }
 
-    @GetMapping("menu/success")
-    public String successPage() {
-        return "menu/success";
-    }
+
 }

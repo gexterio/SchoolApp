@@ -5,13 +5,14 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ua.com.foxminded.sqljdbcschool.dao.CourseDao;
 import ua.com.foxminded.sqljdbcschool.dao.StudentDao;
 import ua.com.foxminded.sqljdbcschool.dao.hibernate.HibernateCourseDao;
-import ua.com.foxminded.sqljdbcschool.dao.hibernate.HibernateStudentDao;
 import ua.com.foxminded.sqljdbcschool.dto.CourseDTO;
 import ua.com.foxminded.sqljdbcschool.dto.StudentDTO;
 
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("/menu/")
+@RequestMapping("/students/")
 public class StudentController {
     private static final String REDIRECT_MENU_SUCCESS = "redirect:success";
     private final StudentDao studentDao;
@@ -31,21 +32,48 @@ public class StudentController {
         this.courseDao = courseDao;
     }
 
-    @GetMapping("addStudentForm")
-    public String addStudentPage() {
-        return "menu/addStudentForm";
+    @GetMapping("success")
+    public String successPage() {
+        return "menu/success";
     }
 
-    @PostMapping("addStudentSuccess")
-    public String addedSuccessPage(@RequestParam("firstName") String firstName,
-                                   @RequestParam("lastName") String lastName) {
-        studentDao.create(new StudentDTO.StudentBuilder(firstName, lastName).build());
-        return REDIRECT_MENU_SUCCESS;
+    @GetMapping("new")
+    public String newStudent(@ModelAttribute("student") StudentDTO student) {
+        return "students/new";
     }
+
+    @PostMapping()
+    public String create(@ModelAttribute("student") StudentDTO student) {
+        studentDao.create(student);
+        return "redirect:" + student.getStudentId();
+    }
+
+    @GetMapping()
+    public String index(Model model) {
+        model.addAttribute("students", studentDao.getAll());
+        return "students/index";
+    }
+
+    @GetMapping("/{id}")
+    public String show(@PathVariable("id") int id, Model model) {
+        model.addAttribute("student", studentDao.searchById(id));
+        return "students/show";
+    }
+
+    @GetMapping("search")
+    public String studentInfoPage() {
+        return "students/search";
+    }
+
+    @GetMapping("toShow")
+    public String toShow(@RequestParam("studentId") int id) {
+        return "redirect:" + id;
+    }
+
 
     @GetMapping("addStudentToCourseForm")
     public String addStudentToCoursePage() {
-        return "menu/addStudentToCourseForm";
+        return "students/addStudentToCourseForm";
     }
 
     @PostMapping("addStudentToCourseSuccess")
@@ -54,12 +82,12 @@ public class StudentController {
         StudentDTO student = studentDao.searchById(studentId);
         CourseDTO course = courseDao.searchById(courseId);
         studentDao.addStudentToCourse(student, course);
-        return REDIRECT_MENU_SUCCESS;
+        return "redirect:" + studentId;
     }
 
-    @GetMapping("deleteStudentForm")
+    @GetMapping("delete")
     public String deleteStudentPage() {
-        return "menu/deleteStudentForm";
+        return "students/delete";
     }
 
     @PostMapping("deleteStudentSuccess")
@@ -70,7 +98,7 @@ public class StudentController {
 
     @GetMapping("removeStudentFromCourseForm")
     public String removeStudentFromCoursePage() {
-        return "menu/removeStudentFromCourseForm";
+        return "students/removeStudentFromCourseForm";
     }
 
     @PostMapping("removeStudentFromCourseSuccess")
@@ -79,24 +107,24 @@ public class StudentController {
         StudentDTO student = studentDao.searchById(studentId);
         CourseDTO course = courseDao.searchById(courseId);
         studentDao.deleteStudentFromCourse(student, course);
-        return REDIRECT_MENU_SUCCESS;
+        return "redirect:" + studentId;
     }
 
     @GetMapping("searchGroupsForm")
     public String searchGroupsPage() {
-        return "menu/searchGroupsForm";
+        return "students/searchGroupsForm";
     }
 
     @GetMapping("groupsCount")
-    public String groupsCountPage(@RequestParam(value = "count") int count,
+    public String groupsCountPage(@RequestParam("count") int count,
                                   Model model) {
         model.addAttribute("msg", studentDao.searchGroupsByStudentCount(count));
-        return "menu/groupsCount";
+        return "students/groupsCount";
     }
 
     @GetMapping("searchStudentsInCourseForm")
     public String searchStudentsInCoursePage() {
-        return "menu/searchStudentsInCourseForm";
+        return "students/searchStudentsInCourseForm";
     }
 
     @GetMapping("studentsInCourse")
@@ -105,24 +133,8 @@ public class StudentController {
         List<String> students = new ArrayList<>();
         studentsInCourse.forEach(course -> students.add(studentDao.searchById(course).getFirstName()));
         model.addAttribute("studentsInCourse", students);
-        return "menu/studentsInCourse";
+        return "students/studentsInCourse";
     }
 
-    @GetMapping("searchStudentForm")
-    public String studentInfoPage() {
-        return "menu/searchStudentForm";
-    }
 
-    @GetMapping("studentInfo")
-    public String studentInfoPage(@RequestParam(value = "studentId") Integer studentId, Model model) {
-        StudentDTO student = studentDao.searchById(studentId);
-        model.addAttribute("student", student);
-        return "menu/studentInfo";
-    }
-
-    @GetMapping("students")
-    public String studentsPage(Model model) {
-        model.addAttribute("students", studentDao.getAll());
-        return "menu/students";
-    }
 }

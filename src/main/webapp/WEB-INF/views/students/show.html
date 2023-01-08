@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>student</title>
+</head>
+<body>
+<a href="/menu"> return</a>
+<div>
+    <p> ID: <span th:text="${student.getStudentId()}"></span></p>
+    <p> First Name: <span th:text="${student.getFirstName()}"></span></p>
+    <p> Last Name: <span th:text="${student.getLastName()}"></span></p>
+    <p> Group ID: <span th:text="${student.getGroupId()}"></span></p>
+    <br>
+    <br>
+    <div th:each="course : ${student.getCourses()}">
+        <p>Course ID: <span th:text="${course.getCourseId()}"></span></p>
+        <p>Course Name: <span th:text="${course.getCourseName()}"></span></p>
+        <p>Course Description: <span th:text="${course.getCourseDescription()}"></span></p>
+        <br>
+    </div>
+</div>
+</body>
+</html>

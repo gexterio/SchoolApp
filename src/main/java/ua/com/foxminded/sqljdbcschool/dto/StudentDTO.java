@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -47,6 +48,9 @@ public class StudentDTO {
     }
 
     public void addCourse(CourseDTO course) {
+        if (courses == null) {
+            courses = new ArrayList<>();
+        }
         if (!courses.contains(course)) {
             courses.add(course);
         } else {

@@ -20,8 +20,6 @@ import java.util.Objects;
 import java.util.Properties;
 
 @Configuration
-//@SpringJUnitConfig
-//@ComponentScan("ua.com.foxminded.sqljdbcschool")
 @PropertySource("classpath:testDBProperties.properties")
 @EnableTransactionManagement(proxyTargetClass = true)
 
@@ -75,12 +73,16 @@ public class TestSpringConfig {
     public HibernateCourseDao hibernateCourseDao() {
         return new HibernateCourseDao(testSessionFactory().getObject(), new DTOInputValidator());
     }
+
     @Bean
     public HibernateStudentDao hibernateStudentDao() {
         return new HibernateStudentDao(testSessionFactory().getObject(), new DTOInputValidator());
     }
+
     @Bean
     public HibernateGroupDao hibernateGroupDao() {
         return new HibernateGroupDao(testSessionFactory().getObject());
     }
+
+
 }

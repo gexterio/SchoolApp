@@ -50,6 +50,6 @@ class AddStudentTest {
         String inputString = "   " + "\n" + "   ";
         ByteArrayInputStream in = new ByteArrayInputStream(inputString.getBytes());
         System.setIn(in);
-        Assertions.assertThrows(Exception.class, () -> addStudent.execute());
+        Assertions.assertThrows(IllegalArgumentException.class, () -> addStudent.execute());
     }
 }
