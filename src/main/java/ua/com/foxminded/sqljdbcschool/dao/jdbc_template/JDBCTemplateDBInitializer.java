@@ -5,7 +5,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ua.com.foxminded.sqljdbcschool.dao.DbInitializer;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +21,7 @@ public class JDBCTemplateDBInitializer implements DbInitializer {
     public JDBCTemplateDBInitializer(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
+
     public void initAllTables() {
         for (String s : getSqlQuery()) {
             initTable(s);

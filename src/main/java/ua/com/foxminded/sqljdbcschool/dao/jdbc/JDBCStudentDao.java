@@ -23,13 +23,13 @@ public class JDBCStudentDao implements StudentDao {
     public static final String CREATE_STUDENT = "INSERT INTO students (student_id, first_name, last_name) VALUES (DEFAULT, (?), (?))";
     public static final String GROUP_ID = "group_id";
     public static final IllegalArgumentException STUDENT_NULL_EXCEPTION = new IllegalArgumentException("student can't be NULL");
-    private static final String ADD_STUDENT_TO_COURSE = "INSERT INTO personal_courses (student_id, course_id) VALUES ((?), (?));";
-    private static final String DELETE_STUDENT_FROM_COURSE = "DELETE FROM personal_courses WHERE student_id = (?) AND course_id = (?);";
-    private static final String SELECT_ALL_STUDENTS = "SELECT student_id, first_name, last_name, group_id FROM students;";
-    private static final String SELECT_COUNT_STUDENTS_IN_GROUP = "SELECT group_id, Count(student_id) as cnt FROM students WHERE group_id>0 GROUP BY students.group_id HAVING COUNT (student_id)<=(?) ORDER BY students.group_id;";
+    private static final String ADD_STUDENT_TO_COURSE = "INSERT INTO personal_courses (student_id, course_id) VALUES ((?), (?))";
+    private static final String DELETE_STUDENT_FROM_COURSE = "DELETE FROM personal_courses WHERE student_id = (?) AND course_id = (?)";
+    private static final String SELECT_ALL_STUDENTS = "SELECT student_id, first_name, last_name, group_id FROM students";
+    private static final String SELECT_COUNT_STUDENTS_IN_GROUP = "SELECT group_id, Count(student_id) as cnt FROM students WHERE group_id>0 GROUP BY students.group_id HAVING COUNT (student_id)<=(?) ORDER BY students.group_id";
     private static final String DELETE_STUDENT = "DELETE FROM students WHERE student_id = (?)";
-    private static final String SELECT_BY_ID = "SELECT  first_name, last_name, group_id FROM students WHERE student_id = (?);";
-    private static final String SET_GROUP_ID = "UPDATE students SET group_id = (?) WHERE student_id = (?);";
+    private static final String SELECT_BY_ID = "SELECT  first_name, last_name, group_id FROM students WHERE student_id = (?)";
+    private static final String SET_GROUP_ID = "UPDATE students SET group_id = (?) WHERE student_id = (?)";
     private final BasicConnectionPool connectionPool;
 
     @Autowired
@@ -199,17 +199,17 @@ public class JDBCStudentDao implements StudentDao {
 
     @Override
     public void batchCreate(List<StudentDTO> students) {
-
+        students.forEach(this::create);
     }
 
     @Override
     public void batchAddStudentToGroup(List<StudentDTO> students) {
-
+        students.forEach(st -> addStudentToGroup(st, st.getGroupId()));
     }
 
     @Override
     public void batchAddStudentToCourse(Map<StudentDTO, CourseDTO> studentCoursesMap) {
-
+        studentCoursesMap.forEach(this::addStudentToCourse);
     }
 
     @Override

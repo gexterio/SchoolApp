@@ -86,7 +86,7 @@ public class JDBCCourseDao implements CourseDao {
 
     @Override
     public void batchCreate(List<CourseDTO> courses) {
-
+courses.forEach(this::create);
     }
 
     @Override

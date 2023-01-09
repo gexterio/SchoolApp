@@ -56,27 +56,26 @@ public class HibernateCourseDao implements CourseDao {
     @Transactional(readOnly = true)
     public CourseDTO searchByName(String name) {
         Session session = sessionFactory.getCurrentSession();
+        CourseDTO courseDTO = null;
         try {
-            CourseDTO courseDTO = session.createQuery("select c from CourseDTO c where courseName = ?1", CourseDTO.class)
+            courseDTO = session.createQuery("select c from CourseDTO c where courseName = ?1", CourseDTO.class)
                     .setParameter(1, name)
                     .getSingleResult();
-            inputValidator.validateCourse(courseDTO);
-            return courseDTO;
         } catch (NoResultException e) {
             e.printStackTrace();
-            throw new IllegalArgumentException("Can't find course with input name");
         }
+        inputValidator.validateCourse(courseDTO);
+        return courseDTO;
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Integer> searchStudentsInCourse(String courseName) {
         Session session = sessionFactory.getCurrentSession();
-        CourseDTO course =(CourseDTO) session.createQuery("select c from CourseDTO c where courseName = ?1")
+        CourseDTO course = (CourseDTO) session.createQuery("select c from CourseDTO c where courseName = ?1")
                 .setParameter(1, courseName).getSingleResult();
         return course.getStudents().stream().map(StudentDTO::getStudentId).collect(Collectors.toList());
     }
-
 
 
     @Override

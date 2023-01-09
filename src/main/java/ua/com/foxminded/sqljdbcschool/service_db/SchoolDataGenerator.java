@@ -8,10 +8,6 @@ import ua.com.foxminded.sqljdbcschool.dao.StudentDao;
 import ua.com.foxminded.sqljdbcschool.dao.hibernate.HibernateCourseDao;
 import ua.com.foxminded.sqljdbcschool.dao.hibernate.HibernateGroupDao;
 import ua.com.foxminded.sqljdbcschool.dao.hibernate.HibernateStudentDao;
-import ua.com.foxminded.sqljdbcschool.dao.jdbc_template.JDBCTemplateCourseDao;
-import ua.com.foxminded.sqljdbcschool.dao.jdbc_template.JDBCTemplateGroupDao;
-import ua.com.foxminded.sqljdbcschool.dao.jdbc_template.JDBCTemplateStudentDao;
-import ua.com.foxminded.sqljdbcschool.dao.connection.BasicConnectionPool;
 import ua.com.foxminded.sqljdbcschool.dto.CourseDTO;
 import ua.com.foxminded.sqljdbcschool.dto.GroupDTO;
 import ua.com.foxminded.sqljdbcschool.dto.StudentDTO;
@@ -106,7 +102,7 @@ public class SchoolDataGenerator {
         List<GroupDTO> groups = new ArrayList<>();
         for (int i = 0; i < GROUPS_COUNT; i++) {
             String groupName = groupNameGenerator();
-            groups.add(new GroupDTO.GroupBuilder(groupName).build()); //TODO here i remove setID
+            groups.add(new GroupDTO.GroupBuilder(groupName).build());
         }
         groupDao.batchCreate(groups);
     }
@@ -126,10 +122,9 @@ public class SchoolDataGenerator {
     private void generateCourses(FileParser parser) {
         List<String> courses = parser.parseCourses("courses");
         List<CourseDTO> courseList = new ArrayList<>();
-        for (int i = 0; i < courses.size(); i++) {
-            String[] line = courses.get(i).split("_");
+        for (String course : courses) {
+            String[] line = course.split("_");
             courseList.add(new CourseDTO.CourseBuilder(line[0])
-//                    .setCourseId(i) //TODO here i remove setID
                     .setDescription(line[1])
                     .build());
             courseCount++;

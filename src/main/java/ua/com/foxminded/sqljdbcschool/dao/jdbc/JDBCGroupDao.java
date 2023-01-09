@@ -15,7 +15,7 @@ import java.util.List;
 
 @Repository
 public class JDBCGroupDao implements GroupDao {
-    private static final String SELECT_ALL_GROUPS = "SELECT group_id, group_name FROM groups;";
+    private static final String SELECT_ALL_GROUPS = "SELECT group_id, group_name FROM groups";
     private static final String CREATE_GROUP = "INSERT INTO groups (group_id, group_name) VALUES (DEFAULT, (?))";
     private final BasicConnectionPool connectionPool;
 
@@ -63,7 +63,7 @@ public class JDBCGroupDao implements GroupDao {
 
     @Override
     public void batchCreate(List<GroupDTO> list) {
-
+        list.forEach(this::create);
     }
 
 }

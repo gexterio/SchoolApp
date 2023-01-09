@@ -1,35 +1,34 @@
 package ua.com.foxminded.sqljdbcschool.dao;
 
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import ua.com.foxminded.sqljdbcschool.dto.CourseDTO;
 import ua.com.foxminded.sqljdbcschool.dto.StudentDTO;
 
 import java.util.List;
 import java.util.Map;
+
 @Repository
 public interface StudentDao {
 
-     void create (StudentDTO student);
+    void create(StudentDTO student);
 
-     List<StudentDTO> getAll();
+    List<StudentDTO> getAll();
 
-     StudentDTO searchById(Integer id);
+    StudentDTO searchById(Integer id);
 
-     void delete (StudentDTO student);
+    void delete(StudentDTO student);
 
-     void addStudentToGroup(StudentDTO student, Integer groupId);
+    void addStudentToGroup(StudentDTO student, Integer groupId);
 
-     void addStudentToCourse(StudentDTO student, CourseDTO course);
+    void addStudentToCourse(StudentDTO student, CourseDTO course);
 
-     void deleteStudentFromCourse(StudentDTO student, CourseDTO course);
+    void deleteStudentFromCourse(StudentDTO student, CourseDTO course);
 
-     Map<Integer, Integer> searchGroupsByStudentCount(Integer studentCount);
+    Map<Integer, Integer> searchGroupsByStudentCount(Integer studentCount);
 
-     void batchCreate(List<StudentDTO> students);
+    void batchCreate(List<StudentDTO> students);
 
-     void batchAddStudentToGroup(List<StudentDTO> students);
+    void batchAddStudentToGroup(List<StudentDTO> students);
 
-         //TODO NEED TO REFACTOR
-     void batchAddStudentToCourse(Map<StudentDTO, CourseDTO> studentCoursesMap);
+    void batchAddStudentToCourse(Map<StudentDTO, CourseDTO> studentCoursesMap);
 }
