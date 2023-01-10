@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>studentsInCourses</title>
@@ -7,8 +7,9 @@
 <body>
 <a href="/menu">return</a>
 <br>
-<div th:each="course : ${studentsInCourse}">
-  <p th:text="${course}"></p>
+<div th:each="student : ${studentsInCourse}">
+    <p><span th:text="${student.getFirstName()}"></span>
+        <span th:text="${student.getLastName()}"></span></p>
 </div>
 </body>
 </html>

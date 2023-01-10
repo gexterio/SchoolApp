@@ -45,7 +45,7 @@ public class StudentController {
     @PostMapping()
     public String create(@ModelAttribute("student") StudentDTO student) {
         studentDao.create(student);
-        return "redirect:" + student.getStudentId();
+        return String.format("redirect:%d", student.getStudentId());
     }
 
     @GetMapping()
@@ -65,9 +65,9 @@ public class StudentController {
         return "students/search";
     }
 
-    @GetMapping("toShow")
+    @PostMapping("toShow")
     public String toShow(@RequestParam("studentId") int id) {
-        return "redirect:" + id;
+        return String.format("redirect:%d", id);
     }
 
 
@@ -82,7 +82,7 @@ public class StudentController {
         StudentDTO student = studentDao.searchById(studentId);
         CourseDTO course = courseDao.searchById(courseId);
         studentDao.addStudentToCourse(student, course);
-        return "redirect:" + studentId;
+        return String.format("redirect:%d", studentId);
     }
 
     @GetMapping("delete")
@@ -107,7 +107,7 @@ public class StudentController {
         StudentDTO student = studentDao.searchById(studentId);
         CourseDTO course = courseDao.searchById(courseId);
         studentDao.deleteStudentFromCourse(student, course);
-        return "redirect:" + studentId;
+        return String.format("redirect:%d", studentId);
     }
 
     @GetMapping("searchGroupsForm")
@@ -130,8 +130,8 @@ public class StudentController {
     @GetMapping("studentsInCourse")
     public String studentsInCoursePage(@RequestParam("courseName") String courseName, Model model) {
         List<Integer> studentsInCourse = courseDao.searchStudentsInCourse(courseName);
-        List<String> students = new ArrayList<>();
-        studentsInCourse.forEach(course -> students.add(studentDao.searchById(course).getFirstName()));
+        List<StudentDTO> students = new ArrayList<>();
+        studentsInCourse.forEach(course -> students.add(studentDao.searchById(course)));
         model.addAttribute("studentsInCourse", students);
         return "students/studentsInCourse";
     }

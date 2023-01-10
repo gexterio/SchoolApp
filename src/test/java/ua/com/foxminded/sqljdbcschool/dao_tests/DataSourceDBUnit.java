@@ -5,12 +5,7 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.operation.DatabaseOperation;
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-//import ua.com.foxminded.sqljdbcschool.TestSpringConfig;
 import ua.com.foxminded.sqljdbcschool.util.FileReader;
 
 import javax.sql.DataSource;
@@ -19,18 +14,11 @@ import java.sql.Connection;
 import java.util.Properties;
 
 @Component
-class DataSourceDBUnit extends DataSourceBasedDBTestCase {
+public class DataSourceDBUnit extends DataSourceBasedDBTestCase {
     public final static String TEST_DB = "testDBProperties.properties";
     public final Properties props = new Properties();
     Connection connection;
     IDataSet dataSet;
-
-
-    @BeforeEach
-    public void setup() {
-//        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(TestSpringConfig.class);
-
-    }
 
     @AfterEach
     public void tearDown() throws Exception {
