@@ -4,7 +4,6 @@ import org.dbunit.Assertion;
 import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -16,7 +15,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import ua.com.foxminded.sqljdbcschool.TestSpringConfig;
 import ua.com.foxminded.sqljdbcschool.dao.StudentDao;
-import ua.com.foxminded.sqljdbcschool.dao.hibernate.HibernateStudentDao;
 import ua.com.foxminded.sqljdbcschool.dto.CourseDTO;
 import ua.com.foxminded.sqljdbcschool.dto.StudentDTO;
 
@@ -27,12 +25,8 @@ public class StudentDaoTest extends DataSourceDBUnit {
     @Autowired
     ApplicationContext context;
 
+    @Autowired
     StudentDao studentDao;
-
-    @BeforeAll
-    public void setUpBeans() {
-        studentDao = context.getBean("hibernateStudentDao", HibernateStudentDao.class);
-    }
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -76,7 +70,7 @@ public class StudentDaoTest extends DataSourceDBUnit {
     @Test
     void getAll_returnedListWithAllStudentsFromDB() throws Exception {
         dataSet = new FlatXmlDataSetBuilder().build(getClass().getClassLoader()
-                .getResourceAsStream("afterData/createCourseDaoTest_data.xml"));
+                .getResourceAsStream("afterData/addStudentToCourse_data.xml"));
         super.setUp();
         int expectedSize = getConnection().createDataSet().getTable("students").getRowCount();
         int actualSize = studentDao.getAll().size();

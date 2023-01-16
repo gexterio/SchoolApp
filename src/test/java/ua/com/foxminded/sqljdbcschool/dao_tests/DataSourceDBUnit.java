@@ -17,8 +17,8 @@ import java.util.Properties;
 public class DataSourceDBUnit extends DataSourceBasedDBTestCase {
     public final static String TEST_DB = "testDBProperties.properties";
     public final Properties props = new Properties();
-    Connection connection;
-    IDataSet dataSet;
+    public Connection connection;
+    public IDataSet dataSet;
 
     @AfterEach
     public void tearDown() throws Exception {

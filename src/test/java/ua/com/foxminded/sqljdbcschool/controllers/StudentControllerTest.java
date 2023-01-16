@@ -77,7 +77,6 @@ public class StudentControllerTest {
         Mockito.doNothing().when(studentDaoMock).create(Mockito.any(StudentDTO.class));
         mockMvc.perform(post("/students/").flashAttr("student", student))
                 .andExpect(status().isFound())
-                .andDo(print())
                 .andExpect(redirectedUrl(student.getStudentId().toString()));
     }
 

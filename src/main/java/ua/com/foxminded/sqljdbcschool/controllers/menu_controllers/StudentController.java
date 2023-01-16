@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ua.com.foxminded.sqljdbcschool.dao.CourseDao;
 import ua.com.foxminded.sqljdbcschool.dao.StudentDao;
-import ua.com.foxminded.sqljdbcschool.dao.hibernate.HibernateCourseDao;
 import ua.com.foxminded.sqljdbcschool.dto.CourseDTO;
 import ua.com.foxminded.sqljdbcschool.dto.StudentDTO;
 
@@ -27,7 +26,7 @@ public class StudentController {
     private final CourseDao courseDao;
 
     @Autowired
-    public StudentController(@Qualifier("hibernateStudentDao") StudentDao studentDao, HibernateCourseDao courseDao) {
+    public StudentController(@Qualifier("hibernateStudentDao") StudentDao studentDao, @Qualifier("hibernateCourseDao") CourseDao courseDao) {
         this.studentDao = studentDao;
         this.courseDao = courseDao;
     }

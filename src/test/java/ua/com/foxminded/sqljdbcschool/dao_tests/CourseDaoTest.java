@@ -4,7 +4,6 @@ import org.dbunit.Assertion;
 import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -16,7 +15,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import ua.com.foxminded.sqljdbcschool.TestSpringConfig;
 import ua.com.foxminded.sqljdbcschool.dao.CourseDao;
-import ua.com.foxminded.sqljdbcschool.dao.hibernate.HibernateCourseDao;
 import ua.com.foxminded.sqljdbcschool.dto.CourseDTO;
 
 
@@ -27,12 +25,8 @@ public class CourseDaoTest extends DataSourceDBUnit {
     @Autowired
     ApplicationContext context;
 
+    @Autowired
     CourseDao courseDao;
-
-    @BeforeAll
-    public void setUpBeans() {
-        courseDao = context.getBean("hibernateCourseDao", HibernateCourseDao.class);
-    }
 
     @BeforeEach
     public void setUp() throws Exception {

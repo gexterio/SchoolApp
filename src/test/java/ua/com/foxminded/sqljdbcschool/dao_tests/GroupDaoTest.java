@@ -4,7 +4,6 @@ import org.dbunit.Assertion;
 import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -16,7 +15,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import ua.com.foxminded.sqljdbcschool.TestSpringConfig;
 import ua.com.foxminded.sqljdbcschool.dao.GroupDao;
-import ua.com.foxminded.sqljdbcschool.dao.hibernate.HibernateGroupDao;
 import ua.com.foxminded.sqljdbcschool.dto.GroupDTO;
 
 @ExtendWith(SpringExtension.class)
@@ -25,12 +23,9 @@ import ua.com.foxminded.sqljdbcschool.dto.GroupDTO;
 public class GroupDaoTest extends DataSourceDBUnit {
     @Autowired
     ApplicationContext context;
-    GroupDao groupDao;
 
-    @BeforeAll
-    public void setUpBeans() {
-        groupDao = context.getBean("hibernateGroupDao", HibernateGroupDao.class);
-    }
+    @Autowired
+    GroupDao groupDao;
 
     @BeforeEach
     public void setUp() throws Exception {

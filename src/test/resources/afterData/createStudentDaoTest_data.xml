@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-    <students student_id = '1' first_name = 'FirstName' last_name = 'LastName' group_id = '0'/>
-
+    <groups group_id='1' group_name='11-AA'/>
+    <students student_id='1' first_name='FirstName' last_name='LastName' group_id='1'/>
 </dataset>

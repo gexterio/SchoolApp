@@ -10,6 +10,7 @@ import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import ua.com.foxminded.sqljdbcschool.controllers.menu_controllers.StudentController;
 import ua.com.foxminded.sqljdbcschool.dao.hibernate.HibernateCourseDao;
 import ua.com.foxminded.sqljdbcschool.dao.hibernate.HibernateGroupDao;
 import ua.com.foxminded.sqljdbcschool.dao.hibernate.HibernateStudentDao;
@@ -84,5 +85,8 @@ public class TestSpringConfig {
         return new HibernateGroupDao(testSessionFactory().getObject());
     }
 
-
+    @Bean
+    public StudentController studentController() {
+        return new StudentController(hibernateStudentDao(), hibernateCourseDao());
+    }
 }
