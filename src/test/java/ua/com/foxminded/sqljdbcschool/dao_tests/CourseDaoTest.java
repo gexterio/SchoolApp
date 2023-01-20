@@ -100,7 +100,6 @@ public class CourseDaoTest extends DataSourceDBUnit {
                 .getResourceAsStream("beforeData/coursesAndStudents_data.xml"));
         super.setUp();
         int actualSize = courseDao.searchStudentsInCourse("Law").size();
-//        System.out.println(courseDao.searchStudentsInCourse("Law").get(0));
         Assertions.assertEquals(0, actualSize);
     }
 

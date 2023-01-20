@@ -57,14 +57,14 @@ public class StudentControllerTest {
 
 
     @Test
-    void successPage() throws Exception {
+    void successPage_returnView() throws Exception {
         mockMvc.perform(get("/students/success"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("menu/success"));
     }
 
     @Test
-    void newStudent() throws Exception {
+    void newStudent_returnSelectedView_attrExist() throws Exception {
         mockMvc.perform(get("/students/new"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("students/new"))
@@ -72,7 +72,7 @@ public class StudentControllerTest {
     }
 
     @Test
-    void create() throws Exception {
+    void create_redirect_inputIsValidStudent() throws Exception {
         StudentDTO student = new StudentDTO.StudentBuilder("Adam", "Jones").setGroupId(1).setStudentId(1).build();
         Mockito.doNothing().when(studentDaoMock).create(Mockito.any(StudentDTO.class));
         mockMvc.perform(post("/students/").flashAttr("student", student))
@@ -81,7 +81,7 @@ public class StudentControllerTest {
     }
 
     @Test
-    void index() throws Exception {
+    void index_addAttrAndReturnView() throws Exception {
         List<StudentDTO> studentList = List.of(
                 new StudentDTO.StudentBuilder("FirstName", "LastName").build(),
                 new StudentDTO.StudentBuilder("SecondName", "LastName").setGroupId(1).build());
@@ -93,7 +93,7 @@ public class StudentControllerTest {
     }
 
     @Test
-    void show() throws Exception {
+    void show_addAttrAndReturnView_dataIsFound() throws Exception {
         StudentDTO student = new StudentDTO.StudentBuilder("Adam", "Jones").setStudentId(1).build();
         Mockito.when(studentDaoMock.searchById(student.getStudentId())).thenReturn(student);
         mockMvc.perform(get("/students/1"))
@@ -103,87 +103,87 @@ public class StudentControllerTest {
     }
 
     @Test
-    void studentInfoPage() throws Exception {
+    void studentInfoPage_returnView() throws Exception {
         mockMvc.perform(get("/students/search"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("students/search"));
     }
 
     @Test
-    void toShow() throws Exception {
+    void toShow_redirect_paramIsFound() throws Exception {
         mockMvc.perform(post("/students/toShow?studentId=1"))
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("1"));
     }
 
     @Test
-    void addStudentToCoursePage() throws Exception {
+    void addStudentToCoursePage_returnView() throws Exception {
         mockMvc.perform(get("/students/addStudentToCourseForm"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("students/addStudentToCourseForm"));
     }
 
     @Test
-    void addedToCoursePage() throws Exception {
-        int ID = 1;
-        Mockito.when(studentDaoMock.searchById(ID)).thenReturn(null);
-        Mockito.when(courseDaoMock.searchById(ID)).thenReturn(null);
+    void addedToCoursePage_redirect_paramIsValidIDs() throws Exception {
+        int iD = 1;
+        Mockito.when(studentDaoMock.searchById(iD)).thenReturn(null);
+        Mockito.when(courseDaoMock.searchById(iD)).thenReturn(null);
         Mockito.doNothing().when(studentDaoMock).addStudentToCourse(null, null);
         mockMvc.perform(post("/students/addStudentToCourseSuccess")
-                        .param("studentId", String.valueOf(ID))
-                        .param("courseId", String.valueOf(ID)))
+                        .param("studentId", String.valueOf(iD))
+                        .param("courseId", String.valueOf(iD)))
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl(String.valueOf(ID)));
+                .andExpect(redirectedUrl(String.valueOf(iD)));
     }
 
     @Test
-    void deleteStudentPage() throws Exception {
+    void deleteStudentPage_returnView() throws Exception {
         mockMvc.perform(get("/students/delete"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("students/delete"));
     }
 
     @Test
-    void deletedStudentPage() throws Exception {
-        int ID = 1;
-        Mockito.when(studentDaoMock.searchById(ID)).thenReturn(null);
+    void deletedStudentPage_redirect_paramIsFound() throws Exception {
+        int iD = 1;
+        Mockito.when(studentDaoMock.searchById(iD)).thenReturn(null);
         Mockito.doNothing().when(studentDaoMock).delete(null);
         mockMvc.perform(post("/students/deleteStudentSuccess")
-                        .param("studentId", String.valueOf(ID)))
+                        .param("studentId", String.valueOf(iD)))
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("success"));
     }
 
     @Test
-    void removeStudentFromCoursePage() throws Exception {
+    void removeStudentFromCoursePage_returnView() throws Exception {
         mockMvc.perform(get("/students/removeStudentFromCourseForm"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("students/removeStudentFromCourseForm"));
     }
 
     @Test
-    void removedStudentFromCoursePage() throws Exception {
-        int ID = 1;
-        Mockito.when(studentDaoMock.searchById(ID)).thenReturn(null);
-        Mockito.when(courseDaoMock.searchById(ID)).thenReturn(null);
+    void removedStudentFromCoursePage_redirectUsingInputId_iDIsFound() throws Exception {
+        int iD = 1;
+        Mockito.when(studentDaoMock.searchById(iD)).thenReturn(null);
+        Mockito.when(courseDaoMock.searchById(iD)).thenReturn(null);
         Mockito.doNothing().when(studentDaoMock).deleteStudentFromCourse(null, null);
         mockMvc.perform(post("/students/removeStudentFromCourseSuccess")
-                        .param("studentId", String.valueOf(ID))
-                        .param("courseId", String.valueOf(ID)))
+                        .param("studentId", String.valueOf(iD))
+                        .param("courseId", String.valueOf(iD)))
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl(String.valueOf(ID)))
+                .andExpect(redirectedUrl(String.valueOf(iD)))
                 .andDo(print());
     }
 
     @Test
-    void searchGroupsPage() throws Exception {
+    void searchGroupsPage_returnView() throws Exception {
         mockMvc.perform(get("/students/searchGroupsForm"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("students/searchGroupsForm"));
     }
 
     @Test
-    void groupsCountPage() throws Exception {
+    void groupsCountPage_addAttrAndReturnView_inputIsMoreThanZero() throws Exception {
         int count = 10;
         Map<Integer, Integer> map = Map.of(1, 1, 2, 9);
         Mockito.when(studentDaoMock.searchGroupsByStudentCount(count)).thenReturn(map);
@@ -195,14 +195,14 @@ public class StudentControllerTest {
     }
 
     @Test
-    void searchStudentsInCoursePage() throws Exception {
+    void searchStudentsInCoursePage_returnView() throws Exception {
         mockMvc.perform(get("/students/searchStudentsInCourseForm"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("students/searchStudentsInCourseForm"));
     }
 
     @Test
-    void studentsInCoursePage() throws Exception {
+    void studentsInCoursePage_addAttrAndReturnView_inputIsValidCourseName() throws Exception {
         String courseName = "Music";
         List<Integer> studentsInCourse = List.of(1, 1, 1);
         List<StudentDTO> students = List.of(
